@@ -1,14 +1,12 @@
 <script lang="ts">
 	type Variant = 'primary' | 'secondary' | 'muted';
 
-	interface Props {
+	const { href, variant = 'primary', class: className, children } = $props<{
 		href: string;
 		variant?: Variant;
 		class?: string;
 		children?: import('svelte').Snippet;
-	}
-
-	const { href, variant = 'primary', class: className, children } = $props<Props>();
+	}>();
 
 	const variantClasses = {
 		primary: 'text-blue-600 hover:text-blue-700',

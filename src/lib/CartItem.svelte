@@ -2,15 +2,13 @@
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
-	import type { CartItem as CartItemType } from './cart';
+	import type { CartItem } from './cart';
 
-	interface Props {
-		item: CartItemType;
+	const { item, onQuantityChange, onRemove } = $props<{
+		item: CartItem;
 		onQuantityChange: (quantity: number) => void;
 		onRemove: () => void;
-	}
-
-	const { item, onQuantityChange, onRemove } = $props<Props>();
+	}>();
 </script>
 
 <div class="flex items-center gap-4 p-6 border-b">

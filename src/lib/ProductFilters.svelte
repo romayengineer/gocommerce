@@ -1,13 +1,12 @@
 <script lang="ts">
-	interface Props {
+
+	const { sortBy, filterCategory, categories, onSortChange, onCategoryChange } = $props<{
 		sortBy: string;
 		filterCategory: string;
 		categories: string[];
 		onSortChange: (value: string) => void;
 		onCategoryChange: (value: string) => void;
-	}
-
-	const { sortBy, filterCategory, categories, onSortChange, onCategoryChange } = $props<Props>();
+	}>();
 </script>
 
 <div class="bg-white p-6 rounded-lg shadow">

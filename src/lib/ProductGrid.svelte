@@ -2,12 +2,10 @@
 	import ProductCard from './ProductCard.svelte';
 	import type { Product } from './products';
 
-	interface Props {
+	const { products, emptyMessage = 'No products found' } = $props<{
 		products: Product[];
 		emptyMessage?: string;
-	}
-
-	const { products, emptyMessage = 'No products found' } = $props<Props>();
+	}>();
 </script>
 
 {#if products.length === 0}

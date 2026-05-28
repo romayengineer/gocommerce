@@ -9,7 +9,8 @@
       "Bash(npm list *)",
       "Bash(grep *)",
       "Bash(npm uninstall *)",
-      "Bash(pkill -f \"vite dev\")"
+      "Bash(pkill -f \"vite dev\")",
+      "Bash(npx tsc *)"
     ]
   }
 }

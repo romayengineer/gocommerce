@@ -1,13 +1,11 @@
 <script lang="ts">
 	import Price from './Price.svelte';
 
-	interface Props {
+	const { label, amount, isBold = false } = $props<{
 		label: string;
 		amount: number;
 		isBold?: boolean;
-	}
-
-	const { label, amount, isBold = false } = $props<Props>();
+	}>();
 </script>
 
 <div class={`flex justify-between ${isBold ? 'text-2xl font-bold' : ''}`}>

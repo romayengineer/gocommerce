@@ -1,10 +1,8 @@
 <script lang="ts">
-	interface Props {
+	const { quantity, onchange } = $props<{
 		quantity: number;
 		onchange?: (quantity: number) => void;
-	}
-
-	const { quantity, onchange } = $props<Props>();
+	}>();
 
 	function handleChange(e: Event) {
 		const target = e.target as HTMLInputElement;

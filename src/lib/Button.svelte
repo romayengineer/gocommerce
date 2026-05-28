@@ -1,15 +1,13 @@
 <script lang="ts">
 	type Variant = 'primary' | 'secondary' | 'danger';
 
-	interface Props {
+	const { variant = 'primary', class: className, onclick, disabled = false, children } = $props<{
 		variant?: Variant;
 		class?: string;
 		onclick?: (e: MouseEvent) => void;
 		disabled?: boolean;
 		children?: import('svelte').Snippet;
-	}
-
-	const { variant = 'primary', class: className, onclick, disabled = false, children } = $props<Props>();
+	}>();
 
 	const variantClasses = {
 		primary: 'bg-blue-600 text-white hover:bg-blue-700',

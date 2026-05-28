@@ -1,9 +1,7 @@
 <script lang="ts">
-	interface Props {
+	const { text } = $props<{
 		text: string;
-	}
-
-	const { text } = $props<Props>();
+	}>();
 </script>
 
 <p class="text-gray-700 mb-8 leading-relaxed">{text}</p>

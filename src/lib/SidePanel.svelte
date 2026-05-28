@@ -1,11 +1,9 @@
 <script lang="ts">
-	interface Props {
+	const { title, sticky = false, children } = $props<{
 		title: string;
 		sticky?: boolean;
 		children?: import('svelte').Snippet;
-	}
-
-	const { title, sticky = false, children } = $props<Props>();
+	}>();
 </script>
 
 <div class={sticky ? 'h-fit' : ''}>

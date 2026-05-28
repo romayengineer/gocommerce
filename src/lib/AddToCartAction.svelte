@@ -1,11 +1,9 @@
 <script lang="ts">
 	import Button from './Button.svelte';
 
-	interface Props {
+	const { onclick } = $props<{
 		onclick: () => void;
-	}
-
-	const { onclick } = $props<Props>();
+	}>();
 </script>
 
 <Button

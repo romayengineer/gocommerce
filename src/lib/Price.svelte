@@ -1,11 +1,9 @@
 <script lang="ts">
-	interface Props {
+	const { amount, size = 'md', class: className } = $props<{
 		amount: number;
 		size?: 'sm' | 'md' | 'lg';
 		class?: string;
-	}
-
-	const { amount, size = 'md', class: className } = $props<Props>();
+	}>();
 
 	const sizeClasses = {
 		sm: 'text-sm',

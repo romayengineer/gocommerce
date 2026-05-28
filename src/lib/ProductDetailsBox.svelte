@@ -1,11 +1,9 @@
 <script lang="ts">
-	interface Props {
+	const { id, category, rating } = $props<{
 		id: string;
 		category: string;
 		rating: number;
-	}
-
-	const { id, category, rating } = $props<Props>();
+	}>();
 </script>
 
 <div class="bg-gray-50 p-4 rounded-lg">
