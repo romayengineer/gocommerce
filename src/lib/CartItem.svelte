@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
+	import QuantitySelector from './QuantitySelector.svelte';
 	import type { CartItem as CartItemType } from './cart';
 
 	interface Props {
@@ -20,29 +21,8 @@
 		<Price amount={item.product.price} size="sm" class="text-gray-600" />
 	</div>
 
-	<div class="flex items-center gap-3">
-		<Button
-			variant="secondary"
-			class="px-2 py-1 text-sm"
-			onclick={() => onQuantityChange(item.quantity - 1)}
-			disabled={item.quantity <= 1}
-		>
-			−
-		</Button>
-		<input
-			type="number"
-			value={item.quantity}
-			min="1"
-			onchange={(e) => onQuantityChange(parseInt(e.currentTarget.value) || 1)}
-			class="w-16 text-center border rounded p-1"
-		/>
-		<Button
-			variant="secondary"
-			class="px-2 py-1 text-sm"
-			onclick={() => onQuantityChange(item.quantity + 1)}
-		>
-			+
-		</Button>
+	<div class="flex items-center">
+		<QuantitySelector quantity={item.quantity} onchange={onQuantityChange} />
 	</div>
 
 	<div class="w-24 text-right">

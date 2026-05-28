@@ -3,6 +3,7 @@
 	import Link from './Link.svelte';
 	import Price from './Price.svelte';
 	import Rating from './Rating.svelte';
+	import ProductImage from './ProductImage.svelte';
 	import type { Product } from './products';
 	import { addToCart } from './cart';
 
@@ -17,8 +18,8 @@
 
 <Link href="#/products/{product.id}" class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
-		<div class="bg-gray-100 aspect-square flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-			<div class="text-6xl">{product.emoji}</div>
+		<div class="group-hover:opacity-80 transition-opacity">
+			<ProductImage emoji={product.emoji} alt={product.name} />
 		</div>
 
 		<div class="p-4 flex flex-col flex-1">
