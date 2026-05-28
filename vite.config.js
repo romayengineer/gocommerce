@@ -5,6 +5,10 @@ export default defineConfig({
   plugins: [sveltekit()],
   server: {
     host: '0.0.0.0',
-    port: 5173
+    port: 5173,
+    watch: {
+      usePolling: true,
+      interval: 100
+    }
   }
 });
