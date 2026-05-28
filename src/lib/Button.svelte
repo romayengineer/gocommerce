@@ -6,9 +6,10 @@
 		class?: string;
 		onclick?: (e: MouseEvent) => void;
 		disabled?: boolean;
+		children?: import('svelte').Snippet;
 	}
 
-	const { variant = 'primary', class: className, onclick, disabled = false } = $props<Props>();
+	const { variant = 'primary', class: className, onclick, disabled = false, children } = $props<Props>();
 
 	const variantClasses = {
 		primary: 'bg-blue-600 text-white hover:bg-blue-700',
@@ -22,5 +23,7 @@
 	{disabled}
 	class="px-4 py-2 rounded font-semibold transition-colors {variantClasses[variant]} {disabled ? 'opacity-50 cursor-not-allowed' : ''} {className || ''}"
 >
-	<slot />
+	{#if children}
+		{@render children()}
+	{/if}
 </button>

@@ -5,9 +5,10 @@
 		href: string;
 		variant?: Variant;
 		class?: string;
+		children?: import('svelte').Snippet;
 	}
 
-	const { href, variant = 'primary', class: className } = $props<Props>();
+	const { href, variant = 'primary', class: className, children } = $props<Props>();
 
 	const variantClasses = {
 		primary: 'text-blue-600 hover:text-blue-700',
@@ -17,5 +18,7 @@
 </script>
 
 <a {href} class="transition-colors {variantClasses[variant]} {className || ''}">
-	<slot />
+	{#if children}
+		{@render children()}
+	{/if}
 </a>
