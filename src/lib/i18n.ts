@@ -1,16 +1,9 @@
-import { init, register } from 'svelte-i18n';
+import { init, register, locale } from 'svelte-i18n';
 
-const defaultLocale = 'en';
+const defaultLocale = 'es';
 
 register('en', () => import('./translations/en.json'));
 register('es', () => import('./translations/es.json'));
-
-export function initializeI18n() {
-	init({
-		fallbackLocale: defaultLocale,
-		initialLocale: typeof window !== 'undefined' ? getStoredLocale() || defaultLocale : defaultLocale
-	});
-}
 
 export function getStoredLocale(): string | null {
 	if (typeof window !== 'undefined') {
@@ -19,9 +12,24 @@ export function getStoredLocale(): string | null {
 	return null;
 }
 
-export function setLocale(locale: string): void {
+export function setLocale(newLocale: string): void {
+	locale.set(newLocale);
 	if (typeof window !== 'undefined') {
-		localStorage.setItem('locale', locale);
+		localStorage.setItem('locale', newLocale);
+	}
+}
+
+// Initialize i18n immediately
+init({
+	fallbackLocale: defaultLocale,
+	initialLocale: defaultLocale
+});
+
+// Set stored locale if available (client-side only)
+if (typeof window !== 'undefined') {
+	const stored = getStoredLocale();
+	if (stored) {
+		locale.set(stored);
 	}
 }
 
