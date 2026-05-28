@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Link from './Link.svelte';
 </script>
 
 <footer class="bg-gray-900 text-white mt-16">
@@ -12,27 +13,27 @@
 			<div>
 				<h4 class="font-semibold mb-4">Shop</h4>
 				<ul class="space-y-2 text-gray-400">
-					<li><a href="#/products" class="hover:text-white transition">All Products</a></li>
-					<li><a href="#/products" class="hover:text-white transition">Categories</a></li>
-					<li><a href="#/products" class="hover:text-white transition">Sale</a></li>
+					<li><Link href="#/products" variant="muted">All Products</Link></li>
+					<li><Link href="#/products" variant="muted">Categories</Link></li>
+					<li><Link href="#/products" variant="muted">Sale</Link></li>
 				</ul>
 			</div>
 
 			<div>
 				<h4 class="font-semibold mb-4">Company</h4>
 				<ul class="space-y-2 text-gray-400">
-					<li><a href="#/" class="hover:text-white transition">About Us</a></li>
-					<li><a href="#/" class="hover:text-white transition">Contact</a></li>
-					<li><a href="#/" class="hover:text-white transition">Blog</a></li>
+					<li><Link href="#/" variant="muted">About Us</Link></li>
+					<li><Link href="#/" variant="muted">Contact</Link></li>
+					<li><Link href="#/" variant="muted">Blog</Link></li>
 				</ul>
 			</div>
 
 			<div>
 				<h4 class="font-semibold mb-4">Legal</h4>
 				<ul class="space-y-2 text-gray-400">
-					<li><a href="#/" class="hover:text-white transition">Privacy Policy</a></li>
-					<li><a href="#/" class="hover:text-white transition">Terms of Service</a></li>
-					<li><a href="#/" class="hover:text-white transition">Shipping Info</a></li>
+					<li><Link href="#/" variant="muted">Privacy Policy</Link></li>
+					<li><Link href="#/" variant="muted">Terms of Service</Link></li>
+					<li><Link href="#/" variant="muted">Shipping Info</Link></li>
 				</ul>
 			</div>
 		</div>

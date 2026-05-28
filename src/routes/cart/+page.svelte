@@ -1,5 +1,8 @@
 <script lang="ts">
+	import Button from '../../lib/Button.svelte';
+	import CartItem from '../../lib/CartItem.svelte';
 	import EmptyState from '../../lib/EmptyState.svelte';
+	import OrderSummaryLine from '../../lib/OrderSummaryLine.svelte';
 	import SidePanel from '../../lib/SidePanel.svelte';
 	import { cart, removeFromCart, updateQuantity, clearCart } from '../../lib/cart';
 
@@ -17,48 +20,11 @@
 			<div class="lg:col-span-2">
 				<div class="bg-white rounded-lg shadow">
 					{#each $cart as item (item.product.id)}
-						<div class="flex items-center gap-4 p-6 border-b">
-							<div class="text-4xl">{item.product.emoji}</div>
-
-							<div class="flex-1">
-								<h3 class="font-semibold text-lg">{item.product.name}</h3>
-								<p class="text-gray-600">${item.product.price.toFixed(2)} each</p>
-							</div>
-
-							<div class="flex items-center gap-3">
-								<button
-									onclick={() => updateQuantity(item.product.id, item.quantity - 1)}
-									class="px-2 py-1 border rounded hover:bg-gray-100"
-									disabled={item.quantity <= 1}
-								>
-									−
-								</button>
-								<input
-									type="number"
-									value={item.quantity}
-									min="1"
-									onchange={(e) => updateQuantity(item.product.id, parseInt(e.target?.value) || 1)}
-									class="w-16 text-center border rounded p-1"
-								/>
-								<button
-									onclick={() => updateQuantity(item.product.id, item.quantity + 1)}
-									class="px-2 py-1 border rounded hover:bg-gray-100"
-								>
-									+
-								</button>
-							</div>
-
-							<div class="w-24 text-right">
-								<p class="font-semibold">${(item.product.price * item.quantity).toFixed(2)}</p>
-							</div>
-
-							<button
-								onclick={() => removeFromCart(item.product.id)}
-								class="text-red-600 hover:text-red-800 font-semibold"
-							>
-								Remove
-							</button>
-						</div>
+						<CartItem
+							{item}
+							onQuantityChange={(qty) => updateQuantity(item.product.id, qty)}
+							onRemove={() => removeFromCart(item.product.id)}
+						/>
 					{/each}
 				</div>
 			</div>
@@ -67,35 +33,22 @@
 				<SidePanel title="Order Summary" sticky={true}>
 
 					<div class="space-y-3 mb-6 pb-6 border-b">
-						<div class="flex justify-between">
-							<span>Subtotal:</span>
-							<span>${total.toFixed(2)}</span>
-						</div>
-						<div class="flex justify-between">
-							<span>Shipping:</span>
-							<span>${(total > 100 ? 0 : 10).toFixed(2)}</span>
-						</div>
-						<div class="flex justify-between">
-							<span>Tax:</span>
-							<span>${(total * 0.1).toFixed(2)}</span>
-						</div>
+						<OrderSummaryLine label="Subtotal:" amount={total} />
+						<OrderSummaryLine label="Shipping:" amount={total > 100 ? 0 : 10} />
+						<OrderSummaryLine label="Tax:" amount={total * 0.1} />
 					</div>
 
-					<div class="flex justify-between text-2xl font-bold mb-6">
-						<span>Total:</span>
-						<span>${(total + (total > 100 ? 0 : 10) + total * 0.1).toFixed(2)}</span>
+					<div class="mb-6">
+						<OrderSummaryLine label="Total:" amount={total + (total > 100 ? 0 : 10) + total * 0.1} isBold={true} />
 					</div>
 
-					<button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 mb-3">
+					<Button class="w-full py-3 mb-3">
 						Proceed to Checkout
-					</button>
+					</Button>
 
-					<button
-						onclick={() => clearCart()}
-						class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50"
-					>
+					<Button variant="secondary" class="w-full py-3" onclick={() => clearCart()}>
 						Clear Cart
-					</button>
+					</Button>
 
 					{#if total > 100}
 						<div class="mt-4 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-700">
