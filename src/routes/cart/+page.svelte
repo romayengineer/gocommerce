@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { cart, removeFromCart, updateQuantity, clearCart } from '../../lib/cart';
 
-	$: total = $cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-	$: itemCount = $cart.reduce((sum, item) => sum + item.quantity, 0);
+	let total = $derived($cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
+	let itemCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
 </script>
 
 <div class="max-w-4xl mx-auto px-4 py-12">
@@ -30,7 +30,7 @@
 
 							<div class="flex items-center gap-3">
 								<button
-									on:click={() => updateQuantity(item.product.id, item.quantity - 1)}
+									onclick={() => updateQuantity(item.product.id, item.quantity - 1)}
 									class="px-2 py-1 border rounded hover:bg-gray-100"
 									disabled={item.quantity <= 1}
 								>
@@ -40,11 +40,11 @@
 									type="number"
 									value={item.quantity}
 									min="1"
-									on:change={(e) => updateQuantity(item.product.id, parseInt(e.target.value) || 1)}
+									onchange={(e) => updateQuantity(item.product.id, parseInt(e.target?.value) || 1)}
 									class="w-16 text-center border rounded p-1"
 								/>
 								<button
-									on:click={() => updateQuantity(item.product.id, item.quantity + 1)}
+									onclick={() => updateQuantity(item.product.id, item.quantity + 1)}
 									class="px-2 py-1 border rounded hover:bg-gray-100"
 								>
 									+
@@ -56,7 +56,7 @@
 							</div>
 
 							<button
-								on:click={() => removeFromCart(item.product.id)}
+								onclick={() => removeFromCart(item.product.id)}
 								class="text-red-600 hover:text-red-800 font-semibold"
 							>
 								Remove
@@ -95,7 +95,7 @@
 					</button>
 
 					<button
-						on:click={() => clearCart()}
+						onclick={() => clearCart()}
 						class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50"
 					>
 						Clear Cart

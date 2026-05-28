@@ -10,7 +10,13 @@
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "$app/*": [".svelte-kit/runtime/*"],
+      "$lib/*": ["src/lib/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", ".svelte-kit/generated"],
+  "exclude": ["node_modules"]
 }

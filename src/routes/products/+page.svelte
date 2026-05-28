@@ -1,22 +1,26 @@
-<script>
+<script lang="ts">
 	import ProductCard from '../../lib/ProductCard.svelte';
-	import { products } from '../../lib/products';
+	import { products, type Product } from '../../lib/products';
 
-	let sortBy = 'name';
-	let filterCategory = 'all';
+	let sortBy = $state('name');
+	let filterCategory = $state('all');
 
-	const categories = ['all', ...new Set(products.map(p => p.category))];
+	const categories: string[] = ['all', ...new Set(products.map(p => p.category))];
 
-	$: filtered = filterCategory === 'all'
-		? products
-		: products.filter(p => p.category === filterCategory);
+	let filtered = $derived(
+		filterCategory === 'all'
+			? products
+			: products.filter(p => p.category === filterCategory)
+	);
 
-	$: sorted = [...filtered].sort((a, b) => {
-		if (sortBy === 'name') return a.name.localeCompare(b.name);
-		if (sortBy === 'price-low') return a.price - b.price;
-		if (sortBy === 'price-high') return b.price - a.price;
-		return 0;
-	});
+	let sorted = $derived(
+		[...filtered].sort((a, b) => {
+			if (sortBy === 'name') return a.name.localeCompare(b.name);
+			if (sortBy === 'price-low') return a.price - b.price;
+			if (sortBy === 'price-high') return b.price - a.price;
+			return 0;
+		})
+	);
 </script>
 
 <div class="max-w-7xl mx-auto px-4 py-12">

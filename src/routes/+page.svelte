@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import ProductCard from '../lib/ProductCard.svelte';
-	import { products } from '../lib/products';
+	import { products, type Product } from '../lib/products';
 
-	const featured = products.slice(0, 6);
+	const featured: Product[] = products.slice(0, 6);
 </script>
 
 <div class="max-w-7xl mx-auto px-4 py-12">

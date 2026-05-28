@@ -1,5 +1,7 @@
-<script>
-	export let product;
+<script lang="ts">
+	import type { Product } from './products';
+
+	const { product } = $props<{ product: Product }>();
 </script>
 
 <a href="/products/{product.id}" class="group">

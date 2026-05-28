@@ -1,14 +1,17 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
-	import { products } from '../../../lib/products';
+	import { products, type Product } from '../../../lib/products';
 	import { cart, addToCart } from '../../../lib/cart';
 
-	$: product = products.find(p => p.id === $page.params.id);
-	$: quantity = 1;
+	let quantity = $state(1);
+
+	let product = $derived(products.find(p => p.id === $page.params.id));
 
 	function handleAddToCart() {
-		addToCart(product, quantity);
-		alert(`${product.name} added to cart!`);
+		if (product) {
+			addToCart(product, quantity);
+			alert(`${product.name} added to cart!`);
+		}
 	}
 </script>
 
@@ -44,7 +47,7 @@
 				</div>
 
 				<button
-					on:click={handleAddToCart}
+					onclick={handleAddToCart}
 					class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 mb-4"
 				>
 					Add to Cart

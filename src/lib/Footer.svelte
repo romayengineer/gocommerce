@@ -1,3 +1,6 @@
+<script lang="ts">
+</script>
+
 <footer class="bg-gray-900 text-white mt-16">
 	<div class="max-w-7xl mx-auto px-4 py-12">
 		<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">

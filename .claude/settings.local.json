@@ -4,7 +4,9 @@
       "Bash(npx sv *)",
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "Bash(curl *)"
+      "Bash(curl *",
+      "Bash(pkill -f \"npm run dev\")",
+      "Bash(npm list *)"
     ]
   }
 }

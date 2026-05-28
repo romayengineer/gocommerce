@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { cart } from './cart';
 
-	$: cartCount = $cart.reduce((sum, item) => sum + item.quantity, 0);
+	let cartCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
 </script>
 
 <nav class="bg-white shadow-md sticky top-0 z-50">
