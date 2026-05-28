@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Link from './Link.svelte';
+	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import { cart } from './cart';
 
 	let cartCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
@@ -8,11 +10,13 @@
 <nav class="bg-white shadow-md sticky top-0 z-50">
 	<div class="max-w-7xl mx-auto px-4">
 		<div class="flex items-center justify-between h-16">
-			<Link href="#/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">ShopHub</Link>
+			<Link href="#/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">{$t('header.title')}</Link>
 
 			<div class="flex items-center gap-8">
-				<Link href="#/" variant="secondary">Home</Link>
-				<Link href="#/products" variant="secondary">Products</Link>
+				<Link href="#/" variant="secondary">{$t('home.featured').split(' ')[0]}</Link>
+				<Link href="#/products" variant="secondary">{$t('products.title')}</Link>
+
+				<LanguageSwitcher />
 
 				<Link href="#/cart" class="relative">
 					<span class="text-gray-700 hover:text-blue-600 text-2xl">🛒</span>

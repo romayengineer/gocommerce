@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Button from './Button.svelte';
 	import Link from './Link.svelte';
 	import Price from './Price.svelte';
@@ -34,7 +35,7 @@
 
 			<div class="flex items-center justify-between">
 				<Price amount={product.price} size="lg" />
-				<Button onclick={handleAddToCart}>Add</Button>
+				<Button onclick={handleAddToCart}>{$t('products.add')}</Button>
 			</div>
 		</div>
 	</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
@@ -28,6 +29,6 @@
 	</div>
 
 	<Button variant="danger" class="px-3 py-1 text-sm" onclick={onRemove}>
-		Remove
+		{$t('cart.remove')}
 	</Button>
 </div>

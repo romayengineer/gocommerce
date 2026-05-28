@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFilters from '$lib/ProductFilters.svelte';
 	import { products, type Product } from '$lib/products';
@@ -25,7 +26,7 @@
 </script>
 
 <div class="max-w-7xl mx-auto px-4 py-12">
-	<h1 class="text-4xl font-bold mb-8">All Products</h1>
+	<h1 class="text-4xl font-bold mb-8">{$t('products.title')}</h1>
 
 	<div class="flex flex-col md:flex-row gap-8">
 		<aside class="md:w-48">
@@ -39,7 +40,7 @@
 		</aside>
 
 		<div class="flex-1">
-			<p class="text-gray-600 mb-6">Showing {sorted.length} product{sorted.length !== 1 ? 's' : ''}</p>
+			<p class="text-gray-600 mb-6">{$t('products.add')} {sorted.length} {sorted.length !== 1 ? 's' : ''}</p>
 			<ProductGrid products={sorted} />
 		</div>
 	</div>

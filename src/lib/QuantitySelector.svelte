@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
+
 	const { quantity, onchange } = $props<{
 		quantity: number;
 		onchange?: (quantity: number) => void;
@@ -11,7 +13,7 @@
 </script>
 
 <div class="flex items-center gap-4">
-	<label for="qty" class="font-semibold">Quantity:</label>
+	<label for="qty" class="font-semibold">{$t('productDetail.quantity')}</label>
 	<input
 		id="qty"
 		type="number"

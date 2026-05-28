@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Button from '$lib/Button.svelte';
 	import CartItem from '$lib/CartItem.svelte';
 	import EmptyState from '$lib/EmptyState.svelte';
@@ -11,10 +12,10 @@
 </script>
 
 <div class="max-w-4xl mx-auto px-4 py-12">
-	<h1 class="text-4xl font-bold mb-8">Shopping Cart</h1>
+	<h1 class="text-4xl font-bold mb-8">{$t('cart.title')}</h1>
 
 	{#if $cart.length === 0}
-		<EmptyState message="Your cart is empty" actionHref="#/products" actionLabel="Continue Shopping" />
+		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
 	{:else}
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 			<div class="lg:col-span-2">
@@ -30,24 +31,24 @@
 			</div>
 
 			<div class="h-fit">
-				<SidePanel title="Order Summary" sticky={true}>
+				<SidePanel title={$t('cart.title')} sticky={true}>
 
 					<div class="space-y-3 mb-6 pb-6 border-b">
-						<OrderSummaryLine label="Subtotal:" amount={total} />
-						<OrderSummaryLine label="Shipping:" amount={total > 100 ? 0 : 10} />
-						<OrderSummaryLine label="Tax:" amount={total * 0.1} />
+						<OrderSummaryLine label={$t('cart.subtotal') + ':'} amount={total} />
+						<OrderSummaryLine label={$t('cart.shipping') + ':'} amount={total > 100 ? 0 : 10} />
+						<OrderSummaryLine label={$t('cart.tax') + ':'} amount={total * 0.1} />
 					</div>
 
 					<div class="mb-6">
-						<OrderSummaryLine label="Total:" amount={total + (total > 100 ? 0 : 10) + total * 0.1} isBold={true} />
+						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total + (total > 100 ? 0 : 10) + total * 0.1} isBold={true} />
 					</div>
 
 					<Button class="w-full py-3 mb-3">
-						Proceed to Checkout
+						{$t('cart.checkout')}
 					</Button>
 
 					<Button variant="secondary" class="w-full py-3" onclick={() => clearCart()}>
-						Clear Cart
+						{$t('cart.title')}
 					</Button>
 
 					{#if total > 100}

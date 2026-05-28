@@ -1,0 +1,60 @@
+{
+  "header": {
+    "title": "ShopHub",
+    "allProducts": "All Products",
+    "cart": "Cart"
+  },
+  "home": {
+    "featured": "Featured Products",
+    "browse": "Browse all products to find what you need"
+  },
+  "products": {
+    "title": "Products",
+    "filter": "Filter",
+    "sortBy": "Sort By",
+    "category": "Category",
+    "price": "Price",
+    "rating": "Rating",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low",
+    "ratingHigh": "Highest Rated",
+    "add": "Add"
+  },
+  "productDetail": {
+    "backToProducts": "← Back to Products",
+    "inStock": "In Stock",
+    "quantity": "Quantity:",
+    "addToCart": "Add to Cart",
+    "productDetails": "Product Details",
+    "sku": "SKU:",
+    "category": "Category:",
+    "rating": "Rating:"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "tax": "Tax (10%)",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "footer": {
+    "description": "Your trusted online shopping destination for quality products.",
+    "shop": "Shop",
+    "allProducts": "All Products",
+    "categories": "Categories",
+    "sale": "Sale",
+    "company": "Company",
+    "about": "About Us",
+    "contact": "Contact",
+    "blog": "Blog",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "shipping": "Shipping Info",
+    "copyright": "© 2024 ShopHub. All rights reserved. | Built with Svelte"
+  }
+}

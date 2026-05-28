@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { page } from '$app/stores';
 	import { products } from '$lib/products';
 	import { addToCart } from '$lib/cart';
@@ -25,7 +26,7 @@
 
 {#if product}
 	<div class="max-w-6xl mx-auto px-4 py-12">
-		<Link href="#/products" class="mb-6 inline-block">← Back to Products</Link>
+		<Link href="#/products" class="mb-6 inline-block">{$t('productDetail.backToProducts')}</Link>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 			<ProductImage emoji={product.emoji} alt={product.name} />
@@ -35,7 +36,7 @@
 
 				<div class="mb-6">
 					<Price amount={product.price} size="lg" />
-					<p class="text-sm text-gray-500 mt-1">In Stock</p>
+					<p class="text-sm text-gray-500 mt-1">{$t('productDetail.inStock')}</p>
 				</div>
 
 				<ProductDescription text={product.description} />

@@ -1,0 +1,60 @@
+{
+  "header": {
+    "title": "ShopHub",
+    "allProducts": "Todos los Productos",
+    "cart": "Carrito"
+  },
+  "home": {
+    "featured": "Productos Destacados",
+    "browse": "Explora todos nuestros productos para encontrar lo que necesitas"
+  },
+  "products": {
+    "title": "Productos",
+    "filter": "Filtrar",
+    "sortBy": "Ordenar Por",
+    "category": "Categoría",
+    "price": "Precio",
+    "rating": "Calificación",
+    "priceAsc": "Precio: Menor a Mayor",
+    "priceDesc": "Precio: Mayor a Menor",
+    "ratingHigh": "Más Calificados",
+    "add": "Agregar"
+  },
+  "productDetail": {
+    "backToProducts": "← Volver a Productos",
+    "inStock": "En Stock",
+    "quantity": "Cantidad:",
+    "addToCart": "Agregar al Carrito",
+    "productDetails": "Detalles del Producto",
+    "sku": "SKU:",
+    "category": "Categoría:",
+    "rating": "Calificación:"
+  },
+  "cart": {
+    "title": "Carrito de Compras",
+    "empty": "Tu carrito está vacío",
+    "continueShopping": "Continuar Comprando",
+    "remove": "Eliminar",
+    "subtotal": "Subtotal",
+    "tax": "Impuestos (10%)",
+    "shipping": "Envío",
+    "total": "Total",
+    "checkout": "Proceder al Pago"
+  },
+  "footer": {
+    "description": "Tu destino de confianza para comprar productos de calidad en línea.",
+    "shop": "Comprar",
+    "allProducts": "Todos los Productos",
+    "categories": "Categorías",
+    "sale": "Oferta",
+    "company": "Empresa",
+    "about": "Acerca de Nosotros",
+    "contact": "Contacto",
+    "blog": "Blog",
+    "legal": "Legal",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "shipping": "Información de Envío",
+    "copyright": "© 2024 ShopHub. Todos los derechos reservados. | Construido con Svelte"
+  }
+}

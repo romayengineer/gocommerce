@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Button from './Button.svelte';
 
 	const { onclick } = $props<{
@@ -11,5 +12,5 @@
 	class="w-full py-3"
 	{onclick}
 >
-	Add to Cart
+	{$t('productDetail.addToCart')}
 </Button>
