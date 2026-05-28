@@ -4,6 +4,7 @@ export interface Product {
 	price: number;
 	category: string;
 	emoji: string;
+	emojis?: string[];
 	rating: number;
 	description: string;
 }
@@ -15,6 +16,7 @@ export const products: Product[] = [
 		price: 79.99,
 		category: 'electronics',
 		emoji: '🎧',
+		emojis: ['🎧', '🎵', '🔊'],
 		rating: 4.5,
 		description: 'Premium wireless headphones with active noise cancellation, 30-hour battery life, and premium sound quality.'
 	},
@@ -24,6 +26,7 @@ export const products: Product[] = [
 		price: 49.99,
 		category: 'appliances',
 		emoji: '☕',
+		emojis: ['☕', '🍵', '🫖'],
 		rating: 4.2,
 		description: 'Programmable coffee maker with thermal carafe. Makes up to 12 cups with perfect brewing every time.'
 	},
@@ -33,6 +36,7 @@ export const products: Product[] = [
 		price: 89.99,
 		category: 'sports',
 		emoji: '👟',
+		emojis: ['👟', '🏃', '⚡'],
 		rating: 4.7,
 		description: 'Lightweight running shoes with responsive cushioning and breathable mesh upper for maximum comfort.'
 	},
@@ -42,6 +46,7 @@ export const products: Product[] = [
 		price: 34.99,
 		category: 'home',
 		emoji: '💡',
+		emojis: ['💡', '🌟', '✨'],
 		rating: 4.3,
 		description: 'LED desk lamp with adjustable brightness and color temperature. Perfect for work or study.'
 	},
@@ -51,6 +56,7 @@ export const products: Product[] = [
 		price: 29.99,
 		category: 'sports',
 		emoji: '🧘',
+		emojis: ['🧘', '🏋️', '💪'],
 		rating: 4.6,
 		description: 'Non-slip yoga mat with extra cushioning. Lightweight and easy to carry to your gym or studio.'
 	},
@@ -60,6 +66,7 @@ export const products: Product[] = [
 		price: 59.99,
 		category: 'electronics',
 		emoji: '🔊',
+		emojis: ['🔊', '🎶', '📻'],
 		rating: 4.4,
 		description: 'Portable Bluetooth speaker with 360-degree sound, waterproof design, and 12-hour battery life.'
 	},
@@ -69,6 +76,7 @@ export const products: Product[] = [
 		price: 199.99,
 		category: 'furniture',
 		emoji: '🪑',
+		emojis: ['🪑', '💼', '🖥️'],
 		rating: 4.5,
 		description: 'Ergonomic office chair with lumbar support, adjustable height, and breathable mesh back.'
 	},
@@ -78,6 +86,7 @@ export const products: Product[] = [
 		price: 24.99,
 		category: 'home',
 		emoji: '🪴',
+		emojis: ['🪴', '🌱', '🌿'],
 		rating: 4.2,
 		description: 'Beautiful ceramic plant pot with drainage hole. Perfect for indoor plants and succulents.'
 	},
@@ -87,6 +96,7 @@ export const products: Product[] = [
 		price: 199.99,
 		category: 'electronics',
 		emoji: '⌚',
+		emojis: ['⌚', '⏰', '📱'],
 		rating: 4.6,
 		description: 'Feature-rich smartwatch with fitness tracking, heart rate monitor, and 7-day battery life.'
 	},
@@ -96,6 +106,7 @@ export const products: Product[] = [
 		price: 19.99,
 		category: 'sports',
 		emoji: '💧',
+		emojis: ['💧', '💦', '🚰'],
 		rating: 4.4,
 		description: 'Insulated water bottle keeps drinks hot or cold for 24 hours. BPA-free and durable.'
 	},
@@ -105,6 +116,7 @@ export const products: Product[] = [
 		price: 39.99,
 		category: 'appliances',
 		emoji: '🌾',
+		emojis: ['🌾', '☕', '⚙️'],
 		rating: 4.3,
 		description: 'Burr coffee grinder with 15 grind settings for perfect consistency every time.'
 	},
@@ -114,6 +126,7 @@ export const products: Product[] = [
 		price: 14.99,
 		category: 'electronics',
 		emoji: '🖱️',
+		emojis: ['🖱️', '⌨️', '🖥️'],
 		rating: 4.1,
 		description: 'Large gaming mouse pad with non-slip rubber base and smooth surface for precise movements.'
 	}

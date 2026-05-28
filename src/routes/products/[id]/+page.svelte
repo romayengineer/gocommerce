@@ -29,7 +29,7 @@
 		<Link href="#/products" class="mb-6 inline-block">{$t('productDetail.backToProducts')}</Link>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-			<ProductImage emoji={product.emoji} alt={product.name} />
+			<ProductImage emoji={product.emoji} emojis={product.emojis} alt={product.name} />
 
 			<div>
 				<ProductHeader name={product.name} category={product.category} />
