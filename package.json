@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "build:single": "vite build && node scripts/inline-assets.js",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -14,6 +15,7 @@
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@types/node": "^25.9.1",
     "autoprefixer": "^10.4.0",
+    "inline-assets": "^1.5.1",
     "postcss": "^8.4.0",
     "svelte": "^5.55.10",
     "tailwindcss": "^3.4.0",
