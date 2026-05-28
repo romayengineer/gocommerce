@@ -1,6 +1,6 @@
 import { init, register, locale } from 'svelte-i18n';
 
-const defaultLocale = 'es';
+export const defaultLocale = 'es';
 
 register('en', () => import('./translations/en.json'));
 register('es', () => import('./translations/es.json'));
