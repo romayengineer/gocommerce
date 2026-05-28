@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { products } from '../../../lib/products';
-	import { addToCart } from '../../../lib/cart';
-	import Link from '../../../lib/Link.svelte';
-	import Price from '../../../lib/Price.svelte';
-	import ProductImage from '../../../lib/ProductImage.svelte';
-	import ProductHeader from '../../../lib/ProductHeader.svelte';
-	import ProductDescription from '../../../lib/ProductDescription.svelte';
-	import QuantitySelector from '../../../lib/QuantitySelector.svelte';
-	import AddToCartAction from '../../../lib/AddToCartAction.svelte';
-	import ProductDetailsBox from '../../../lib/ProductDetailsBox.svelte';
-	import ProductNotFound from '../../../lib/ProductNotFound.svelte';
+	import { products } from '$lib/products';
+	import { addToCart } from '$lib/cart';
+	import Link from '$lib/Link.svelte';
+	import Price from '$lib/Price.svelte';
+	import ProductImage from '$lib/ProductImage.svelte';
+	import ProductHeader from '$lib/ProductHeader.svelte';
+	import ProductDescription from '$lib/ProductDescription.svelte';
+	import QuantitySelector from '$lib/QuantitySelector.svelte';
+	import AddToCartAction from '$lib/AddToCartAction.svelte';
+	import ProductDetailsBox from '$lib/ProductDetailsBox.svelte';
+	import ProductNotFound from '$lib/ProductNotFound.svelte';
 
 	let quantity = $state(1);
 
