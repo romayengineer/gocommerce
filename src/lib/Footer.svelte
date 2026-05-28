@@ -12,9 +12,9 @@
 			<div>
 				<h4 class="font-semibold mb-4">Shop</h4>
 				<ul class="space-y-2 text-gray-400">
-					<li><a href="/products" class="hover:text-white transition">All Products</a></li>
-					<li><a href="/products" class="hover:text-white transition">Categories</a></li>
-					<li><a href="/products" class="hover:text-white transition">Sale</a></li>
+					<li><a href="#/products" class="hover:text-white transition">All Products</a></li>
+					<li><a href="#/products" class="hover:text-white transition">Categories</a></li>
+					<li><a href="#/products" class="hover:text-white transition">Sale</a></li>
 				</ul>
 			</div>
 

@@ -13,6 +13,9 @@ const config = {
     output: {
       bundleStrategy: 'inline'
     },
+    router: {
+      type: 'hash'
+    },
     adapter: adapter({
       pages: 'build',
       assets: 'build',

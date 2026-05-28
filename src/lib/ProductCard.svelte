@@ -4,7 +4,7 @@
 	const { product } = $props<{ product: Product }>();
 </script>
 
-<a href="/products/{product.id}" class="group">
+<a href="#/products/{product.id}" class="group">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
 		<div class="bg-gray-100 aspect-square flex items-center justify-center group-hover:bg-gray-200 transition-colors">
 			<div class="text-6xl">{product.emoji}</div>

@@ -10,7 +10,7 @@
 		<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg p-12 mb-8">
 			<h1 class="text-5xl font-bold mb-4">Welcome to ShopHub</h1>
 			<p class="text-xl mb-6">Discover amazing products at unbeatable prices</p>
-			<a href="/products" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">
+			<a href="#/products" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">
 				Shop Now
 			</a>
 		</div>

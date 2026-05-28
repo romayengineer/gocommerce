@@ -16,7 +16,7 @@
 
 {#if product}
 	<div class="max-w-6xl mx-auto px-4 py-12">
-		<a href="/products" class="text-blue-600 hover:underline mb-6 inline-block">← Back to Products</a>
+		<a href="#/products" class="text-blue-600 hover:underline mb-6 inline-block">← Back to Products</a>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 			<div class="bg-gray-200 rounded-lg aspect-square flex items-center justify-center">
@@ -66,6 +66,6 @@
 {:else}
 	<div class="max-w-6xl mx-auto px-4 py-12">
 		<p class="text-xl text-gray-600">Product not found</p>
-		<a href="/products" class="text-blue-600 hover:underline mt-4 inline-block">Back to Products</a>
+		<a href="#/products" class="text-blue-600 hover:underline mt-4 inline-block">Back to Products</a>
 	</div>
 {/if}
