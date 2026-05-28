@@ -1,22 +1,23 @@
 <script lang="ts">
 	import { locale } from 'svelte-i18n';
-	import { locales, localeNames, setLocale } from './i18n';
-	import Button from './Button.svelte';
+	import { locales, localeNames, localeFlags, setLocale } from './i18n';
 
-	function handleLanguageChange(newLocale: string) {
+	function handleLanguageChange(e: Event) {
+		const target = e.target as HTMLSelectElement;
+		const newLocale = target.value;
 		locale.set(newLocale);
 		setLocale(newLocale);
 	}
 </script>
 
-<div class="flex gap-2">
+<select
+	value={$locale}
+	onchange={handleLanguageChange}
+	class="px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 cursor-pointer hover:border-blue-400 focus:outline-none focus:border-blue-600"
+>
 	{#each locales as lang}
-		<Button
-			variant={$locale === lang ? 'primary' : 'secondary'}
-			class="px-3 py-1 text-sm"
-			onclick={() => handleLanguageChange(lang)}
-		>
-			{localeNames[lang]}
-		</Button>
+		<option value={lang}>
+			{localeFlags[lang]} {localeNames[lang]}
+		</option>
 	{/each}
-</div>
+</select>
