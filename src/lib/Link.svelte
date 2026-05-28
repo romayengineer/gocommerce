@@ -15,7 +15,7 @@
 	};
 </script>
 
-<a {href} class="transition-colors {variantClasses[variant]} {className || ''}">
+<a {href} class="transition-colors {variantClasses[variant as Variant]} {className || ''}">
 	{#if children}
 		{@render children()}
 	{/if}

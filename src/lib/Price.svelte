@@ -1,7 +1,9 @@
 <script lang="ts">
+	type Size = 'sm' | 'md' | 'lg';
+
 	const { amount, size = 'md', class: className } = $props<{
 		amount: number;
-		size?: 'sm' | 'md' | 'lg';
+		size?: Size;
 		class?: string;
 	}>();
 
@@ -12,6 +14,6 @@
 	};
 </script>
 
-<span class="{sizeClasses[size]} {className || ''}">
+<span class="{sizeClasses[size as Size]} {className || ''}">
 	${amount.toFixed(2)}
 </span>
