@@ -1,4 +1,6 @@
 <script lang="ts">
+	import EmptyState from '../../lib/EmptyState.svelte';
+	import SidePanel from '../../lib/SidePanel.svelte';
 	import { cart, removeFromCart, updateQuantity, clearCart } from '../../lib/cart';
 
 	let total = $derived($cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
@@ -9,12 +11,7 @@
 	<h1 class="text-4xl font-bold mb-8">Shopping Cart</h1>
 
 	{#if $cart.length === 0}
-		<div class="bg-white rounded-lg p-12 text-center">
-			<p class="text-xl text-gray-600 mb-6">Your cart is empty</p>
-			<a href="#/products" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 inline-block">
-				Continue Shopping
-			</a>
-		</div>
+		<EmptyState message="Your cart is empty" actionHref="#/products" actionLabel="Continue Shopping" />
 	{:else}
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 			<div class="lg:col-span-2">
@@ -67,8 +64,7 @@
 			</div>
 
 			<div class="h-fit">
-				<div class="bg-white rounded-lg shadow p-6 sticky top-4">
-					<h2 class="text-2xl font-bold mb-4">Order Summary</h2>
+				<SidePanel title="Order Summary" sticky={true}>
 
 					<div class="space-y-3 mb-6 pb-6 border-b">
 						<div class="flex justify-between">
@@ -106,7 +102,7 @@
 							🎉 Free shipping on orders over $100!
 						</div>
 					{/if}
-				</div>
+				</SidePanel>
 			</div>
 		</div>
 	{/if}

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import ProductCard from '../../lib/ProductCard.svelte';
+	import ProductGrid from '../../lib/ProductGrid.svelte';
+	import ProductFilters from '../../lib/ProductFilters.svelte';
 	import { products, type Product } from '../../lib/products';
 
 	let sortBy = $state('name');
@@ -28,44 +29,18 @@
 
 	<div class="flex flex-col md:flex-row gap-8">
 		<aside class="md:w-48">
-			<div class="bg-white p-6 rounded-lg shadow">
-				<h3 class="font-bold text-lg mb-4">Filters</h3>
-
-				<div class="mb-6">
-					<h4 class="font-semibold mb-3">Category</h4>
-					<div class="space-y-2">
-						{#each categories as cat}
-							<label class="flex items-center cursor-pointer">
-								<input
-									type="radio"
-									bind:group={filterCategory}
-									value={cat}
-									class="mr-2"
-								/>
-								<span class="capitalize">{cat}</span>
-							</label>
-						{/each}
-					</div>
-				</div>
-
-				<div>
-					<h4 class="font-semibold mb-3">Sort By</h4>
-					<select bind:value={sortBy} class="w-full p-2 border rounded">
-						<option value="name">Name (A-Z)</option>
-						<option value="price-low">Price (Low to High)</option>
-						<option value="price-high">Price (High to Low)</option>
-					</select>
-				</div>
-			</div>
+			<ProductFilters
+				{sortBy}
+				{filterCategory}
+				{categories}
+				onSortChange={(value) => (sortBy = value)}
+				onCategoryChange={(value) => (filterCategory = value)}
+			/>
 		</aside>
 
 		<div class="flex-1">
 			<p class="text-gray-600 mb-6">Showing {sorted.length} product{sorted.length !== 1 ? 's' : ''}</p>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{#each sorted as product (product.id)}
-					<ProductCard {product} />
-				{/each}
-			</div>
+			<ProductGrid products={sorted} />
 		</div>
 	</div>
 </div>

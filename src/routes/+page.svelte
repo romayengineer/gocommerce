@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ProductCard from '../lib/ProductCard.svelte';
+	import ProductGrid from '../lib/ProductGrid.svelte';
 	import { products, type Product } from '../lib/products';
 
 	const featured: Product[] = products.slice(0, 6);
@@ -18,10 +18,6 @@
 
 	<section>
 		<h2 class="text-3xl font-bold mb-8">Featured Products</h2>
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{#each featured as product (product.id)}
-				<ProductCard {product} />
-			{/each}
-		</div>
+		<ProductGrid products={featured} />
 	</section>
 </div>
