@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ProductGrid from '../../lib/ProductGrid.svelte';
-	import ProductFilters from '../../lib/ProductFilters.svelte';
-	import { products, type Product } from '../../lib/products';
+	import ProductGrid from '$lib/ProductGrid.svelte';
+	import ProductFilters from '$lib/ProductFilters.svelte';
+	import { products, type Product } from '$lib/products';
 
 	let sortBy = $state('name');
 	let filterCategory = $state('all');

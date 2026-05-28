@@ -1,6 +1,6 @@
 <script lang="ts">
-	import ProductGrid from '../lib/ProductGrid.svelte';
-	import { products, type Product } from '../lib/products';
+	import ProductGrid from '$lib/ProductGrid.svelte';
+	import { products, type Product } from '$lib/products';
 
 	const featured: Product[] = products.slice(0, 6);
 </script>

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Button from '../../lib/Button.svelte';
-	import CartItem from '../../lib/CartItem.svelte';
-	import EmptyState from '../../lib/EmptyState.svelte';
-	import OrderSummaryLine from '../../lib/OrderSummaryLine.svelte';
-	import SidePanel from '../../lib/SidePanel.svelte';
-	import { cart, removeFromCart, updateQuantity, clearCart } from '../../lib/cart';
+	import Button from '$lib/Button.svelte';
+	import CartItem from '$lib/CartItem.svelte';
+	import EmptyState from '$lib/EmptyState.svelte';
+	import OrderSummaryLine from '$lib/OrderSummaryLine.svelte';
+	import SidePanel from '$lib/SidePanel.svelte';
+	import { cart, removeFromCart, updateQuantity, clearCart } from '$lib/cart';
 
 	let total = $derived($cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
 	let itemCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
