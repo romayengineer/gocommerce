@@ -1,7 +1,14 @@
 <script lang="ts">
 	import type { Product } from './products';
+	import { addToCart } from './cart';
 
 	const { product } = $props<{ product: Product }>();
+
+	function handleAddToCart(e: MouseEvent) {
+		e.preventDefault();
+		e.stopPropagation();
+		addToCart(product, 1);
+	}
 </script>
 
 <a href="#/products/{product.id}" class="group">
@@ -23,7 +30,7 @@
 			<div class="flex items-center justify-between">
 				<span class="text-2xl font-bold text-blue-600">${product.price.toFixed(2)}</span>
 				<button
-					on:click|preventDefault|stopPropagation
+					onclick={handleAddToCart}
 					class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
 				>
 					Add
