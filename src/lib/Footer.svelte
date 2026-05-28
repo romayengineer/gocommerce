@@ -21,18 +21,18 @@
 			<div>
 				<h4 class="font-semibold mb-4">Company</h4>
 				<ul class="space-y-2 text-gray-400">
-					<li><a href="#" class="hover:text-white transition">About Us</a></li>
-					<li><a href="#" class="hover:text-white transition">Contact</a></li>
-					<li><a href="#" class="hover:text-white transition">Blog</a></li>
+					<li><a href="#/" class="hover:text-white transition">About Us</a></li>
+					<li><a href="#/" class="hover:text-white transition">Contact</a></li>
+					<li><a href="#/" class="hover:text-white transition">Blog</a></li>
 				</ul>
 			</div>
 
 			<div>
 				<h4 class="font-semibold mb-4">Legal</h4>
 				<ul class="space-y-2 text-gray-400">
-					<li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
-					<li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
-					<li><a href="#" class="hover:text-white transition">Shipping Info</a></li>
+					<li><a href="#/" class="hover:text-white transition">Privacy Policy</a></li>
+					<li><a href="#/" class="hover:text-white transition">Terms of Service</a></li>
+					<li><a href="#/" class="hover:text-white transition">Shipping Info</a></li>
 				</ul>
 			</div>
 		</div>
