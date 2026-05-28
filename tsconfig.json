@@ -9,8 +9,15 @@
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
-  },
-  "include": ["src", ".svelte-kit/generated"],
-  "exclude": ["node_modules"]
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "$app": ["./.svelte-kit/types"],
+      "$app/environment": ["./.svelte-kit/types"],
+      "$app/forms": ["./.svelte-kit/types"],
+      "$app/navigation": ["./.svelte-kit/types"],
+      "$app/stores": ["./.svelte-kit/types"],
+      "$app/*": ["./.svelte-kit/types"]
+    }
+  }
 }
