@@ -10,7 +10,6 @@
 	function handleAddToCart() {
 		if (product) {
 			addToCart(product, quantity);
-			alert(`${product.name} added to cart!`);
 		}
 	}
 </script>
