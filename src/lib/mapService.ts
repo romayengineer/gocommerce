@@ -1,3 +1,19 @@
+/*
+┌────────────────┬────────────┬──────────────────────────────────┐
+│     Level      │    Size    │             Example              │
+├────────────────┼────────────┼──────────────────────────────────┤
+│ Country        │ Largest    │ Argentina                        │
+├────────────────┼────────────┼──────────────────────────────────┤
+│ State/Province │ Very large │ Buenos Aires Province            │
+├────────────────┼────────────┼──────────────────────────────────┤
+│ County         │ Large      │ Partido (Avellaneda, La Matanza) │
+├────────────────┼────────────┼──────────────────────────────────┤
+│ City           │ Medium     │ Ciudad de Buenos Aires, La Plata │
+├────────────────┼────────────┼──────────────────────────────────┤
+│ Neighborhood   │ Small      │ Barrio (Caballito, San Telmo)    │
+└────────────────┴────────────┴──────────────────────────────────┘
+*/
+
 export interface MapConfig {
 	address?: string;
 	amenity?: string;
