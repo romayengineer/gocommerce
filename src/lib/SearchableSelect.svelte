@@ -1,20 +1,21 @@
 <script lang="ts">
-	interface Props {
+
+	interface Ioption { value: string; label: string }
+
+	let { id, label, placeholder = 'Search...', options, value = $bindable(), required = false, error = false } = $props<{
 		id: string;
 		label: string;
 		placeholder?: string;
-		options: { value: string; label: string }[];
+		options: Ioption[];
 		value?: string;
 		required?: boolean;
 		error?: boolean;
-	}
-
-	let { id, label, placeholder = 'Search...', options, value = $bindable(), required = false, error = false } = $props<Props>();
+	}>();
 
 	let isOpen = $state(false);
 	let searchQuery = $state('');
 	let filteredOptions = $derived(
-		options.filter((opt) => opt.label.toLowerCase().includes(searchQuery.toLowerCase()))
+		options.filter((opt: Ioption) => opt.label.toLowerCase().includes(searchQuery.toLowerCase()))
 	);
 
 	function selectOption(selectedValue: string) {
@@ -34,7 +35,7 @@
 		isOpen = false;
 	}
 
-	const selectedLabel = $derived(options.find((opt) => opt.value === value)?.label || '');
+	const selectedLabel = $derived(options.find((opt: Ioption) => opt.value === value)?.label || '');
 </script>
 
 <div class="relative">
@@ -48,7 +49,7 @@
 	<button
 		type="button"
 		id={id}
-		on:click={toggleDropdown}
+		onclick={toggleDropdown}
 		class="w-full px-4 py-2 border {error ? 'border-red-500' : 'border-gray-300'} rounded-lg text-left bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
 	>
 		<span class={selectedLabel ? 'text-gray-900' : 'text-gray-500'}>
@@ -60,7 +61,7 @@
 	{#if isOpen}
 		<div
 			class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
-			on:focusout={handleBlur}
+			onfocusout={handleBlur}
 			role="listbox"
 		>
 			<div class="p-2">
@@ -78,7 +79,7 @@
 					<li>
 						<button
 							type="button"
-							on:click={() => selectOption(option.value)}
+							onclick={() => selectOption(option.value)}
 							class="w-full text-left px-4 py-2 hover:bg-blue-100 focus:bg-blue-100 focus:outline-none {value === option.value ? 'bg-blue-50 font-semibold' : ''}"
 						>
 							{option.label}
