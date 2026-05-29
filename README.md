@@ -178,20 +178,48 @@ src/
 - Order summary with subtotal, tax, shipping
 
 ### 💳 Checkout Process
-- Multi-step checkout form with form validation
-- Customer information fields (name, email, phone)
-- Delivery address input (address, city, zip, country)
-- Interactive map visualization of delivery location
+- **Multi-step checkout form** with form validation
+- **Customer information fields** with multilingual labels:
+  - Name, email, phone (fully translated to English/Spanish)
+  - Address, city, postal code, country with Argentina-specific placeholders
+- **Interactive map visualization** of delivery location
+- **Real-time address validation** with debounced geocoding
 - Order review before completing purchase
+- Graceful error handling when address cannot be geocoded
 
 ### 🗺️ Delivery Location Map
 - **Provider Selection:** Choose between Leaflet (default) or Google Maps via `VITE_MAP_PROVIDER`
 - **Leaflet + OpenStreetMap:** Free, offline-capable, no API key required
 - **Google Maps:** Full-featured, premium geocoding (optional)
-- Real-time geocoding of delivery addresses
+- **Real-time geocoding** with debounced address updates (500ms)
+- **Smart zoom levels:** 
+  - Zooms in to street level when address is found
+  - Shows regional view when address not found
+- **Structured address queries** for better accuracy (street, city, postalcode, country)
+- **Error handling** with user-friendly messages in English and Spanish
 - Automatic marker placement on map
 - Responsive map container
 - Both providers implement the same interface for seamless switching
+
+### 🗺️ Map Service Architecture
+The map system uses a pluggable architecture with a shared interface (`IMapService`):
+
+**LeafletService** (Default)
+- Uses Nominatim API for free geocoding
+- OpenStreetMap for map tiles
+- Structured query support for accurate results
+- 500ms debounce on address updates to reduce API calls
+
+**GoogleMapsService** (Optional)
+- Uses Google's Geocoding API
+- Supports both address strings and structured queries
+- Requires API key but offers higher accuracy
+
+Both services share:
+- Common interface for seamless swapping
+- Dynamic zoom levels (street-level vs regional)
+- Error tracking and default location fallback
+- Multi-language error messages
 
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
@@ -279,7 +307,8 @@ npm run build
 - **TypeScript** - Full type safety
 - **Vite** - Lightning-fast build tool
 - **Adapter Static** - Single HTML file bundling
-- **Leaflet** - Open-source mapping library with OpenStreetMap (default)
+- **Leaflet** - Open-source mapping library with OpenStreetMap tiles (default)
+- **Nominatim** - Free, open-source geocoding API for address lookup
 - **Google Maps API** - Interactive maps and geocoding (optional alternative)
 
 ## Performance
