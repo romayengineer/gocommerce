@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import ApiKeyMissing from './ApiKeyMissing.svelte';
 	import { GoogleMapsService } from './googleMapsService';
+	import { type IMapService } from './mapService';
 
 	const { address = '', city = '', zipCode = '', country = '' } = $props<{
 		address?: string;
@@ -12,7 +13,7 @@
 
 	let mapContainer = $state<HTMLDivElement>();
 	let apiKeyMissing = $state(false);
-	let mapService: GoogleMapsService | null = null;
+	let mapService: IMapService | null = null;
 
 	const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 

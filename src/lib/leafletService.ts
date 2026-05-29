@@ -1,15 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
-export interface MapConfig {
-	address?: string;
-	city?: string;
-	zipCode?: string;
-	country?: string;
-}
-
-const DEFAULT_CENTER: L.LatLngExpression = [40.7128, -74.006];
-const DEFAULT_ZOOM = 12;
+import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM } from './mapService';
 
 // Fix for default marker icons in Leaflet
 L.Icon.Default.mergeOptions({
@@ -18,7 +9,7 @@ L.Icon.Default.mergeOptions({
 	shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
 });
 
-export class LeafletService {
+export class LeafletService implements IMapService {
 	private map: L.Map | null = null;
 	private marker: L.Marker | null = null;
 	private mapContainer: HTMLDivElement | null = null;

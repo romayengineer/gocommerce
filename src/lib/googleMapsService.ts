@@ -1,14 +1,6 @@
-export interface MapConfig {
-	address?: string;
-	city?: string;
-	zipCode?: string;
-	country?: string;
-}
+import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM } from './mapService';
 
-const DEFAULT_CENTER = { lat: 40.7128, lng: -74.006 };
-const DEFAULT_ZOOM = 12;
-
-export class GoogleMapsService {
+export class GoogleMapsService implements IMapService {
 	private apiKey: string;
 	private map: google.maps.Map | null = null;
 	private geocoder: google.maps.Geocoder | null = null;
