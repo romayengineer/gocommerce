@@ -42,6 +42,26 @@
     "checkout": "Proceder al Pago",
     "clearCart": "Vaciar Carrito"
   },
+  "amenities": {
+    "office": "Oficina",
+    "store": "Tienda",
+    "restaurant": "Restaurante",
+    "home": "Casa",
+    "apartment": "Departamento",
+    "factory": "Fábrica",
+    "warehouse": "Almacén",
+    "school": "Escuela",
+    "hospital": "Hospital",
+    "hotel": "Hotel",
+    "bank": "Banco",
+    "pharmacy": "Farmacia",
+    "gym": "Gimnasio",
+    "library": "Biblioteca",
+    "museum": "Museo",
+    "park": "Parque",
+    "parking": "Estacionamiento",
+    "other": "Otro"
+  },
   "shipping": {
     "firstName": "Nombre",
     "lastName": "Apellido",

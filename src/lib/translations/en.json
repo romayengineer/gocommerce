@@ -42,6 +42,26 @@
     "checkout": "Proceed to Checkout",
     "clearCart": "Clear Cart"
   },
+  "amenities": {
+    "office": "Office",
+    "store": "Store",
+    "restaurant": "Restaurant",
+    "home": "Home",
+    "apartment": "Apartment",
+    "factory": "Factory",
+    "warehouse": "Warehouse",
+    "school": "School",
+    "hospital": "Hospital",
+    "hotel": "Hotel",
+    "bank": "Bank",
+    "pharmacy": "Pharmacy",
+    "gym": "Gym",
+    "library": "Library",
+    "museum": "Museum",
+    "park": "Park",
+    "parking": "Parking",
+    "other": "Other"
+  },
   "shipping": {
     "firstName": "First Name",
     "lastName": "Last Name",

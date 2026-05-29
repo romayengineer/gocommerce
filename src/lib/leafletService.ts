@@ -84,9 +84,10 @@ export class LeafletService implements IMapService {
 				addressdetails: '1'
 			});
 
-			if (config.amenity) {
-				params.append('amenity', config.amenity);
-			}
+			// do not use amenity
+			// if (config.amenity) {
+			// 	params.append('amenity', config.amenity);
+			// }
 			if (config.address) {
 				params.append('street', config.address);
 			}

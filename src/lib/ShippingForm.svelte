@@ -3,21 +3,46 @@
 	import SearchableSelect from './SearchableSelect.svelte';
 	import { t } from 'svelte-i18n';
 	import { ARGENTINE_PROVINCES } from './argentineProvinces';
+	import { AMENITIES } from './amenities';
 
-	export let formData = {
-		firstName: '',
-		lastName: '',
-		email: '',
-		phone: '',
-		address: '',
-		amenity: '',
-		city: '',
-		county: '',
-		stateName: '',
-		zipCode: '',
-		country: ''
-	};
-	export let submitted: boolean = false;
+	let {
+		formData = $bindable({
+			firstName: '',
+			lastName: '',
+			email: '',
+			phone: '',
+			address: '',
+			amenity: '',
+			city: '',
+			county: '',
+			stateName: '',
+			zipCode: '',
+			country: ''
+		}),
+		submitted = $bindable(false)
+	} = $props<{
+		formData?: {
+			firstName: string;
+			lastName: string;
+			email: string;
+			phone: string;
+			address: string;
+			amenity: string;
+			city: string;
+			county: string;
+			stateName: string;
+			zipCode: string;
+			country: string;
+		};
+		submitted?: boolean;
+	}>();
+
+	const amenitiesWithLabels = $derived(
+		AMENITIES.map(amenity => ({
+			...amenity,
+			label: $t(`amenities.${amenity.value}`)
+		}))
+	);
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -71,10 +96,11 @@
 	</div>
 
 	<div class="md:col-span-2">
-		<FormField
+		<SearchableSelect
 			id="amenity"
 			label={$t('shipping.amenity')}
 			placeholder={$t('shipping.amenityPlaceholder')}
+			options={amenitiesWithLabels}
 			bind:value={formData.amenity}
 			error={submitted && !formData.amenity}
 		/>
@@ -84,7 +110,6 @@
 		id="city"
 		label={$t('shipping.city')}
 		placeholder={$t('shipping.cityPlaceholder')}
-		required
 		bind:value={formData.city}
 		error={submitted && !formData.city}
 	/>
@@ -103,6 +128,7 @@
 		placeholder={$t('shipping.statePlaceholder')}
 		options={ARGENTINE_PROVINCES}
 		bind:value={formData.stateName}
+		required
 		error={submitted && !formData.stateName}
 	/>
 
