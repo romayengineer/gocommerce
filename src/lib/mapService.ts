@@ -5,7 +5,7 @@ export interface MapConfig {
 	country?: string;
 }
 
-export const DEFAULT_CENTER = { lat: 40.7128, lng: -74.006 };
+export const DEFAULT_CENTER = { lat: -34.5918657, lng: -58.4402608 };
 export const DEFAULT_ZOOM = 12;
 
 export interface IMapService {
