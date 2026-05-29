@@ -1,11 +1,12 @@
 <script lang="ts">
 	type Variant = 'primary' | 'secondary' | 'danger';
 
-	const { variant = 'primary', class: className, onclick, disabled = false, children } = $props<{
+	const { variant = 'primary', class: className, onclick, disabled = false, type = 'button', children } = $props<{
 		variant?: Variant;
 		class?: string;
 		onclick?: (e: MouseEvent) => void;
 		disabled?: boolean;
+		type?: 'button' | 'submit' | 'reset';
 		children?: import('svelte').Snippet;
 	}>();
 
@@ -17,6 +18,7 @@
 </script>
 
 <button
+	{type}
 	{onclick}
 	{disabled}
 	class="px-4 py-2 rounded font-semibold transition-colors {variantClasses[variant as Variant]} {disabled ? 'opacity-50 cursor-not-allowed' : ''} {className || ''}"
