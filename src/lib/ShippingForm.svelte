@@ -11,7 +11,7 @@
 		amenity: '',
 		city: '',
 		county: '',
-		state: '',
+		stateName: '',
 		zipCode: '',
 		country: ''
 	};
@@ -99,8 +99,8 @@
 		id="state"
 		label={$t('shipping.state')}
 		placeholder={$t('shipping.statePlaceholder')}
-		bind:value={formData.state}
-		error={submitted && !formData.state}
+		bind:value={formData.stateName}
+		error={submitted && !formData.stateName}
 	/>
 
 	<FormField

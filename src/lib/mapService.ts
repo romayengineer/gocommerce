@@ -3,7 +3,7 @@ export interface MapConfig {
 	amenity?: string;
 	city?: string;
 	county?: string;
-	state?: string;
+	stateName?: string; // state is a reserved word use stateName instead
 	zipCode?: string;
 	country?: string;
 }

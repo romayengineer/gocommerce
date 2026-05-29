@@ -5,9 +5,12 @@
 	import { createMapService } from './mapFactory';
 	import { type IMapService } from './mapService';
 
-	const { address = '', city = '', zipCode = '', country = '' } = $props<{
+	const { address, amenity, city, county, stateName, zipCode, country } = $props<{
 		address?: string;
+		amenity?: string;
 		city?: string;
+		county?: string;
+		stateName?: string;
 		zipCode?: string;
 		country?: string;
 	}>();
@@ -35,12 +38,12 @@
 
 	async function updateLocation() {
 		if (!mapService) return;
-		await mapService.updateLocation({ address, city, zipCode, country });
+		await mapService.updateLocation({ address, amenity, city, county, stateName, zipCode, country });
 		locationNotFound = !mapService.wasLocationFound();
 	}
 
 	$effect(() => {
-		if (address || city || zipCode || country) {
+		if (address || amenity || city || county || stateName || zipCode || country) {
 			updateLocation();
 		}
 	});

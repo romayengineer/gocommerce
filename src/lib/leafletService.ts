@@ -72,7 +72,7 @@ export class LeafletService implements IMapService {
 			return;
 		}
 
-		const hasAddress = config.address || config.amenity || config.city || config.county || config.state || config.zipCode || config.country;
+		const hasAddress = config.address || config.amenity || config.city || config.county || config.stateName || config.zipCode || config.country;
 		if (!hasAddress) {
 			return;
 		}
@@ -96,8 +96,8 @@ export class LeafletService implements IMapService {
 			if (config.county) {
 				params.append('county', config.county);
 			}
-			if (config.state) {
-				params.append('state', config.state);
+			if (config.stateName) {
+				params.append('state', config.stateName);
 			}
 			if (config.zipCode) {
 				params.append('postalcode', config.zipCode);

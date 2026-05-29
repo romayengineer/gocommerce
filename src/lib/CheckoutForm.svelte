@@ -10,9 +10,12 @@
 		email: '',
 		phone: '',
 		address: '',
+		amenity: '',
 		city: '',
+		county: '',
+		stateName: '',
 		zipCode: '',
-		country: ''
+		country: '',
 	};
 
 	let submitted = false;
@@ -25,7 +28,10 @@
 			formData.email &&
 			formData.phone &&
 			formData.address &&
+			formData.amenity &&
 			formData.city &&
+			formData.county &&
+			formData.stateName &&
 			formData.zipCode &&
 			formData.country
 		) {
@@ -44,7 +50,10 @@
 
 	<MapDisplay
 		address={formData.address}
+		amenity={formData.amenity}
 		city={formData.city}
+		county={formData.county}
+		stateName={formData.stateName}
 		zipCode={formData.zipCode}
 		country={formData.country}
 	/>
