@@ -11,7 +11,8 @@
       "Bash(npm uninstall *)",
       "Bash(pkill -f \"vite dev\")",
       "Bash(npx tsc *)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:nominatim.org)"
     ]
   }
 }

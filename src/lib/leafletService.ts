@@ -2,6 +2,22 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM } from './mapService';
 
+// KEEP THIS DOCUMENTATION
+/*
+# [Structured query](https://nominatim.org/release-docs/develop/api/Search/#structured-query)
+
+| Parameter  | Value                      |
+| ---------- | -------------------------- |
+| amenity    | name and/or type of POI    |
+| street     | housenumber and streetname |
+| city       | city                       |
+| county     | county                     |
+| state      | state                      |
+| country    | country                    |
+| postalcode | postal code                |
+*/
+
+
 // Fix for default marker icons in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -55,17 +71,34 @@ export class LeafletService implements IMapService {
 			return;
 		}
 
-		const fullAddress = [config.address, config.city, config.zipCode, config.country]
-			.filter(Boolean)
-			.join(', ');
-
-		if (!fullAddress || fullAddress.trim() === ',') {
+		const hasAddress = config.address || config.city || config.zipCode || config.country;
+		if (!hasAddress) {
 			return;
 		}
 
 		try {
+			const params = new URLSearchParams({
+				format: 'json',
+				limit: '1',
+				addressdetails: '1'
+			});
+
+			if (config.address) {
+				params.append('street', config.address);
+			}
+			if (config.city) {
+				params.append('city', config.city);
+			}
+			if (config.zipCode) {
+				params.append('postalcode', config.zipCode);
+			}
+			if (config.country) {
+				params.append('country', config.country);
+				params.append('countrycodes', config.country.substring(0, 2).toLowerCase());
+			}
+
 			const response = await fetch(
-				`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}`
+				`https://nominatim.openstreetmap.org/search?${params.toString()}`
 			);
 			const results = await response.json() as Array<{ lat: string; lon: string }>;
 
