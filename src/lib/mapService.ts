@@ -13,4 +13,5 @@ export interface IMapService {
 	updateLocation(config: MapConfig): Promise<void>;
 	isInitialized(): boolean;
 	hasApiKey(): boolean;
+	wasLocationFound(): boolean;
 }

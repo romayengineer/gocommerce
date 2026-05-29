@@ -32,6 +32,7 @@ export class LeafletService implements IMapService {
 	private mapContainer: HTMLDivElement | null = null;
 	private updateTimeout: NodeJS.Timeout | null = null;
 	private readonly DEBOUNCE_DELAY = 2000;
+	private lastLocationFound = true;
 
 	async initialize(container: HTMLDivElement): Promise<void> {
 		this.mapContainer = container;
@@ -107,10 +108,28 @@ export class LeafletService implements IMapService {
 				const coordinates: L.LatLngExpression = [parseFloat(lat), parseFloat(lon)];
 				this.map.setView(coordinates, DEFAULT_ZOOM);
 				this.marker.setLatLng(coordinates);
+				this.lastLocationFound = true;
+			} else {
+				this.lastLocationFound = false;
+				this.resetToDefault();
 			}
 		} catch (error) {
-			console.log('Address not found, showing default location');
+			this.lastLocationFound = false;
+			this.resetToDefault();
 		}
+	}
+
+	private resetToDefault(): void {
+		if (!this.map || !this.marker) {
+			return;
+		}
+		const defaultCoords: L.LatLngExpression = [DEFAULT_CENTER.lat, DEFAULT_CENTER.lng];
+		this.map.setView(defaultCoords, DEFAULT_ZOOM);
+		this.marker.setLatLng(defaultCoords);
+	}
+
+	wasLocationFound(): boolean {
+		return this.lastLocationFound;
 	}
 
 	isInitialized(): boolean {

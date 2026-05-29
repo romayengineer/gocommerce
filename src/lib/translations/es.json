@@ -58,7 +58,8 @@
     "addressPlaceholder": "Calle Principal 123",
     "cityPlaceholder": "Buenos Aires",
     "zipCodePlaceholder": "1425",
-    "countryPlaceholder": "Argentina"
+    "countryPlaceholder": "Argentina",
+    "locationNotFound": "Ubicación no encontrada. Mostrando ubicación predeterminada."
   },
   "footer": {
     "description": "Tu destino de confianza para comprar productos de calidad en línea.",

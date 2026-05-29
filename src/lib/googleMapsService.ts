@@ -104,4 +104,8 @@ export class GoogleMapsService implements IMapService {
 	hasApiKey(): boolean {
 		return this.apiKey.length > 0;
 	}
+
+	wasLocationFound(): boolean {
+		return true;
+	}
 }
