@@ -39,7 +39,8 @@
     "tax": "Tax (10%)",
     "shipping": "Shipping",
     "total": "Total",
-    "checkout": "Proceed to Checkout"
+    "checkout": "Proceed to Checkout",
+    "clearCart": "Clear Cart"
   },
   "footer": {
     "description": "Your trusted online shopping destination for quality products.",

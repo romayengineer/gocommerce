@@ -39,7 +39,8 @@
     "tax": "Impuestos (10%)",
     "shipping": "Envío",
     "total": "Total",
-    "checkout": "Proceder al Pago"
+    "checkout": "Proceder al Pago",
+    "clearCart": "Vaciar Carrito"
   },
   "footer": {
     "description": "Tu destino de confianza para comprar productos de calidad en línea.",

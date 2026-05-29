@@ -48,7 +48,7 @@
 					</Button>
 
 					<Button variant="secondary" class="w-full py-3" onclick={() => clearCart()}>
-						{$t('cart.title')}
+						{$t('cart.clearCart')}
 					</Button>
 
 					{#if total > 100}
