@@ -47,7 +47,7 @@
 </script>
 
 <div class="mt-8">
-	<h2 class="text-xl font-bold mb-4">Delivery Location</h2>
+	<h2 class="text-xl font-bold mb-4">{$t('shipping.deliveryLocation')}</h2>
 	{#if apiKeyMissing}
 		<ApiKeyMissing />
 	{:else}

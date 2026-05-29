@@ -59,7 +59,8 @@
     "cityPlaceholder": "Buenos Aires",
     "zipCodePlaceholder": "1425",
     "countryPlaceholder": "Argentina",
-    "locationNotFound": "Ubicación no encontrada. Mostrando ubicación predeterminada."
+    "locationNotFound": "Ubicación no encontrada. Mostrando ubicación predeterminada.",
+    "deliveryLocation": "Lugar de entrega"
   },
   "footer": {
     "description": "Tu destino de confianza para comprar productos de calidad en línea.",

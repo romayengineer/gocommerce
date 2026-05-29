@@ -59,7 +59,8 @@
     "cityPlaceholder": "New York",
     "zipCodePlaceholder": "10001",
     "countryPlaceholder": "United States",
-    "locationNotFound": "Location not found. Showing default location."
+    "locationNotFound": "Location not found. Showing default location.",
+    "deliveryLocation": "Delivery Location"
   },
   "footer": {
     "description": "Your trusted online shopping destination for quality products.",
