@@ -1,4 +1,4 @@
-import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM } from './mapService';
+import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 export class GoogleMapsService implements IMapService {
 	private apiKey: string;
@@ -6,6 +6,7 @@ export class GoogleMapsService implements IMapService {
 	private geocoder: google.maps.Geocoder | null = null;
 	private marker: google.maps.marker.AdvancedMarkerElement | null = null;
 	private mapContainer: HTMLDivElement | null = null;
+	private lastLocationFound = true;
 
 	constructor(apiKey: string = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '') {
 		this.apiKey = apiKey;
@@ -88,12 +89,30 @@ export class GoogleMapsService implements IMapService {
 			if (results[0]) {
 				const location = results[0].geometry.location;
 				this.map.setCenter(location);
+				this.map.setZoom(FOUND_LOCATION_ZOOM);
 				if (this.marker) {
 					this.marker.position = location;
 				}
+				this.lastLocationFound = true;
+			} else {
+				this.lastLocationFound = false;
+				this.resetToDefault();
 			}
 		} catch (error) {
+			this.lastLocationFound = false;
+			this.resetToDefault();
 			console.log('Address not found, showing default location');
+		}
+	}
+
+	private resetToDefault(): void {
+		if (!this.map) {
+			return;
+		}
+		this.map.setCenter(DEFAULT_CENTER);
+		this.map.setZoom(DEFAULT_ZOOM);
+		if (this.marker) {
+			this.marker.position = DEFAULT_CENTER;
 		}
 	}
 
@@ -106,6 +125,6 @@ export class GoogleMapsService implements IMapService {
 	}
 
 	wasLocationFound(): boolean {
-		return true;
+		return this.lastLocationFound;
 	}
 }

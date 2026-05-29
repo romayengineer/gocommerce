@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM } from './mapService';
+import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 // KEEP THIS DOCUMENTATION
 /*
@@ -106,7 +106,7 @@ export class LeafletService implements IMapService {
 			if (results.length > 0) {
 				const { lat, lon } = results[0];
 				const coordinates: L.LatLngExpression = [parseFloat(lat), parseFloat(lon)];
-				this.map.setView(coordinates, DEFAULT_ZOOM);
+				this.map.setView(coordinates, FOUND_LOCATION_ZOOM);
 				this.marker.setLatLng(coordinates);
 				this.lastLocationFound = true;
 			} else {
