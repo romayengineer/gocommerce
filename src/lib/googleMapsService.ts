@@ -67,7 +67,7 @@ export class GoogleMapsService implements IMapService {
 			return;
 		}
 
-		const fullAddress = [config.address, config.city, config.zipCode, config.country]
+		const fullAddress = [config.amenity, config.address, config.county, config.city, config.state, config.zipCode, config.country]
 			.filter(Boolean)
 			.join(', ');
 

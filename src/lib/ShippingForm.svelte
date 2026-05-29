@@ -8,7 +8,10 @@
 		email: '',
 		phone: '',
 		address: '',
+		amenity: '',
 		city: '',
+		county: '',
+		state: '',
 		zipCode: '',
 		country: ''
 	};
@@ -65,6 +68,16 @@
 		/>
 	</div>
 
+	<div class="md:col-span-2">
+		<FormField
+			id="amenity"
+			label={$t('shipping.amenity')}
+			placeholder={$t('shipping.amenityPlaceholder')}
+			bind:value={formData.amenity}
+			error={submitted && !formData.amenity}
+		/>
+	</div>
+
 	<FormField
 		id="city"
 		label={$t('shipping.city')}
@@ -72,6 +85,22 @@
 		required
 		bind:value={formData.city}
 		error={submitted && !formData.city}
+	/>
+
+	<FormField
+		id="county"
+		label={$t('shipping.county')}
+		placeholder={$t('shipping.countyPlaceholder')}
+		bind:value={formData.county}
+		error={submitted && !formData.county}
+	/>
+
+	<FormField
+		id="state"
+		label={$t('shipping.state')}
+		placeholder={$t('shipping.statePlaceholder')}
+		bind:value={formData.state}
+		error={submitted && !formData.state}
 	/>
 
 	<FormField

@@ -1,6 +1,9 @@
 export interface MapConfig {
 	address?: string;
+	amenity?: string;
 	city?: string;
+	county?: string;
+	state?: string;
 	zipCode?: string;
 	country?: string;
 }
