@@ -15,16 +15,16 @@
 	let apiKeyMissing = $state(false);
 	let mapService: IMapService | null = null;
 
-	const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
-
 	onMount(async () => {
-		if (!GOOGLE_MAPS_API_KEY) {
+		const googleMapsService = new GoogleMapsService();
+
+		if (!googleMapsService.hasApiKey()) {
 			apiKeyMissing = true;
 			return;
 		}
 
 		try {
-			mapService = new GoogleMapsService(GOOGLE_MAPS_API_KEY);
+			mapService = googleMapsService;
 			await mapService.initialize(mapContainer!);
 			await updateLocation();
 		} catch (error) {

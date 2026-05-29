@@ -7,7 +7,7 @@ export class GoogleMapsService implements IMapService {
 	private marker: google.maps.marker.AdvancedMarkerElement | null = null;
 	private mapContainer: HTMLDivElement | null = null;
 
-	constructor(apiKey: string) {
+	constructor(apiKey: string = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '') {
 		this.apiKey = apiKey;
 	}
 
@@ -99,5 +99,9 @@ export class GoogleMapsService implements IMapService {
 
 	isInitialized(): boolean {
 		return this.map !== null && this.geocoder !== null;
+	}
+
+	hasApiKey(): boolean {
+		return this.apiKey.length > 0;
 	}
 }
