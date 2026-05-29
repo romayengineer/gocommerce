@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Button from './Button.svelte';
 	import ShippingForm from './ShippingForm.svelte';
+	import MapDisplay from './MapDisplay.svelte';
 
 	let formData = {
 		firstName: '',
@@ -40,6 +41,13 @@
 
 <form on:submit|preventDefault={handleSubmit} class="bg-white rounded-lg shadow p-8">
 	<ShippingForm bind:formData bind:submitted />
+
+	<MapDisplay
+		address={formData.address}
+		city={formData.city}
+		zipCode={formData.zipCode}
+		country={formData.country}
+	/>
 
 	<div class="flex gap-4 mt-8">
 		<Button type="submit" class="flex-1 py-3">
