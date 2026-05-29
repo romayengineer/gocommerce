@@ -14,6 +14,8 @@ export class LeafletService implements IMapService {
 	private map: L.Map | null = null;
 	private marker: L.Marker | null = null;
 	private mapContainer: HTMLDivElement | null = null;
+	private updateTimeout: NodeJS.Timeout | null = null;
+	private readonly DEBOUNCE_DELAY = 2000;
 
 	async initialize(container: HTMLDivElement): Promise<void> {
 		this.mapContainer = container;
@@ -35,7 +37,20 @@ export class LeafletService implements IMapService {
 		this.marker = L.marker(DEFAULT_CENTER).addTo(this.map);
 	}
 
-	async updateLocation(config: MapConfig): Promise<void> {
+	updateLocation(config: MapConfig): Promise<void> {
+		return new Promise((resolve) => {
+			if (this.updateTimeout) {
+				clearTimeout(this.updateTimeout);
+			}
+
+			this.updateTimeout = setTimeout(async () => {
+				await this.performLocationUpdate(config);
+				resolve();
+			}, this.DEBOUNCE_DELAY);
+		});
+	}
+
+	private async performLocationUpdate(config: MapConfig): Promise<void> {
 		if (!this.map || !this.marker) {
 			return;
 		}
