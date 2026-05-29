@@ -42,6 +42,24 @@
     "checkout": "Proceder al Pago",
     "clearCart": "Vaciar Carrito"
   },
+  "shipping": {
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "city": "Ciudad",
+    "zipCode": "Código Postal",
+    "country": "País",
+    "firstNamePlaceholder": "Juan",
+    "lastNamePlaceholder": "García",
+    "emailPlaceholder": "juan@ejemplo.com",
+    "phonePlaceholder": "+54 (11) 0000-0000",
+    "addressPlaceholder": "Calle Principal 123",
+    "cityPlaceholder": "Buenos Aires",
+    "zipCodePlaceholder": "1425",
+    "countryPlaceholder": "Argentina"
+  },
   "footer": {
     "description": "Tu destino de confianza para comprar productos de calidad en línea.",
     "shop": "Comprar",

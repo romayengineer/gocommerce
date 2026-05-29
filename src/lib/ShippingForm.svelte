@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FormField from './FormField.svelte';
+	import { t } from 'svelte-i18n';
 
 	export let formData = {
 		firstName: '',
@@ -17,8 +18,8 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 	<FormField
 		id="firstName"
-		label="First Name"
-		placeholder="John"
+		label={$t('shipping.firstName')}
+		placeholder={$t('shipping.firstNamePlaceholder')}
 		required
 		bind:value={formData.firstName}
 		error={submitted && !formData.firstName}
@@ -26,8 +27,8 @@
 
 	<FormField
 		id="lastName"
-		label="Last Name"
-		placeholder="Doe"
+		label={$t('shipping.lastName')}
+		placeholder={$t('shipping.lastNamePlaceholder')}
 		required
 		bind:value={formData.lastName}
 		error={submitted && !formData.lastName}
@@ -35,9 +36,9 @@
 
 	<FormField
 		id="email"
-		label="Email"
+		label={$t('shipping.email')}
 		type="email"
-		placeholder="john@example.com"
+		placeholder={$t('shipping.emailPlaceholder')}
 		required
 		bind:value={formData.email}
 		error={submitted && !formData.email}
@@ -45,9 +46,9 @@
 
 	<FormField
 		id="phone"
-		label="Phone"
+		label={$t('shipping.phone')}
 		type="tel"
-		placeholder="+1 (555) 000-0000"
+		placeholder={$t('shipping.phonePlaceholder')}
 		required
 		bind:value={formData.phone}
 		error={submitted && !formData.phone}
@@ -56,8 +57,8 @@
 	<div class="md:col-span-2">
 		<FormField
 			id="address"
-			label="Address"
-			placeholder="123 Main Street"
+			label={$t('shipping.address')}
+			placeholder={$t('shipping.addressPlaceholder')}
 			required
 			bind:value={formData.address}
 			error={submitted && !formData.address}
@@ -66,8 +67,8 @@
 
 	<FormField
 		id="city"
-		label="City"
-		placeholder="New York"
+		label={$t('shipping.city')}
+		placeholder={$t('shipping.cityPlaceholder')}
 		required
 		bind:value={formData.city}
 		error={submitted && !formData.city}
@@ -75,8 +76,8 @@
 
 	<FormField
 		id="zipCode"
-		label="Zip Code"
-		placeholder="10001"
+		label={$t('shipping.zipCode')}
+		placeholder={$t('shipping.zipCodePlaceholder')}
 		required
 		bind:value={formData.zipCode}
 		error={submitted && !formData.zipCode}
@@ -84,8 +85,8 @@
 
 	<FormField
 		id="country"
-		label="Country"
-		placeholder="United States"
+		label={$t('shipping.country')}
+		placeholder={$t('shipping.countryPlaceholder')}
 		required
 		bind:value={formData.country}
 		error={submitted && !formData.country}

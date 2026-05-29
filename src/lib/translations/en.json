@@ -42,6 +42,24 @@
     "checkout": "Proceed to Checkout",
     "clearCart": "Clear Cart"
   },
+  "shipping": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "zipCode": "Zip Code",
+    "country": "Country",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe",
+    "emailPlaceholder": "john@example.com",
+    "phonePlaceholder": "+1 (555) 000-0000",
+    "addressPlaceholder": "123 Main Street",
+    "cityPlaceholder": "New York",
+    "zipCodePlaceholder": "10001",
+    "countryPlaceholder": "United States"
+  },
   "footer": {
     "description": "Your trusted online shopping destination for quality products.",
     "shop": "Shop",
