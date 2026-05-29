@@ -12,4 +12,5 @@ export interface IMapService {
 	initialize(container: HTMLDivElement): Promise<void>;
 	updateLocation(config: MapConfig): Promise<void>;
 	isInitialized(): boolean;
+	hasApiKey(): boolean;
 }

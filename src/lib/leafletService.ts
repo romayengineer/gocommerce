@@ -67,4 +67,8 @@ export class LeafletService implements IMapService {
 	isInitialized(): boolean {
 		return this.map !== null;
 	}
+
+	hasApiKey(): boolean {
+		return true;
+	}
 }
