@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
+	import { goto } from '$app/navigation';
 	import Button from '$lib/Button.svelte';
 	import CartItem from '$lib/CartItem.svelte';
 	import EmptyState from '$lib/EmptyState.svelte';
@@ -43,7 +44,7 @@
 						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total + (total > 100 ? 0 : 10) + total * 0.1} isBold={true} />
 					</div>
 
-					<Button class="w-full py-3 mb-3">
+					<Button class="w-full py-3 mb-3" onclick={() => goto('#/checkout')}>
 						{$t('cart.checkout')}
 					</Button>
 
