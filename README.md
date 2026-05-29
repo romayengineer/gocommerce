@@ -22,8 +22,17 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Previous/Next navigation buttons
   - Image counter (e.g., "1 of 3")
   - Auto-wrapping navigation
+- 🛍️ **Checkout Flow** - Complete order management
+  - Multi-step checkout form with validation
+  - Delivery location mapping with Google Maps
+  - Order summary with itemized breakdown
+  - Support for multiple payment methods
+- 🗺️ **Delivery Map** - Interactive address visualization
+  - Google Maps integration with geocoding
+  - Real-time address to location mapping
+  - Responsive map display
 - 🎨 **Component Architecture** - Highly reusable atomic components
-  - 20+ specialized, single-responsibility components
+  - 25+ specialized, single-responsibility components
   - Zero code duplication
   - Consistent styling throughout
 
@@ -45,6 +54,25 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 ```bash
 npm install
 ```
+
+### Google Maps Setup (Optional)
+
+The checkout page includes an interactive delivery location map powered by Google Maps. To enable this feature:
+
+1. Get your Google Maps API key:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/maps)
+   - Create a new project
+   - Enable the Maps JavaScript API and Geocoding API
+   - Create an API key
+
+2. Add the API key to your `.env` file:
+   ```
+   VITE_GOOGLE_MAPS_API_KEY=your_api_key_here
+   ```
+
+3. Restart your dev server
+
+If you don't add an API key, the checkout page will still work but the map will display a helpful message with instructions.
 
 ### Development
 
@@ -73,8 +101,10 @@ src/
 │   │   ├── +page.svelte            # Products listing with filters
 │   │   └── [id]/
 │   │       └── +page.svelte        # Product detail page with carousel
-│   └── cart/
-│       └── +page.svelte            # Shopping cart
+│   ├── cart/
+│   │   └── +page.svelte            # Shopping cart
+│   └── checkout/
+│       └── +page.svelte            # Checkout with delivery form
 └── lib/
     ├── translations/               # i18n files
     │   ├── en.json                # English translations
@@ -82,12 +112,16 @@ src/
     ├── i18n.ts                    # i18n configuration
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
+    ├── googleMapsService.ts       # Google Maps integration
     ├── LanguageSwitcher.svelte    # Language selector dropdown
     ├── ProductImage.svelte        # Image carousel component
     ├── ProductCard.svelte         # Product grid card
     ├── ProductGrid.svelte         # Product grid layout
     ├── ProductFilters.svelte      # Category & sort filters
     ├── CartItem.svelte            # Cart item component
+    ├── CheckoutForm.svelte        # Checkout form component
+    ├── MapDisplay.svelte          # Delivery location map
+    ├── ApiKeyMissing.svelte       # API key missing alert
     ├── Button.svelte              # Reusable button
     ├── Link.svelte                # Consistent link styling
     ├── Price.svelte               # Price display
@@ -118,6 +152,20 @@ src/
 - Persistent storage with localStorage
 - Works completely offline
 - Order summary with subtotal, tax, shipping
+
+### 💳 Checkout Process
+- Multi-step checkout form with form validation
+- Customer information fields (name, email, phone)
+- Delivery address input (address, city, zip, country)
+- Interactive map visualization of delivery location
+- Order review before completing purchase
+
+### 🗺️ Delivery Location Map
+- Google Maps integration for address visualization
+- Real-time geocoding of delivery addresses
+- Automatic marker placement on map
+- Responsive map container
+- Graceful handling of missing API keys with helpful instructions
 
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
@@ -205,6 +253,7 @@ npm run build
 - **TypeScript** - Full type safety
 - **Vite** - Lightning-fast build tool
 - **Adapter Static** - Single HTML file bundling
+- **Google Maps API** - Interactive maps and geocoding (optional)
 
 ## Performance
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ApiKeyMissing from './ApiKeyMissing.svelte';
-	import { GoogleMapsService, type MapConfig } from './googleMapsService';
+	import { GoogleMapsService } from './googleMapsService';
 
 	const { address = '', city = '', zipCode = '', country = '' } = $props<{
 		address?: string;
