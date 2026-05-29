@@ -27,10 +27,12 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Delivery location mapping with Google Maps
   - Order summary with itemized breakdown
   - Support for multiple payment methods
-- 🗺️ **Delivery Map** - Interactive address visualization
-  - Google Maps integration with geocoding
+- 🗺️ **Delivery Map** - Interactive address visualization (choose your provider)
+  - **Default:** Leaflet + OpenStreetMap (free, no API key required)
+  - **Alternative:** Google Maps integration with geocoding
   - Real-time address to location mapping
   - Responsive map display
+  - Easy provider switching via environment variable
 - 🎨 **Component Architecture** - Highly reusable atomic components
   - 25+ specialized, single-responsibility components
   - Zero code duplication
@@ -55,9 +57,20 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 npm install
 ```
 
-### Google Maps Setup (Optional)
+### Map Provider Setup
 
-The checkout page includes an interactive delivery location map powered by Google Maps. To enable this feature:
+The checkout page includes an interactive delivery location map. Two providers are available:
+
+#### Leaflet + OpenStreetMap (Default - No Setup Required)
+The default map provider uses free, open-source Leaflet and OpenStreetMap data. No API key needed!
+
+```bash
+npm run dev
+# Map will work automatically
+```
+
+#### Google Maps (Optional)
+To use Google Maps instead of Leaflet:
 
 1. Get your Google Maps API key:
    - Go to [Google Cloud Console](https://console.cloud.google.com/maps)
@@ -65,14 +78,22 @@ The checkout page includes an interactive delivery location map powered by Googl
    - Enable the Maps JavaScript API and Geocoding API
    - Create an API key
 
-2. Add the API key to your `.env` file:
+2. Add to your `.env` file:
    ```
+   VITE_MAP_PROVIDER=google
    VITE_GOOGLE_MAPS_API_KEY=your_api_key_here
    ```
 
 3. Restart your dev server
 
-If you don't add an API key, the checkout page will still work but the map will display a helpful message with instructions.
+#### Comparison
+| Feature | Leaflet (Default) | Google Maps |
+|---------|------------------|-------------|
+| Cost | Free | Free tier + paid |
+| API Key | Not required | Required |
+| Setup | None | 3 steps |
+| Offline | Yes | No |
+| Data Source | OpenStreetMap | Google |
 
 ### Development
 
@@ -112,7 +133,10 @@ src/
     ├── i18n.ts                    # i18n configuration
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
-    ├── googleMapsService.ts       # Google Maps integration
+    ├── mapService.ts              # Map service interface & types
+    ├── mapFactory.ts              # Map provider factory
+    ├── googleMapsService.ts       # Google Maps implementation
+    ├── leafletService.ts          # Leaflet + OpenStreetMap implementation
     ├── LanguageSwitcher.svelte    # Language selector dropdown
     ├── ProductImage.svelte        # Image carousel component
     ├── ProductCard.svelte         # Product grid card
@@ -161,11 +185,13 @@ src/
 - Order review before completing purchase
 
 ### 🗺️ Delivery Location Map
-- Google Maps integration for address visualization
+- **Provider Selection:** Choose between Leaflet (default) or Google Maps via `VITE_MAP_PROVIDER`
+- **Leaflet + OpenStreetMap:** Free, offline-capable, no API key required
+- **Google Maps:** Full-featured, premium geocoding (optional)
 - Real-time geocoding of delivery addresses
 - Automatic marker placement on map
 - Responsive map container
-- Graceful handling of missing API keys with helpful instructions
+- Both providers implement the same interface for seamless switching
 
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
@@ -253,7 +279,8 @@ npm run build
 - **TypeScript** - Full type safety
 - **Vite** - Lightning-fast build tool
 - **Adapter Static** - Single HTML file bundling
-- **Google Maps API** - Interactive maps and geocoding (optional)
+- **Leaflet** - Open-source mapping library with OpenStreetMap (default)
+- **Google Maps API** - Interactive maps and geocoding (optional alternative)
 
 ## Performance
 
