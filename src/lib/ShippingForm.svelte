@@ -1,6 +1,8 @@
 <script lang="ts">
 	import FormField from './FormField.svelte';
+	import SearchableSelect from './SearchableSelect.svelte';
 	import { t } from 'svelte-i18n';
+	import { ARGENTINE_PROVINCES } from './argentineProvinces';
 
 	export let formData = {
 		firstName: '',
@@ -95,10 +97,11 @@
 		error={submitted && !formData.county}
 	/>
 
-	<FormField
+	<SearchableSelect
 		id="state"
 		label={$t('shipping.state')}
 		placeholder={$t('shipping.statePlaceholder')}
+		options={ARGENTINE_PROVINCES}
 		bind:value={formData.stateName}
 		error={submitted && !formData.stateName}
 	/>
