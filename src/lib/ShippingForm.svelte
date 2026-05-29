@@ -122,5 +122,6 @@
 		required
 		bind:value={formData.country}
 		error={submitted && !formData.country}
+		editable={false}
 	/>
 </div>

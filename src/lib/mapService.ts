@@ -26,7 +26,8 @@ export interface MapConfig {
 
 
 export function mapHasAddress(config: MapConfig): boolean {
-	if (config.address || config.amenity || config.city || config.county || config.stateName || config.zipCode || config.country) {
+	// address and state are required
+	if (config.address && config.stateName && (config.amenity || config.city || config.county || config.zipCode || config.country)) {
 		return true
 	}
 	return false

@@ -15,7 +15,7 @@
 		county: '',
 		stateName: '',
 		zipCode: '',
-		country: '',
+		country: 'Argentina', // hardcoded to Argentina
 	};
 
 	let submitted = false;

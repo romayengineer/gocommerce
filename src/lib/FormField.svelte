@@ -7,6 +7,7 @@
 	export let required: boolean = false;
 	export let error: boolean = false;
 	export let errorMessage: string = 'This field is required';
+	export let editable: boolean = true;
 </script>
 
 <div>
@@ -20,7 +21,8 @@
 		bind:value
 		{required}
 		{placeholder}
-		class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+		disabled={!editable}
+		class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent {!editable ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : ''}"
 	/>
 	{#if error}
 		<span class="text-red-500 text-sm mt-1">{errorMessage}</span>
