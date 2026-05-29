@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
+import { mapHasAddress, type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 // KEEP THIS DOCUMENTATION
 /*
@@ -72,7 +72,7 @@ export class LeafletService implements IMapService {
 			return;
 		}
 
-		const hasAddress = config.address || config.amenity || config.city || config.county || config.stateName || config.zipCode || config.country;
+		const hasAddress = mapHasAddress(config)
 		if (!hasAddress) {
 			return;
 		}
