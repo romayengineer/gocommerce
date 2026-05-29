@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ApiKeyMissing from './ApiKeyMissing.svelte';
-	import { GoogleMapsService } from './googleMapsService';
+	import { createMapService } from './mapFactory';
 	import { type IMapService } from './mapService';
 
 	const { address = '', city = '', zipCode = '', country = '' } = $props<{
@@ -16,15 +16,14 @@
 	let mapService: IMapService | null = null;
 
 	onMount(async () => {
-		const googleMapsService = new GoogleMapsService();
+		mapService = createMapService();
 
-		if (!googleMapsService.hasApiKey()) {
+		if (!mapService.hasApiKey()) {
 			apiKeyMissing = true;
 			return;
 		}
 
 		try {
-			mapService = googleMapsService;
 			await mapService.initialize(mapContainer!);
 			await updateLocation();
 		} catch (error) {
