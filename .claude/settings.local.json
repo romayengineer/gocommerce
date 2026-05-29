@@ -10,7 +10,8 @@
       "Bash(grep *)",
       "Bash(npm uninstall *)",
       "Bash(pkill -f \"vite dev\")",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "WebSearch"
     ]
   }
 }
