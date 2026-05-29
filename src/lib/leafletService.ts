@@ -6,15 +6,15 @@ import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM } from '
 /*
 # [Structured query](https://nominatim.org/release-docs/develop/api/Search/#structured-query)
 
-| Parameter  | Value                      |
-| ---------- | -------------------------- |
-| amenity    | name and/or type of POI    |
-| street     | housenumber and streetname |
-| city       | city                       |
-| county     | county                     |
-| state      | state                      |
-| country    | country                    |
-| postalcode | postal code                |
+| Parameter  | Value                      | Parámetro     | Valor (Argentina)                   |
+| ---------- | -------------------------- | ------------- | ----------------------------------- |
+| amenity    | name and/or type of POI    | amenidad      | nombre y/o tipo de lugar de interés |
+| street     | housenumber and streetname | calle         | número y nombre de calle            |
+| city       | city                       | ciudad        | ciudad                              |
+| county     | county                     | partido       | partido o departamento              |
+| state      | state                      | provincia     | provincia                           |
+| country    | country                    | país          | país                                |
+| postalcode | postal code                | código_postal | código postal                       |
 */
 
 
