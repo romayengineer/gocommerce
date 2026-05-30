@@ -18,25 +18,53 @@
 		options.filter((opt: Ioption) => opt.label.toLowerCase().includes(value.toLowerCase()))
 	);
 
+	function setValue(newValue: string) {
+		value = newValue;
+	}
+
+	function matchesOption(): boolean {
+		return options.some((opt: Ioption) =>
+			opt.label.toLowerCase() === value.toLowerCase()
+		);
+	}
+
+	function setToOpen() {
+		if (!matchesOption()) {
+			isOpen = true;
+		}
+	}
+
 	function selectOption(selectedValue: string) {
-		value = selectedValue;
-		onchange?.(selectedValue);
 		isOpen = false;
+		if (value != selectedValue) {
+			setValue(selectedValue);
+		}
+		onchange?.(selectedValue);
 	}
 
 	function handleInputChange(e: Event) {
-		isOpen = true;
+		setToOpen()
 	}
 
 	function handleFocusOut() {
-		if (value && filteredOptions.length == 1) {
-			value = filteredOptions[0].label
-		}
 		isOpen = false;
+		if (value && filteredOptions.length == 1) {
+			setValue(filteredOptions[0].label)
+		}
 	}
+
+	function handleFocusIn(e: Event) {
+		setToOpen()
+	}
+
+	$effect(() => {
+		if (value) {		
+			setToOpen()
+		}
+	});
 </script>
 
-<div class="relative" onfocusout={handleFocusOut}>
+<div class="relative" >
 	<FormField
 		{id}
 		{label}
@@ -45,7 +73,8 @@
 		error={error}
 		bind:value={value}
 		onchange={handleInputChange}
-		onfocus={() => (isOpen = true)}
+		onfocusin={handleFocusIn}
+		onfocusout={handleFocusOut}
 	/>
 
 	{#if isOpen}
