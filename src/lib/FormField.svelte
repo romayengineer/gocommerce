@@ -27,6 +27,7 @@
 		{value}
 		{required}
 		disabled={!editable}
+		spellcheck="false"
 		onchange={onchange}
 		onfocusin={onfocusin}
 		onfocusout={onfocusout}
