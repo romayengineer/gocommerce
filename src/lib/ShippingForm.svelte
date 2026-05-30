@@ -78,6 +78,7 @@
 	<div class="md:col-span-2">
 		<SearchableSelect
 			id="amenity"
+			required={true}
 			label={$t('shipping.amenity')}
 			placeholder={$t('shipping.amenityPlaceholder')}
 			options={amenitiesWithLabels}

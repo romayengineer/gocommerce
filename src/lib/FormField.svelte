@@ -1,6 +1,6 @@
 <script lang="ts">
 
-	let { id, label, type = 'text', placeholder = '', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange } = $props<{
+	let { id, label, type = 'text', placeholder = '', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange, onfocus } = $props<{
 		id: string;
 		label: string;
 		type?: string;
@@ -11,6 +11,7 @@
 		errorMessage?: string;
 		editable?: boolean;
 		onchange?: (event: Event) => void;
+		onfocus?: (event: FocusEvent) => void;
 	}>();
 </script>
 
@@ -28,6 +29,7 @@
 		{placeholder}
 		disabled={!editable}
 		onchange={onchange}
+		onfocus={onfocus}
 		oninput={(e) => { if (e.target instanceof HTMLInputElement) value = e.target.value; }}
 		class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent {!editable ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : ''}"
 	/>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FormField from './FormField.svelte';
 
 	interface Ioption { value: string; label: string }
 
@@ -22,72 +23,61 @@
 	function selectOption(selectedValue: string) {
 		value = selectedValue;
 		onchange?.(selectedValue);
-		searchQuery = '';
+		searchQuery = value;
 		isOpen = false;
 	}
 
 	function handleInputChange(e: Event) {
-		if (e.target instanceof HTMLInputElement) {
-			searchQuery = e.target.value;
-		}
+		isOpen = true;
 	}
 
-	function toggleDropdown() {
-		isOpen = !isOpen;
-		if (isOpen) {
-			searchQuery = '';
+	function handleFocusOut() {
+		if (searchQuery) {
+			const matchesOption = options.some((opt: Ioption) =>
+				opt.label.toLowerCase() === searchQuery.toLowerCase()
+			);
+			if (!matchesOption) {
+				searchQuery = '';
+			}
 		}
-	}
-
-	function handleBlur() {
 		isOpen = false;
 	}
 
 	const selectedLabel = $derived(options.find((opt: Ioption) => opt.value === value)?.label || '');
+
+	$effect(() => {
+		if (searchQuery) {
+			isOpen = true;
+		}
+	});
 </script>
 
-<div class="relative">
-	<label for={id} class="block text-sm font-medium text-gray-700 mb-2">
+<div class="relative" onfocusout={handleFocusOut}>
+	<FormField
+		{id}
 		{label}
-		{#if required}
-			<span class="text-red-500">*</span>
-		{/if}
-	</label>
-
-	<button
-		type="button"
-		id={id}
-		onclick={toggleDropdown}
-		class="w-full px-4 py-2 border {error ? 'border-red-500' : 'border-gray-300'} rounded-lg text-left bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-	>
-		<span class={selectedLabel ? 'text-gray-900' : 'text-gray-500'}>
-			{selectedLabel || placeholder}
-		</span>
-		<span class="float-right text-gray-400">▼</span>
-	</button>
+		type="text"
+		placeholder={placeholder}
+		{required}
+		error={error}
+		bind:value={searchQuery}
+		onchange={handleInputChange}
+		onfocus={() => (isOpen = true)}
+	/>
 
 	{#if isOpen}
 		<div
 			class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
-			onfocusout={handleBlur}
 			role="listbox"
+			tabindex="-1"
+			onmousedown={(e) => e.preventDefault()}
 		>
-			<div class="p-2">
-				<input
-					type="text"
-					placeholder={placeholder}
-					bind:value={searchQuery}
-					class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-					aria-label="Search options"
-				/>
-			</div>
-
 			<ul class="max-h-64 overflow-y-auto">
 				{#each filteredOptions as option (option.value)}
 					<li>
 						<button
 							type="button"
-							onclick={() => selectOption(option.value)}
+							onclick={() => selectOption(option.label)}
 							class="w-full text-left px-4 py-2 hover:bg-blue-100 focus:bg-blue-100 focus:outline-none {value === option.value ? 'bg-blue-50 font-semibold' : ''}"
 						>
 							{option.label}
