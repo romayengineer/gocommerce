@@ -73,7 +73,7 @@
 	<div class="md:col-span-2">
 		<SearchableSelect
 			id="amenity"
-			required={true}
+			required={false}
 			label={$t('shipping.amenity')}
 			options={amenitiesWithLabels}
 			bind:value={formData.amenity}
