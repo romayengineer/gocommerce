@@ -72,10 +72,12 @@ export class LeafletService implements IMapService {
 			return;
 		}
 
+		console.log(JSON.stringify(config))
 		const hasAddress = mapHasAddress(config)
 		if (!hasAddress) {
 			return;
 		}
+		console.log("updateLocation")
 
 		try {
 			const params = new URLSearchParams({

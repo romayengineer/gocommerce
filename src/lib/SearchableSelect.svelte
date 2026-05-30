@@ -14,15 +14,13 @@
 	}>();
 
 	let isOpen = $state(false);
-	let searchQuery = $state('');
-	let filteredOptions = $derived(
-		options.filter((opt: Ioption) => opt.label.toLowerCase().includes(searchQuery.toLowerCase()))
+	let filteredOptions: Ioption[] = $derived(
+		options.filter((opt: Ioption) => opt.label.toLowerCase().includes(value.toLowerCase()))
 	);
 
 	function selectOption(selectedValue: string) {
 		value = selectedValue;
 		onchange?.(selectedValue);
-		searchQuery = value;
 		isOpen = false;
 	}
 
@@ -31,24 +29,11 @@
 	}
 
 	function handleFocusOut() {
-		if (searchQuery) {
-			const matchesOption = options.some((opt: Ioption) =>
-				opt.label.toLowerCase() === searchQuery.toLowerCase()
-			);
-			if (!matchesOption) {
-				searchQuery = '';
-			}
+		if (value && filteredOptions.length == 1) {
+			value = filteredOptions[0].label
 		}
 		isOpen = false;
 	}
-
-	const selectedLabel = $derived(options.find((opt: Ioption) => opt.value === value)?.label || '');
-
-	$effect(() => {
-		if (searchQuery) {
-			isOpen = true;
-		}
-	});
 </script>
 
 <div class="relative" onfocusout={handleFocusOut}>
@@ -58,7 +43,7 @@
 		type="text"
 		{required}
 		error={error}
-		bind:value={searchQuery}
+		bind:value={value}
 		onchange={handleInputChange}
 		onfocus={() => (isOpen = true)}
 	/>
