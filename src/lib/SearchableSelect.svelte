@@ -2,7 +2,7 @@
 
 	interface Ioption { value: string; label: string }
 
-	let { id, label, placeholder = 'Search...', options, value = $bindable(), required = false, error = false } = $props<{
+	let { id, label, placeholder = 'Search...', options, value = $bindable(''), required = false, error = false, onchange } = $props<{
 		id: string;
 		label: string;
 		placeholder?: string;
@@ -10,6 +10,7 @@
 		value?: string;
 		required?: boolean;
 		error?: boolean;
+		onchange?: (value: string) => void;
 	}>();
 
 	let isOpen = $state(false);
@@ -20,8 +21,15 @@
 
 	function selectOption(selectedValue: string) {
 		value = selectedValue;
+		onchange?.(selectedValue);
 		searchQuery = '';
 		isOpen = false;
+	}
+
+	function handleInputChange(e: Event) {
+		if (e.target instanceof HTMLInputElement) {
+			searchQuery = e.target.value;
+		}
 	}
 
 	function toggleDropdown() {

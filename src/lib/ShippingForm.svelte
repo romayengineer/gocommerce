@@ -4,37 +4,12 @@
 	import { t } from 'svelte-i18n';
 	import { ARGENTINE_PROVINCES } from './argentineProvinces';
 	import { AMENITIES } from './amenities';
+	import type { ShippingFormData } from './schemas';
 
-	let {
-		formData = $bindable({
-			firstName: '',
-			lastName: '',
-			email: '',
-			phone: '',
-			address: '',
-			amenity: '',
-			city: '',
-			county: '',
-			stateName: '',
-			zipCode: '',
-			country: ''
-		}),
-		submitted = $bindable(false)
-	} = $props<{
-		formData?: {
-			firstName: string;
-			lastName: string;
-			email: string;
-			phone: string;
-			address: string;
-			amenity: string;
-			city: string;
-			county: string;
-			stateName: string;
-			zipCode: string;
-			country: string;
-		};
-		submitted?: boolean;
+	let { formData = $bindable(), errors = $bindable({}), submitted = $bindable({}) } = $props<{
+		formData: ShippingFormData;
+		errors: Record<string, string[] | undefined>;
+		submitted: boolean;
 	}>();
 
 	const amenitiesWithLabels = $derived(
@@ -52,7 +27,8 @@
 		placeholder={$t('shipping.firstNamePlaceholder')}
 		required
 		bind:value={formData.firstName}
-		error={submitted && !formData.firstName}
+		error={!!errors.firstName}
+		errorMessage={errors.firstName?.[0]}
 	/>
 
 	<FormField
@@ -61,7 +37,8 @@
 		placeholder={$t('shipping.lastNamePlaceholder')}
 		required
 		bind:value={formData.lastName}
-		error={submitted && !formData.lastName}
+		error={!!errors.lastName}
+		errorMessage={errors.lastName?.[0]}
 	/>
 
 	<FormField
@@ -71,7 +48,8 @@
 		placeholder={$t('shipping.emailPlaceholder')}
 		required
 		bind:value={formData.email}
-		error={submitted && !formData.email}
+		error={!!errors.email}
+		errorMessage={errors.email?.[0]}
 	/>
 
 	<FormField
@@ -81,7 +59,8 @@
 		placeholder={$t('shipping.phonePlaceholder')}
 		required
 		bind:value={formData.phone}
-		error={submitted && !formData.phone}
+		error={!!errors.phone}
+		errorMessage={errors.phone?.[0]}
 	/>
 
 	<div class="md:col-span-2">
@@ -91,7 +70,8 @@
 			placeholder={$t('shipping.addressPlaceholder')}
 			required
 			bind:value={formData.address}
-			error={submitted && !formData.address}
+			error={!!errors.address}
+			errorMessage={errors.address?.[0]}
 		/>
 	</div>
 
@@ -102,7 +82,7 @@
 			placeholder={$t('shipping.amenityPlaceholder')}
 			options={amenitiesWithLabels}
 			bind:value={formData.amenity}
-			error={submitted && !formData.amenity}
+			error={!!errors.amenity}
 		/>
 	</div>
 
@@ -110,8 +90,10 @@
 		id="city"
 		label={$t('shipping.city')}
 		placeholder={$t('shipping.cityPlaceholder')}
+		required
 		bind:value={formData.city}
-		error={submitted && !formData.city}
+		error={!!errors.city}
+		errorMessage={errors.city?.[0]}
 	/>
 
 	<FormField
@@ -119,7 +101,8 @@
 		label={$t('shipping.county')}
 		placeholder={$t('shipping.countyPlaceholder')}
 		bind:value={formData.county}
-		error={submitted && !formData.county}
+		error={!!errors.county}
+		errorMessage={errors.county?.[0]}
 	/>
 
 	<SearchableSelect
@@ -129,7 +112,7 @@
 		options={ARGENTINE_PROVINCES}
 		bind:value={formData.stateName}
 		required
-		error={submitted && !formData.stateName}
+		error={!!errors.stateName}
 	/>
 
 	<FormField
@@ -138,7 +121,8 @@
 		placeholder={$t('shipping.zipCodePlaceholder')}
 		required
 		bind:value={formData.zipCode}
-		error={submitted && !formData.zipCode}
+		error={!!errors.zipCode}
+		errorMessage={errors.zipCode?.[0]}
 	/>
 
 	<FormField
@@ -147,7 +131,8 @@
 		placeholder={$t('shipping.countryPlaceholder')}
 		required
 		bind:value={formData.country}
-		error={submitted && !formData.country}
+		error={!!errors.country}
+		errorMessage={errors.country?.[0]}
 		editable={false}
 	/>
 </div>
