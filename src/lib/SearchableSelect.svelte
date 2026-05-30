@@ -3,10 +3,9 @@
 
 	interface Ioption { value: string; label: string }
 
-	let { id, label, placeholder = 'Search...', options, value = $bindable(''), required = false, error = false, onchange } = $props<{
+	let { id, label, options, value = $bindable(''), required = false, error = false, onchange } = $props<{
 		id: string;
 		label: string;
-		placeholder?: string;
 		options: Ioption[];
 		value?: string;
 		required?: boolean;
@@ -57,7 +56,6 @@
 		{id}
 		{label}
 		type="text"
-		placeholder={placeholder}
 		{required}
 		error={error}
 		bind:value={searchQuery}

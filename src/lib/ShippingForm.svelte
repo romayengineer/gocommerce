@@ -24,7 +24,6 @@
 	<FormField
 		id="firstName"
 		label={$t('shipping.firstName')}
-		placeholder={$t('shipping.firstNamePlaceholder')}
 		required
 		bind:value={formData.firstName}
 		error={!!errors.firstName}
@@ -34,7 +33,6 @@
 	<FormField
 		id="lastName"
 		label={$t('shipping.lastName')}
-		placeholder={$t('shipping.lastNamePlaceholder')}
 		required
 		bind:value={formData.lastName}
 		error={!!errors.lastName}
@@ -45,7 +43,6 @@
 		id="email"
 		label={$t('shipping.email')}
 		type="email"
-		placeholder={$t('shipping.emailPlaceholder')}
 		required
 		bind:value={formData.email}
 		error={!!errors.email}
@@ -56,7 +53,6 @@
 		id="phone"
 		label={$t('shipping.phone')}
 		type="tel"
-		placeholder={$t('shipping.phonePlaceholder')}
 		required
 		bind:value={formData.phone}
 		error={!!errors.phone}
@@ -67,7 +63,6 @@
 		<FormField
 			id="address"
 			label={$t('shipping.address')}
-			placeholder={$t('shipping.addressPlaceholder')}
 			required
 			bind:value={formData.address}
 			error={!!errors.address}
@@ -80,7 +75,6 @@
 			id="amenity"
 			required={true}
 			label={$t('shipping.amenity')}
-			placeholder={$t('shipping.amenityPlaceholder')}
 			options={amenitiesWithLabels}
 			bind:value={formData.amenity}
 			error={!!errors.amenity}
@@ -90,7 +84,6 @@
 	<FormField
 		id="city"
 		label={$t('shipping.city')}
-		placeholder={$t('shipping.cityPlaceholder')}
 		required
 		bind:value={formData.city}
 		error={!!errors.city}
@@ -100,7 +93,6 @@
 	<FormField
 		id="county"
 		label={$t('shipping.county')}
-		placeholder={$t('shipping.countyPlaceholder')}
 		bind:value={formData.county}
 		error={!!errors.county}
 		errorMessage={errors.county?.[0]}
@@ -109,7 +101,6 @@
 	<SearchableSelect
 		id="state"
 		label={$t('shipping.state')}
-		placeholder={$t('shipping.statePlaceholder')}
 		options={ARGENTINE_PROVINCES}
 		bind:value={formData.stateName}
 		required
@@ -119,7 +110,6 @@
 	<FormField
 		id="zipCode"
 		label={$t('shipping.zipCode')}
-		placeholder={$t('shipping.zipCodePlaceholder')}
 		required
 		bind:value={formData.zipCode}
 		error={!!errors.zipCode}
@@ -129,7 +119,6 @@
 	<FormField
 		id="country"
 		label={$t('shipping.country')}
-		placeholder={$t('shipping.countryPlaceholder')}
 		required
 		bind:value={formData.country}
 		error={!!errors.country}

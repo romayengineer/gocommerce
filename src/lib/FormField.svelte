@@ -1,10 +1,9 @@
 <script lang="ts">
 
-	let { id, label, type = 'text', placeholder = '', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange, onfocus } = $props<{
+	let { id, label, type = 'text', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange, onfocus } = $props<{
 		id: string;
 		label: string;
 		type?: string;
-		placeholder?: string;
 		value?: string;
 		required?: boolean;
 		error?: boolean;
@@ -26,7 +25,6 @@
 		{type}
 		{value}
 		{required}
-		{placeholder}
 		disabled={!editable}
 		onchange={onchange}
 		onfocus={onfocus}
