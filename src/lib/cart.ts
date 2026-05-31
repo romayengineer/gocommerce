@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import type { Product } from './products';
+import type { DisplayProduct } from './products';
 
 export interface CartItem {
-	product: Product;
+	product: DisplayProduct;
 	quantity: number;
 }
 
@@ -17,7 +17,7 @@ function createCartStore() {
 
 	return {
 		subscribe,
-		addToCart: (product: Product, quantity: number) => {
+		addToCart: (product: DisplayProduct, quantity: number) => {
 			update((items: CartItem[]) => {
 				const existing = items.find((item) => item.product.itemId === product.itemId);
 				if (existing) {
@@ -59,7 +59,7 @@ function createCartStore() {
 
 export const cart = createCartStore();
 
-export async function addToCart(product: Product, quantity: number): Promise<void> {
+export async function addToCart(product: DisplayProduct, quantity: number): Promise<void> {
 	cart.addToCart(product, quantity);
 }
 

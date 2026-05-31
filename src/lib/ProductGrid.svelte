@@ -1,9 +1,9 @@
 <script lang="ts">
 	import ProductCard from './ProductCard.svelte';
-	import type { Product } from './products';
+	import type { DisplayProduct } from './products';
 
 	interface Props {
-		products: Product[];
+		products: DisplayProduct[];
 		emptyMessage?: string;
 	}
 

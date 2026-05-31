@@ -3,18 +3,18 @@
 
 	interface Props {
 		itemId: string;
-		ean: string;
-		variations: string[];
+		productName: string;
+		brand: string;
 	}
 
-	const { itemId, ean, variations }: Props = $props();
+	const { itemId, productName, brand }: Props = $props();
 </script>
 
 <div class="bg-gray-50 p-4 rounded-lg">
 	<h3 class="font-semibold mb-2">{$t('productDetail.productDetails')}</h3>
 	<ul class="space-y-2 text-sm text-gray-700">
 		<li><strong>{$t('productDetail.sku')}</strong> {itemId}</li>
-		<li><strong>EAN:</strong> {ean}</li>
-		<li><strong>Variations:</strong> {variations.join(', ')}</li>
+		<li><strong>Product:</strong> {productName}</li>
+		<li><strong>Brand:</strong> {brand}</li>
 	</ul>
 </div>

@@ -4,7 +4,6 @@
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
 	import { clearCart, type CartItem } from './cart';
-	import { isValidProduct } from './products';
 
 	interface Props {
 		item: CartItem;
@@ -13,12 +12,6 @@
 	}
 
 	const { item, onQuantityChange, onRemove }: Props = $props();
-
-	$effect.pre(() => {
-		if (!isValidProduct(item.product)) {
-			clearCart();
-		}
-	});
 </script>
 
 <div class="flex items-center gap-4 p-6 border-b">

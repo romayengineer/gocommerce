@@ -2,22 +2,23 @@
 	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFilters from '$lib/ProductFilters.svelte';
-	import { products, type Product } from '$lib/products';
+	import { getDisplayProducts } from '$lib/products';
 
 	let sortBy = $state('name');
 	let filterCategory = $state('all');
 
-	const categories: string[] = ['all', ...new Set(products.flatMap(p => p.variations))];
+	const displayProducts = getDisplayProducts();
+	const categories: string[] = ['all', ...new Set(displayProducts.flatMap(p => p.categories))];
 
 	let filtered = $derived(
 		filterCategory === 'all'
-			? products
-			: products.filter(p => p.variations.includes(filterCategory))
+			? displayProducts
+			: displayProducts.filter(p => p.categories.includes(filterCategory))
 	);
 
 	let sorted = $derived(
 		[...filtered].sort((a, b) => {
-			if (sortBy === 'name') return a.nameComplete.localeCompare(b.nameComplete);
+			if (sortBy === 'name') return a.productName.localeCompare(b.productName);
 			if (sortBy === 'price-low') return a.price - b.price;
 			if (sortBy === 'price-high') return b.price - a.price;
 			return 0;

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
-	import { products, type Product } from '$lib/products';
+	import { getDisplayProducts } from '$lib/products';
 
-	const featured: Product[] = products.slice(0, 6);
+	const featured = getDisplayProducts().slice(0, 6);
 </script>
 
 <div class="max-w-7xl mx-auto px-4 py-12">

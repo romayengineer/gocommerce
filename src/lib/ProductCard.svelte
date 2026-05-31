@@ -4,11 +4,11 @@
 	import Link from './Link.svelte';
 	import Price from './Price.svelte';
 	import ProductImage from './ProductImage.svelte';
-	import type { Product } from './products';
+	import type { DisplayProduct } from './products';
 	import { addToCart } from './cart';
 
 	interface Props {
-		product: Product;
+		product: DisplayProduct;
 	}
 
 	const { product }: Props = $props();
@@ -27,10 +27,10 @@
 		</div>
 
 		<div class="p-4 flex flex-col flex-1">
-			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.nameComplete}</h3>
-			<p class="text-gray-600 text-sm mb-2">{product.variations.join(', ')}</p>
+			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.productName}</h3>
+			<p class="text-gray-600 text-sm mb-2 line-clamp-2">{product.description}</p>
 
-			<p class="text-gray-700 text-sm mb-4 flex-1">{product.ean}</p>
+			<p class="text-gray-700 text-sm mb-4 flex-1 font-medium">{product.brand}</p>
 
 			<div class="flex items-center justify-between">
 				<Price amount={product.price} size="lg" />
