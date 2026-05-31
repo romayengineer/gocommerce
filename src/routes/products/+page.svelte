@@ -19,7 +19,7 @@
 				}
 				if (searchQuery.trim() !== '') {
 					const query = searchQuery.toLowerCase();
-					return p.nameComplete.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+					return p.nameComplete.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query);
 				}
 				return true;
 			})
