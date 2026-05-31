@@ -1,12 +1,11 @@
 <script lang="ts">
-	const { emoji, emojis = [emoji], alt = 'Product' } = $props<{
-		emoji: string;
-		emojis?: string[];
+	const { images = [], alt = 'Product' } = $props<{
+		images: string[];
 		alt?: string;
 	}>();
 
 	let currentIndex = $state(0);
-	let imageList = $derived(emojis && emojis.length > 0 ? emojis : [emoji]);
+	let imageList = $derived(images && images.length > 0 ? images : ['']);
 
 	function goToPrevious() {
 		currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
@@ -19,7 +18,9 @@
 
 <div class="relative">
 	<div class="bg-gray-200 rounded-lg aspect-square flex items-center justify-center relative">
-		<div class="text-6xl" title={alt}>{imageList[currentIndex]}</div>
+		{#if imageList[currentIndex]}
+			<img src={imageList[currentIndex]} alt={alt} class="w-full h-full object-cover rounded-lg" />
+		{/if}
 
 		{#if imageList.length > 1}
 			<button

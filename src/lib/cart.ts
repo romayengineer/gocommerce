@@ -19,7 +19,7 @@ function createCartStore() {
 		subscribe,
 		addToCart: (product: Product, quantity: number) => {
 			update((items: CartItem[]) => {
-				const existing = items.find((item) => item.product.id === product.id);
+				const existing = items.find((item) => item.product.itemId === product.itemId);
 				if (existing) {
 					existing.quantity += quantity;
 				} else {
@@ -31,17 +31,17 @@ function createCartStore() {
 		},
 		removeFromCart: (productId: string) => {
 			update((items: CartItem[]) => {
-				const filtered = items.filter((item) => item.product.id !== productId);
+				const filtered = items.filter((item) => item.product.itemId !== productId);
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(filtered));
 				return filtered;
 			});
 		},
 		updateQuantity: (productId: string, quantity: number) => {
 			update((items: CartItem[]) => {
-				const item = items.find((i) => i.product.id === productId);
+				const item = items.find((i) => i.product.itemId === productId);
 				if (item) {
 					if (quantity <= 0) {
-						items = items.filter((i) => i.product.id !== productId);
+						items = items.filter((i) => i.product.itemId !== productId);
 					} else {
 						item.quantity = quantity;
 					}

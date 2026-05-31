@@ -3,7 +3,6 @@
 	import Button from './Button.svelte';
 	import Link from './Link.svelte';
 	import Price from './Price.svelte';
-	import Rating from './Rating.svelte';
 	import ProductImage from './ProductImage.svelte';
 	import type { Product } from './products';
 	import { addToCart } from './cart';
@@ -17,21 +16,17 @@
 	}
 </script>
 
-<Link href="#/products/{product.id}" class="group no-underline">
+<Link href="#/products/{product.itemId}" class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
 		<div class="group-hover:opacity-80 transition-opacity">
-			<ProductImage emoji={product.emoji} alt={product.name} />
+			<ProductImage images={product.images} alt={product.nameComplete} />
 		</div>
 
 		<div class="p-4 flex flex-col flex-1">
-			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.name}</h3>
-			<p class="text-gray-600 text-sm mb-2">{product.category}</p>
+			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.nameComplete}</h3>
+			<p class="text-gray-600 text-sm mb-2">{product.variations.join(', ')}</p>
 
-			<div class="flex items-center gap-2 mb-3">
-				<Rating rating={product.rating} />
-			</div>
-
-			<p class="text-gray-700 text-sm mb-4 flex-1">{product.description.substring(0, 60)}...</p>
+			<p class="text-gray-700 text-sm mb-4 flex-1">{product.ean}</p>
 
 			<div class="flex items-center justify-between">
 				<Price amount={product.price} size="lg" />

@@ -12,7 +12,7 @@
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-		{#each products as product (product.id)}
+		{#each products as product (product.itemId)}
 			<ProductCard {product} />
 		{/each}
 	</div>
