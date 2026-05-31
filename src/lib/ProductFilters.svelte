@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	const { sortBy, filterCategory, categories, onSortChange, onCategoryChange } = $props<{
 		sortBy: string;
 		filterCategory: string;
@@ -7,6 +6,37 @@
 		onSortChange: (value: string) => void;
 		onCategoryChange: (value: string) => void;
 	}>();
+
+	interface CategorizedItems {
+		sizes: string[];
+		others: string[];
+	}
+
+	function categorizeItems(items: string[]): CategorizedItems {
+		const sizes: string[] = [];
+		const others: string[] = [];
+
+		for (const item of items) {
+			const parts = item.trim().split(/\s+/);
+			const isSize = parts.length === 2 && !isNaN(Number(parts[0])) && parts[1].toUpperCase() === 'ML';
+
+			if (isSize) {
+				sizes.push(item);
+			} else {
+				others.push(item);
+			}
+		}
+
+		sizes.sort((a, b) => {
+			const aNum = Number(a.split(/\s+/)[0]);
+			const bNum = Number(b.split(/\s+/)[0]);
+			return aNum - bNum;
+		});
+
+		return { sizes, others };
+	}
+
+	const { sizes, others } = $derived(categorizeItems(categories));
 </script>
 
 <div class="bg-white p-6 rounded-lg shadow">
@@ -15,17 +45,50 @@
 	<div class="mb-6">
 		<h4 class="font-semibold mb-3">Category</h4>
 		<div class="space-y-2">
-			{#each categories as cat}
-				<label class="flex items-center cursor-pointer">
-					<input
-						type="radio"
-						checked={filterCategory === cat}
-						onchange={() => onCategoryChange(cat)}
-						class="mr-2"
-					/>
-					<span class="capitalize">{cat}</span>
-				</label>
-			{/each}
+			<label class="flex items-center cursor-pointer">
+				<input
+					type="radio"
+					checked={filterCategory === 'all'}
+					onchange={() => onCategoryChange('all')}
+					class="mr-2"
+				/>
+				<span class="capitalize">All</span>
+			</label>
+
+			{#if sizes.length > 0}
+				<div class="ml-2 border-l-2 border-gray-300 pl-3">
+					<p class="text-sm font-semibold text-gray-600 mb-2">Sizes</p>
+					<div class="space-y-2">
+						{#each sizes as size}
+							<label class="flex items-center cursor-pointer">
+								<input
+									type="radio"
+									checked={filterCategory === size}
+									onchange={() => onCategoryChange(size)}
+									class="mr-2"
+								/>
+								<span>{size}</span>
+							</label>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
+			{#if others.length > 0}
+				<div class="space-y-2">
+					{#each others as cat}
+						<label class="flex items-center cursor-pointer">
+							<input
+								type="radio"
+								checked={filterCategory === cat}
+								onchange={() => onCategoryChange(cat)}
+								class="mr-2"
+							/>
+							<span class="capitalize">{cat}</span>
+						</label>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 
