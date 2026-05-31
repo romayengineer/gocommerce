@@ -15,7 +15,9 @@
 		lg: 'text-2xl font-bold text-blue-600'
 	};
 
-	function formatPrice(value: number, lang: string | undefined): string {
+	function formatPrice(value: number, lang: string | null | undefined): string {
+		// in argentna cents are not used much so remove them
+		// dots are used for separating 3 digits
 		if (lang === 'es') {
 			const integer = value.toFixed(0);
 			return integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
