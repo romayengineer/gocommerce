@@ -31,7 +31,7 @@
 			<ProductImage images={product.images} alt={product.nameComplete} />
 
 			<div>
-				<ProductHeader name={product.productName} category={product.brand} />
+				<ProductHeader name={product.nameComplete} category={product.brand} />
 
 				<div class="mb-6">
 					<Price amount={product.price} size="lg" />
@@ -65,7 +65,7 @@
 					<AddToCartAction onclick={handleAddToCart} />
 				</div>
 
-				<ProductDetailsBox itemId={product.itemId} productName={product.productName} brand={product.brand} />
+				<ProductDetailsBox itemId={product.itemId} productName={product.nameComplete} brand={product.brand} />
 			</div>
 		</div>
 	</div>

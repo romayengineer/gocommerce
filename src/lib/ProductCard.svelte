@@ -27,7 +27,7 @@
 		</div>
 
 		<div class="p-4 flex flex-col flex-1">
-			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.productName}</h3>
+			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.nameComplete}</h3>
 			<div class="text-gray-600 text-sm mb-2 line-clamp-2 prose prose-sm max-w-none">
 				{@html product.description}
 			</div>
