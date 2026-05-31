@@ -22,7 +22,7 @@
 <div class="relative">
 	<div class="bg-gray-200 rounded-lg aspect-square flex items-center justify-center relative">
 		{#if imageList[currentIndex]}
-			<img src={imageList[currentIndex]} alt={alt} class="w-full h-full object-cover rounded-lg" />
+			<img src={imageList[currentIndex]} alt={alt} loading="lazy" class="w-full h-full object-cover rounded-lg" />
 		{/if}
 
 		{#if imageList.length > 1 && showNavigation}
