@@ -72,9 +72,24 @@ export interface DisplayProduct {
 	price: number;
 }
 
+export function filterPropertiesByNames(
+	properties: ProductProperty[],
+	excludePatterns: string[],
+	caseSensitive = false
+): ProductProperty[] {
+	return properties.filter((prop) => {
+		const name = caseSensitive ? prop.name : prop.name.toLowerCase();
+		return !excludePatterns.some((pattern) => {
+			const p = caseSensitive ? pattern : pattern.toLowerCase();
+			return name.includes(p);
+		});
+	});
+}
+
 export function getDisplayProducts(): DisplayProduct[] {
-	return products.flatMap((product) =>
-		product.items.map((item) => ({
+	return products.flatMap((product) => {
+		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
+		return product.items.map((item) => ({
 			itemId: item.itemId,
 			nameComplete: item.nameComplete,
 			productId: product.productId,
@@ -84,9 +99,10 @@ export function getDisplayProducts(): DisplayProduct[] {
 			brandId: product.brandId,
 			categories: product.categories,
 			images: item.images,
-			properties: product.properties,
+			properties: properties,
 			sellers: item.sellers,
 			price: item.sellers[0]?.commertialOffer.Price ?? 0
 		}))
+	}
 	);
 }
