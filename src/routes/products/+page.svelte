@@ -10,10 +10,11 @@
 	const displayProducts = getDisplayProducts();
 	const categories: string[] = ['all', ...new Set(displayProducts.flatMap(p => p.categories))];
 
+	// fix filtered p.categories that end in filterCategory + /
 	let filtered = $derived(
 		filterCategory === 'all'
 			? displayProducts
-			: displayProducts.filter(p => p.categories.includes(filterCategory))
+			: displayProducts.filter(p => p.categories.some(cat => cat.endsWith(`${filterCategory}/`)))
 	);
 
 	let sorted = $derived(

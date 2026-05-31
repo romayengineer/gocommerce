@@ -25,7 +25,10 @@
 			if (isSize) {
 				sizes.push(item);
 			} else {
-				others.push(item);
+				// split item with / and get last value that is different from ''
+				const pathParts = item.split('/').filter((part) => part !== '');
+				const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : item;
+				others.push(categoryName);
 			}
 		}
 
@@ -82,7 +85,7 @@
 						<label class="flex items-center cursor-pointer">
 							<input
 								type="radio"
-								checked={filterCategory === cat}
+								checked={filterCategory.endsWith(cat) || filterCategory === cat}
 								onchange={() => onCategoryChange(cat)}
 								class="mr-2"
 							/>
