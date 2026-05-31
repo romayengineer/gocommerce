@@ -1,7 +1,8 @@
 <script lang="ts">
-	const { images = [], alt = 'Product' } = $props<{
+	const { images = [], alt = 'Product', showNavigation = true } = $props<{
 		images: string[];
 		alt?: string;
+		showNavigation?: boolean;
 	}>();
 
 	let currentIndex = $state(0);
@@ -24,7 +25,7 @@
 			<img src={imageList[currentIndex]} alt={alt} class="w-full h-full object-cover rounded-lg" />
 		{/if}
 
-		{#if imageList.length > 1}
+		{#if imageList.length > 1 && showNavigation}
 			<button
 				onclick={goToPrevious}
 				class="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-70 transition-colors"

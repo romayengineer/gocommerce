@@ -19,7 +19,7 @@
 <Link href="#/products/{product.itemId}" class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
 		<div class="group-hover:opacity-80 transition-opacity">
-			<ProductImage images={product.images} alt={product.nameComplete} />
+			<ProductImage images={product.images} alt={product.nameComplete} showNavigation={false} />
 		</div>
 
 		<div class="p-4 flex flex-col flex-1">
