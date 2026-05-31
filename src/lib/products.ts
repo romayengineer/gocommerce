@@ -7,4 +7,5 @@ export interface Product {
 	price: number;
 }
 
-export const products: Product[] = []
+import productsData from '../data/products.json';
+export const products: Product[] = productsData;
