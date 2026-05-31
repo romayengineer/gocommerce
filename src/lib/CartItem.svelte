@@ -12,9 +12,11 @@
 		onRemove: () => void;
 	}>();
 
-	if (!isValidProduct(item.product)) {
-		clearCart();
-	}
+	$effect.pre(() => {
+		if (!isValidProduct(item.product)) {
+			clearCart();
+		}
+	});
 </script>
 
 <div class="flex items-center gap-4 p-6 border-b">
