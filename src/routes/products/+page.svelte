@@ -6,15 +6,23 @@
 
 	let sortBy = $state('name');
 	let filterCategory = $state('all');
+	let searchQuery = $state('');
 
 	const displayProducts = getDisplayProducts();
 	const categories: string[] = ['all', ...new Set(displayProducts.flatMap(p => p.categories))];
 
-	// fix filtered p.categories that end in filterCategory + /
 	let filtered = $derived(
-		filterCategory === 'all'
-			? displayProducts
-			: displayProducts.filter(p => p.categories.some(cat => cat.endsWith(`${filterCategory}/`)))
+		displayProducts
+			.filter((p) => {
+				if (filterCategory !== 'all' && !p.categories.some(cat => cat.endsWith(`${filterCategory}/`))) {
+					return false;
+				}
+				if (searchQuery.trim() !== '') {
+					const query = searchQuery.toLowerCase();
+					return p.nameComplete.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+				}
+				return true;
+			})
 	);
 
 	let sorted = $derived(
@@ -35,9 +43,11 @@
 			<ProductFilters
 				{sortBy}
 				{filterCategory}
+				{searchQuery}
 				{categories}
 				onSortChange={(value) => (sortBy = value)}
 				onCategoryChange={(value) => (filterCategory = value)}
+				onSearchChange={(value) => (searchQuery = value)}
 			/>
 		</aside>
 

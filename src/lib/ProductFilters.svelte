@@ -2,12 +2,14 @@
 	interface Props {
 		sortBy: string;
 		filterCategory: string;
+		searchQuery: string;
 		categories: string[];
 		onSortChange: (value: string) => void;
 		onCategoryChange: (value: string) => void;
+		onSearchChange: (value: string) => void;
 	}
 
-	const { sortBy, filterCategory, categories, onSortChange, onCategoryChange }: Props = $props();
+	const { sortBy, filterCategory, searchQuery, categories, onSortChange, onCategoryChange, onSearchChange }: Props = $props();
 
 	interface CategorizedItems {
 		sizes: string[];
@@ -46,6 +48,17 @@
 
 <div class="bg-white p-6 rounded-lg shadow">
 	<h3 class="font-bold text-lg mb-4">Filters</h3>
+
+	<div class="mb-6">
+		<h4 class="font-semibold mb-3">Search</h4>
+		<input
+			type="text"
+			placeholder="Search by name or description..."
+			value={searchQuery}
+			oninput={(e) => onSearchChange(e.currentTarget.value)}
+			class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+		/>
+	</div>
 
 	<div class="mb-6">
 		<h4 class="font-semibold mb-3">Category</h4>
