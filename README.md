@@ -1,13 +1,13 @@
-# ShopHub - Static Ecommerce Website
+# GoCommerce - Static Ecommerce Website
 
-A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend, zero API, works completely offline!
+A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend, zero API, works completely offline with intelligent image caching!
 
 ## ✨ Features
 
 ### Core Features
-- 📦 Complete product catalog with 12 sample products
+- 📦 Complete product catalog with real product images from external CDN
 - 🛒 Shopping cart with persistent storage (localStorage)
-- 💳 Product filtering by category
+- 💳 Smart product filtering by size/variations
 - 📊 Product sorting (name, price)
 - 📱 Fully responsive design
 - ⚡ Lightning-fast static site generation
@@ -17,11 +17,18 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 - 🌍 **Multi-language Support** - English (🇬🇧) & Spanish (🇦🇷)
   - Language switcher dropdown with flag emojis
   - Persistent language preference (localStorage)
+  - **Dynamic price formatting:** Spanish uses `123,456.78` format, others use `123.456,78`
   - 30+ translated strings across all pages
-- 🎠 **Image Carousel** - Click through multiple product images
-  - Previous/Next navigation buttons
-  - Image counter (e.g., "1 of 3")
+- 🖼️ **Real Product Images** - Professional product photos
+  - Multiple images per product with carousel
+  - Smart navigation arrows (only in detail view)
+  - Image counter (e.g., "1 of 7")
   - Auto-wrapping navigation
+- 💾 **Intelligent Image Caching** - Service Worker powered
+  - First load: Downloads images, caches automatically
+  - Subsequent loads: Serves from cache instantly
+  - Works offline after first visit
+  - Automatic cache management
 - 🛍️ **Checkout Flow** - Complete order management
   - Multi-step checkout form with validation
   - Delivery location mapping with Google Maps
@@ -33,6 +40,11 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Real-time address to location mapping
   - Responsive map display
   - Easy provider switching via environment variable
+- 📊 **Smart Product Filters** - Intelligent category organization
+  - Automatically groups sizes (e.g., "30 ML", "100 ML", "200 ML")
+  - Numerical sorting for size variants
+  - Separate display for other categories
+  - Visual grouping with border indicators
 - 🎨 **Component Architecture** - Highly reusable atomic components
   - 25+ specialized, single-responsibility components
   - Zero code duplication
@@ -44,6 +56,11 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 - 🔐 **Hash-Based Routing** - No server required for navigation
 - 📘 **Full TypeScript** - Type-safe throughout with Svelte 5 runes
 - 🚀 **Zero Deprecation Warnings** - Modern Svelte 5 syntax
+- 🔄 **Service Worker Caching** - Aggressive image caching strategy
+  - Cache-first approach for images
+  - Network-first for other assets
+  - Automatic fallback to cached versions when offline
+  - Periodic cache updates
 
 ## Getting Started
 
@@ -244,19 +261,19 @@ Instead of inline markup, every UI element is a reusable component:
 ## Customization
 
 ### Add Your Products
-Edit `src/lib/products.ts` and add products to the array. Each product can have:
+Edit `src/data/products.json` and add products to the array. Each product has:
 ```typescript
 {
-  id: string,
-  name: string,
-  price: number,
-  category: string,
-  emoji: string,           // Primary image
-  emojis?: string[],       // Optional: multiple carousel images
-  rating: number,
-  description: string
+  itemId: string,          // Unique product ID
+  nameComplete: string,    // Full product name
+  ean: string,            // European Article Number (barcode)
+  variations: string[],   // Size variants (e.g., ["30 ML", "100 ML", "200 ML"])
+  images: string[],       // Array of product image URLs
+  price: number           // Price in cents (e.g., 256368 = $2563.68)
 }
 ```
+
+Products are loaded from `src/data/products.json` and typed in `src/lib/products.ts`.
 
 ### Change Languages
 Add new language to `src/lib/translations/`:
@@ -269,6 +286,38 @@ Modify Tailwind CSS classes in components or update `tailwind.config.js`.
 
 ### Add More Pages
 Create new `.svelte` files in `src/routes/` and use hash-based links like `href="#/your-page"`.
+
+## Service Worker Caching
+
+The app uses Service Workers for intelligent image caching:
+
+### How It Works
+1. **First Visit:** Images download from CDN and are automatically cached
+2. **Subsequent Visits:** Images load instantly from cache (no network request)
+3. **Offline Mode:** Cached images display even without internet connection
+4. **Cache Management:** Old caches are automatically cleaned up
+
+### Testing Locally
+The Service Worker requires HTTPS or localhost. Use `npm run preview` to test:
+
+```bash
+npm run build
+npm run preview
+# Open http://localhost:4173
+```
+
+Then:
+1. First load - images cache automatically
+2. Refresh page - images load from cache instantly
+3. DevTools → Application → Cache Storage - see cached images
+
+### Security Note
+Service Workers only work on:
+- ✅ `https://` (production)
+- ✅ `http://localhost` (local testing)
+- ❌ `file://` (direct file opening - not supported)
+
+Always use `npm run preview` or deploy to a server to test service worker functionality.
 
 ## Deployment
 
@@ -307,6 +356,7 @@ npm run build
 - **TypeScript** - Full type safety
 - **Vite** - Lightning-fast build tool
 - **Adapter Static** - Single HTML file bundling
+- **Service Workers** - Intelligent image caching and offline support
 - **Leaflet** - Open-source mapping library with OpenStreetMap tiles (default)
 - **Nominatim** - Free, open-source geocoding API for address lookup
 - **Google Maps API** - Interactive maps and geocoding (optional alternative)
