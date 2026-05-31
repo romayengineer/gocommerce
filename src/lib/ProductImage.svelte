@@ -7,11 +7,13 @@
 	let currentIndex = $state(0);
 	let imageList = $derived(images && images.length > 0 ? images : ['']);
 
-	function goToPrevious() {
+	function goToPrevious(e: MouseEvent) {
+		e.stopPropagation();
 		currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
 	}
 
-	function goToNext() {
+	function goToNext(e: MouseEvent) {
+		e.stopPropagation();
 		currentIndex = (currentIndex + 1) % imageList.length;
 	}
 </script>

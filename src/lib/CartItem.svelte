@@ -3,13 +3,18 @@
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
-	import type { CartItem } from './cart';
+	import { clearCart, type CartItem } from './cart';
+	import { isValidProduct } from './products';
 
 	const { item, onQuantityChange, onRemove } = $props<{
 		item: CartItem;
 		onQuantityChange: (quantity: number) => void;
 		onRemove: () => void;
 	}>();
+
+	if (!isValidProduct(item.product)) {
+		clearCart();
+	}
 </script>
 
 <div class="flex items-center gap-4 p-6 border-b">
