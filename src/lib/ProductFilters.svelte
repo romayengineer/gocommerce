@@ -50,15 +50,6 @@
 	<div class="mb-6">
 		<h4 class="font-semibold mb-3">Category</h4>
 		<div class="space-y-2">
-			<label class="flex items-center cursor-pointer">
-				<input
-					type="radio"
-					checked={filterCategory === 'all'}
-					onchange={() => onCategoryChange('all')}
-					class="mr-2"
-				/>
-				<span class="capitalize">All</span>
-			</label>
 
 			{#if sizes.length > 0}
 				<div class="ml-2 border-l-2 border-gray-300 pl-3">
