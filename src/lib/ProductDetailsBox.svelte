@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 
-	const { itemId, ean, variations } = $props<{
+	interface Props {
 		itemId: string;
 		ean: string;
 		variations: string[];
-	}>();
+	}
+
+	const { itemId, ean, variations }: Props = $props();
 </script>
 
 <div class="bg-gray-50 p-4 rounded-lg">

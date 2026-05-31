@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 
-	const { quantity, onchange } = $props<{
+	interface Props {
 		quantity: number;
 		onchange?: (quantity: number) => void;
-	}>();
+	}
+
+	const { quantity, onchange }: Props = $props();
 
 	function handleChange(e: Event) {
 		const target = e.target as HTMLInputElement;

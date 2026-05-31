@@ -6,11 +6,13 @@
 	import { AMENITIES } from './amenities';
 	import type { ShippingFormData } from './schemas';
 
-	let { formData = $bindable(), errors = $bindable({}), submitted = $bindable({}) } = $props<{
+	interface Props {
 		formData: ShippingFormData;
 		errors: Record<string, string[] | undefined>;
 		submitted: boolean;
-	}>();
+	}
+
+	let { formData = $bindable(), errors = $bindable({}), submitted = $bindable({}) }: Props = $props();
 
 	const amenitiesWithLabels = $derived(
 		AMENITIES.map(amenity => ({

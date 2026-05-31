@@ -7,7 +7,11 @@
 	import type { Product } from './products';
 	import { addToCart } from './cart';
 
-	const { product } = $props<{ product: Product }>();
+	interface Props {
+		product: Product;
+	}
+
+	const { product }: Props = $props();
 
 	function handleAddToCart(e: MouseEvent) {
 		e.preventDefault();

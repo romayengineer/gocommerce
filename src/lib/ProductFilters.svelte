@@ -1,11 +1,13 @@
 <script lang="ts">
-	const { sortBy, filterCategory, categories, onSortChange, onCategoryChange } = $props<{
+	interface Props {
 		sortBy: string;
 		filterCategory: string;
 		categories: string[];
 		onSortChange: (value: string) => void;
 		onCategoryChange: (value: string) => void;
-	}>();
+	}
+
+	const { sortBy, filterCategory, categories, onSortChange, onCategoryChange }: Props = $props();
 
 	interface CategorizedItems {
 		sizes: string[];

@@ -5,7 +5,7 @@
 	import { createMapService } from './mapFactory';
 	import { type IMapService } from './mapService';
 
-	const { address, amenity, city, county, stateName, zipCode, country } = $props<{
+	interface Props {
 		address?: string;
 		amenity?: string;
 		city?: string;
@@ -13,7 +13,9 @@
 		stateName?: string;
 		zipCode?: string;
 		country?: string;
-	}>();
+	}
+
+	const { address, amenity, city, county, stateName, zipCode, country }: Props = $props();
 
 	let mapContainer = $state<HTMLDivElement>();
 	let apiKeyMissing = $state(false);

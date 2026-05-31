@@ -2,9 +2,11 @@
 	import { t } from 'svelte-i18n';
 	import Button from './Button.svelte';
 
-	const { onclick } = $props<{
+	interface Props {
 		onclick: () => void;
-	}>();
+	}
+
+	const { onclick }: Props = $props();
 </script>
 
 <Button

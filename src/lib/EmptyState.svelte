@@ -1,10 +1,11 @@
 <script lang="ts">
-
-	const { message, actionHref, actionLabel } = $props<{
+	interface Props {
 		message: string;
 		actionHref?: string;
 		actionLabel?: string;
-	}>();
+	}
+
+	const { message, actionHref, actionLabel }: Props = $props();
 </script>
 
 <div class="bg-white rounded-lg p-12 text-center">

@@ -3,11 +3,13 @@
 
 	type Size = 'sm' | 'md' | 'lg';
 
-	const { amount, size = 'md', class: className } = $props<{
+	interface Props {
 		amount: number;
 		size?: Size;
 		class?: string;
-	}>();
+	}
+
+	const { amount, size = 'md', class: className }: Props = $props();
 
 	const sizeClasses = {
 		sm: 'text-sm',

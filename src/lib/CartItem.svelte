@@ -6,11 +6,13 @@
 	import { clearCart, type CartItem } from './cart';
 	import { isValidProduct } from './products';
 
-	const { item, onQuantityChange, onRemove } = $props<{
+	interface Props {
 		item: CartItem;
 		onQuantityChange: (quantity: number) => void;
 		onRemove: () => void;
-	}>();
+	}
+
+	const { item, onQuantityChange, onRemove }: Props = $props();
 
 	$effect.pre(() => {
 		if (!isValidProduct(item.product)) {

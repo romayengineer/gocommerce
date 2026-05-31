@@ -1,9 +1,11 @@
 <script lang="ts">
-	const { images = [], alt = 'Product', showNavigation = true } = $props<{
+	interface Props {
 		images: string[];
 		alt?: string;
 		showNavigation?: boolean;
-	}>();
+	}
+
+	const { images = [], alt = 'Product', showNavigation = true }: Props = $props();
 
 	let currentIndex = $state(0);
 	let imageList = $derived(images && images.length > 0 ? images : ['']);
