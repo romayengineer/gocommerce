@@ -46,31 +46,33 @@ export const productSchema = z.object({
 
 export type Product = z.infer<typeof productSchema>;
 
+export const displayProductSchema = z.object({
+	itemId: z.string(),
+	nameComplete: z.string(),
+	productId: z.string(),
+	productName: z.string(),
+	description: z.string(),
+	brand: z.string(),
+	brandId: z.number(),
+	categories: z.array(z.string()),
+	images: z.array(z.string()),
+	properties: z.array(productPropertySchema),
+	sellers: z.array(productSellerAndPriceSchema),
+	price: z.number(),
+})
+
+export type DisplayProduct = z.infer<typeof displayProductSchema>;
+
 export function createValidator<T extends z.ZodType>(schema: T) {
 	return (value: unknown): value is z.infer<T> => {
 		return schema.safeParse(value).success;
 	};
 }
 
-export const isValidProduct = createValidator(productSchema);
+export const isValidProduct = createValidator(displayProductSchema);
 
 import productsData from '../data/products.json';
 export const products: Product[] = productsData;
-
-export interface DisplayProduct {
-	itemId: string;
-	nameComplete: string;
-	productId: string;
-	productName: string;
-	description: string;
-	brand: string;
-	brandId: number;
-	categories: string[];
-	images: string[];
-	properties: ProductProperty[];
-	sellers: ProductSellerAndPrice[];
-	price: number;
-}
 
 export function filterPropertiesByNames(
 	properties: ProductProperty[],

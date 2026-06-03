@@ -60,6 +60,7 @@ function createCartStore() {
 	// clear cart if any product is invalid so that the cart view can display the products
 	initial.some((item) => {
 		if (!isValidProduct(item.product)) {
+			console.log("invalid product clearing cart")
 			ob.clearCart();
 			return true
 		}
