@@ -5,7 +5,7 @@
 		docsLink?: string;
 	}
 
-	const { apiName = 'Google Maps API', envVarName = 'VITE_GOOGLE_MAPS_API_KEY', docsLink = 'https://console.cloud.google.com/maps' } = $props<Props>();
+	const { apiName = 'Google Maps API', envVarName = 'VITE_GOOGLE_MAPS_API_KEY', docsLink = 'https://console.cloud.google.com/maps' }: Props = $props();
 </script>
 
 <div class="w-full h-96 border border-orange-300 rounded-lg shadow-md bg-orange-50 flex items-center justify-center p-4">

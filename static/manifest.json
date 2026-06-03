@@ -1,0 +1,19 @@
+{
+	"name": "GoCommerce",
+	"short_name": "GoCommerce",
+	"description": "An ecommerce store",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"orientation": "portrait-primary",
+	"theme_color": "#2563eb",
+	"background_color": "#ffffff",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	]
+}

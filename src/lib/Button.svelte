@@ -1,14 +1,16 @@
 <script lang="ts">
 	type Variant = 'primary' | 'secondary' | 'danger';
 
-	const { variant = 'primary', class: className, onclick, disabled = false, type = 'button', children } = $props<{
+	interface Props {
 		variant?: Variant;
 		class?: string;
 		onclick?: (e: MouseEvent) => void;
 		disabled?: boolean;
 		type?: 'button' | 'submit' | 'reset';
 		children?: import('svelte').Snippet;
-	}>();
+	}
+
+	const { variant = 'primary', class: className, onclick, disabled = false, type = 'button', children }: Props = $props();
 
 	const variantClasses = {
 		primary: 'bg-blue-600 text-white hover:bg-blue-700',

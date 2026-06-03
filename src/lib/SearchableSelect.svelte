@@ -3,7 +3,7 @@
 
 	interface Ioption { value: string; label: string }
 
-	let { id, label, options, value = $bindable(''), required = false, error = false, onchange } = $props<{
+	interface Props {
 		id: string;
 		label: string;
 		options: Ioption[];
@@ -11,7 +11,9 @@
 		required?: boolean;
 		error?: boolean;
 		onchange?: (value: string) => void;
-	}>();
+	}
+
+	let { id, label, options, value = $bindable(''), required = false, error = false, onchange }: Props = $props();
 
 	let isOpen = $state(false);
 	let filteredOptions: Ioption[] = $derived(

@@ -1,9 +1,10 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import type { Product } from './products';
+import type { DisplayProduct } from './products';
+import { isValidProduct } from './products';
 
 export interface CartItem {
-	product: Product;
+	product: DisplayProduct;
 	quantity: number;
 }
 
@@ -15,11 +16,11 @@ function createCartStore() {
 
 	const { subscribe, set, update } = writable<CartItem[]>(initial);
 
-	return {
+	const ob = {
 		subscribe,
-		addToCart: (product: Product, quantity: number) => {
+		addToCart: (product: DisplayProduct, quantity: number) => {
 			update((items: CartItem[]) => {
-				const existing = items.find((item) => item.product.id === product.id);
+				const existing = items.find((item) => item.product.itemId === product.itemId);
 				if (existing) {
 					existing.quantity += quantity;
 				} else {
@@ -31,17 +32,17 @@ function createCartStore() {
 		},
 		removeFromCart: (productId: string) => {
 			update((items: CartItem[]) => {
-				const filtered = items.filter((item) => item.product.id !== productId);
+				const filtered = items.filter((item) => item.product.itemId !== productId);
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(filtered));
 				return filtered;
 			});
 		},
 		updateQuantity: (productId: string, quantity: number) => {
 			update((items: CartItem[]) => {
-				const item = items.find((i) => i.product.id === productId);
+				const item = items.find((i) => i.product.itemId === productId);
 				if (item) {
 					if (quantity <= 0) {
-						items = items.filter((i) => i.product.id !== productId);
+						items = items.filter((i) => i.product.itemId !== productId);
 					} else {
 						item.quantity = quantity;
 					}
@@ -55,11 +56,21 @@ function createCartStore() {
 			if (browser) localStorage.removeItem(CART_KEY);
 		}
 	};
+
+	// clear cart if any product is invalid so that the cart view can display the products
+	initial.some((item) => {
+		if (!isValidProduct(item.product)) {
+			ob.clearCart();
+			return true
+		}
+	})
+
+	return ob
 }
 
 export const cart = createCartStore();
 
-export async function addToCart(product: Product, quantity: number): Promise<void> {
+export async function addToCart(product: DisplayProduct, quantity: number): Promise<void> {
 	cart.addToCart(product, quantity);
 }
 

@@ -1,27 +1,33 @@
 <script lang="ts">
-	const { emoji, emojis = [emoji], alt = 'Product' } = $props<{
-		emoji: string;
-		emojis?: string[];
+	interface Props {
+		images: string[];
 		alt?: string;
-	}>();
+		showNavigation?: boolean;
+	}
+
+	const { images = [], alt = 'Product', showNavigation = true }: Props = $props();
 
 	let currentIndex = $state(0);
-	let imageList = $derived(emojis && emojis.length > 0 ? emojis : [emoji]);
+	let imageList = $derived(images && images.length > 0 ? images : ['']);
 
-	function goToPrevious() {
+	function goToPrevious(e: MouseEvent) {
+		e.stopPropagation();
 		currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
 	}
 
-	function goToNext() {
+	function goToNext(e: MouseEvent) {
+		e.stopPropagation();
 		currentIndex = (currentIndex + 1) % imageList.length;
 	}
 </script>
 
 <div class="relative">
 	<div class="bg-gray-200 rounded-lg aspect-square flex items-center justify-center relative">
-		<div class="text-6xl" title={alt}>{imageList[currentIndex]}</div>
+		{#if imageList[currentIndex]}
+			<img src={imageList[currentIndex]} alt={alt} loading="lazy" class="w-full h-full object-cover rounded-lg" />
+		{/if}
 
-		{#if imageList.length > 1}
+		{#if imageList.length > 1 && showNavigation}
 			<button
 				onclick={goToPrevious}
 				class="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-70 transition-colors"

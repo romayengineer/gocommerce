@@ -21,11 +21,11 @@
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 			<div class="lg:col-span-2">
 				<div class="bg-white rounded-lg shadow">
-					{#each $cart as item (item.product.id)}
+					{#each $cart as item (item.product.itemId)}
 						<CartItem
 							{item}
-							onQuantityChange={(qty) => updateQuantity(item.product.id, qty)}
-							onRemove={() => removeFromCart(item.product.id)}
+							onQuantityChange={(qty) => updateQuantity(item.product.itemId, qty)}
+							onRemove={() => removeFromCart(item.product.itemId)}
 						/>
 					{/each}
 				</div>

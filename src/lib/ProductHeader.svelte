@@ -1,8 +1,10 @@
 <script lang="ts">
-	const { name, category } = $props<{
+	interface Props {
 		name: string;
 		category: string;
-	}>();
+	}
+
+	const { name, category }: Props = $props();
 </script>
 
 <div>

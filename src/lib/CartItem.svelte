@@ -3,20 +3,26 @@
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
-	import type { CartItem } from './cart';
+	import { clearCart, type CartItem } from './cart';
 
-	const { item, onQuantityChange, onRemove } = $props<{
+	interface Props {
 		item: CartItem;
 		onQuantityChange: (quantity: number) => void;
 		onRemove: () => void;
-	}>();
+	}
+
+	const { item, onQuantityChange, onRemove }: Props = $props();
 </script>
 
 <div class="flex items-center gap-4 p-6 border-b">
-	<div class="text-4xl">{item.product.emoji}</div>
+	<div class="w-20 h-20">
+		{#if item.product.images.length > 0}
+			<img src={item.product.images[0]} alt={item.product.nameComplete} class="w-full h-full object-cover rounded" />
+		{/if}
+	</div>
 
 	<div class="flex-1">
-		<h3 class="font-semibold text-lg">{item.product.name}</h3>
+		<h3 class="font-semibold text-lg">{item.product.nameComplete}</h3>
 		<Price amount={item.product.price} size="sm" class="text-gray-600" />
 	</div>
 

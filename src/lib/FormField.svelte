@@ -1,6 +1,5 @@
 <script lang="ts">
-
-	let { id, label, type = 'text', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange, onfocusin, onfocusout } = $props<{
+	interface Props {
 		id: string;
 		label: string;
 		type?: string;
@@ -12,7 +11,9 @@
 		onchange?: (event: Event) => void;
 		onfocusin?: (event: FocusEvent) => void;
 		onfocusout?: (event: FocusEvent) => void;
-	}>();
+	}
+
+	let { id, label, type = 'text', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange, onfocusin, onfocusout }: Props = $props();
 </script>
 
 

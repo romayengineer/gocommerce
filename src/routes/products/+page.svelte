@@ -2,22 +2,32 @@
 	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFilters from '$lib/ProductFilters.svelte';
-	import { products, type Product } from '$lib/products';
+	import { getDisplayProducts } from '$lib/products';
 
 	let sortBy = $state('name');
 	let filterCategory = $state('all');
+	let searchQuery = $state('');
 
-	const categories: string[] = ['all', ...new Set(products.map(p => p.category))];
+	const displayProducts = getDisplayProducts();
+	const categories: string[] = ['all', ...new Set(displayProducts.flatMap(p => p.categories))];
 
 	let filtered = $derived(
-		filterCategory === 'all'
-			? products
-			: products.filter(p => p.category === filterCategory)
+		displayProducts
+			.filter((p) => {
+				if (filterCategory !== 'all' && !p.categories.some(cat => cat.endsWith(`${filterCategory}/`))) {
+					return false;
+				}
+				if (searchQuery.trim() !== '') {
+					const query = searchQuery.toLowerCase();
+					return p.nameComplete.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query);
+				}
+				return true;
+			})
 	);
 
 	let sorted = $derived(
 		[...filtered].sort((a, b) => {
-			if (sortBy === 'name') return a.name.localeCompare(b.name);
+			if (sortBy === 'name') return a.productName.localeCompare(b.productName);
 			if (sortBy === 'price-low') return a.price - b.price;
 			if (sortBy === 'price-high') return b.price - a.price;
 			return 0;
@@ -33,9 +43,11 @@
 			<ProductFilters
 				{sortBy}
 				{filterCategory}
+				{searchQuery}
 				{categories}
 				onSortChange={(value) => (sortBy = value)}
 				onCategoryChange={(value) => (filterCategory = value)}
+				onSearchChange={(value) => (searchQuery = value)}
 			/>
 		</aside>
 
