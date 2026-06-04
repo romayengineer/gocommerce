@@ -14,7 +14,7 @@
 
 			<div class="flex items-center gap-2 md:gap-8 ml-4">
 				<Link href="#/" variant="secondary" class="hidden sm:inline">{$t('home.featured').split(' ')[0]}</Link>
-				<Link href="#/products" variant="secondary" class="hidden sm:inline">{$t('products.title')}</Link>
+				<Link href="#/products" variant="secondary">{$t('products.title')}</Link>
 
 				<LanguageSwitcher />
 
