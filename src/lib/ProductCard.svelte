@@ -34,9 +34,9 @@
 
 			<p class="text-gray-700 text-sm mb-4 flex-1 font-medium">{product.brand}</p>
 
-			<div class="flex items-center justify-between">
+			<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-0">
 				<Price amount={product.price} size="md" />
-				<Button onclick={handleAddToCart}>{$t('products.add')}</Button>
+				<Button onclick={handleAddToCart} class="w-full md:w-auto">{$t('products.add')}</Button>
 			</div>
 		</div>
 	</div>
