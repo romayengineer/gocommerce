@@ -9,7 +9,7 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 - 🛒 Shopping cart with persistent storage (localStorage)
 - 💳 Smart product filtering by size/variations
 - 📊 Product sorting (name, price)
-- 📱 Fully responsive design
+- 📱 **Mobile-first responsive design** - Optimized for all devices
 - ⚡ Lightning-fast static site generation
 - 🎨 Beautiful Tailwind CSS styling
 
