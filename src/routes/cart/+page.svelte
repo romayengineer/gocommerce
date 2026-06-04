@@ -12,7 +12,7 @@
 	let itemCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
 </script>
 
-<div class="max-w-4xl mx-auto px-4 py-12">
+<div class="max-w-5xl mx-auto px-4 py-12">
 	<h1 class="text-4xl font-bold mb-8">{$t('cart.title')}</h1>
 
 	{#if $cart.length === 0}
