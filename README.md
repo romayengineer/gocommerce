@@ -63,6 +63,10 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Network-first for other assets
   - Automatic fallback to cached versions when offline
   - Periodic cache updates
+- 🔍 **Custom Logger** - Reactive logging system with URL parameter control
+  - Enable/disable logs with `?debug` query parameter
+  - Programmatic control via `logger.setEnabled()` and `logger.toggle()`
+  - Used throughout the app for debugging image loading, cart operations, and service worker activity
 
 ## Getting Started
 
@@ -150,6 +154,7 @@ src/
     │   ├── en.json                # English translations
     │   └── es.json                # Spanish translations
     ├── i18n.ts                    # i18n configuration
+    ├── logger.svelte.ts           # Custom reactive logger with ?debug support
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
     ├── mapService.ts              # Map service interface & types
@@ -243,6 +248,36 @@ Both services share:
 - Dynamic zoom levels (street-level vs regional)
 - Error tracking and default location fallback
 - Multi-language error messages
+
+### 🔍 Logging & Debugging
+The app includes a custom reactive logger for debugging:
+
+**Features:**
+- Logs image loading, cart operations, and service worker activity
+- Automatically detects `?debug` query parameter in URL
+- Can be toggled programmatically from browser console
+- Errors always display regardless of debug state
+
+**Enable Logging:**
+```javascript
+// Via URL
+http://localhost:5173/?debug
+
+// Via browser console
+logger.setEnabled(true);
+logger.toggle();
+logger.setEnabled(false);
+
+// Check current state
+logger.isEnabled;
+```
+
+**Logger Locations:**
+- Image loading events: `ProductImage.svelte`
+- Cart operations: `cart.ts`
+- Service Worker events: `service-worker.js`
+- Location updates: `googleMapsService.ts`, `leafletService.ts`
+- Checkout: `CheckoutForm.svelte`
 
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
