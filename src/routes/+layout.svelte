@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { logger } from '$lib/logger.svelte';
 	import Navigation from '$lib/Navigation.svelte';
 	import Footer from '$lib/Footer.svelte';
 	import '$lib/i18n';
@@ -10,14 +11,14 @@
 			navigator.serviceWorker
 				.register('/service-worker.js', { scope: '/' })
 				.then((registration) => {
-					console.log('Service Worker registered:', registration);
+					logger.log('Service Worker registered:', registration);
 					// Check for updates periodically
 					setInterval(() => {
 						registration.update();
 					}, 60000);
 				})
 				.catch((error) => {
-					console.error('Service Worker registration failed:', error);
+					logger.error('Service Worker registration failed:', error);
 				});
 		}
 	});

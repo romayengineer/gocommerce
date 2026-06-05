@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { logger } from './logger.svelte';
 	import Button from './Button.svelte';
 	import ShippingForm from './ShippingForm.svelte';
 	import MapDisplay from './MapDisplay.svelte';
@@ -41,7 +42,7 @@
 
 		submitting = true;
 		try {
-			console.log('Order submitted:', formData);
+			logger.log('Order submitted:', formData);
 			// Simulate submission delay
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			goto('#/');

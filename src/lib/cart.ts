@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import { logger } from './logger.svelte';
 import type { DisplayProduct } from './products';
 import { isValidProduct } from './products';
 
@@ -60,7 +61,7 @@ function createCartStore() {
 	// clear cart if any product is invalid so that the cart view can display the products
 	initial.some((item) => {
 		if (!isValidProduct(item.product)) {
-			console.log("invalid product clearing cart")
+			logger.log("Invalid product, clearing cart");
 			ob.clearCart();
 			return true
 		}

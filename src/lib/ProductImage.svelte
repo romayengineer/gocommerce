@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { logger } from './logger.svelte';
+
 	interface Props {
 		images: string[];
 		alt?: string;
@@ -18,7 +20,7 @@
 	}
 
 	function handleImageError() {
-		console.log(`image error ${currentIndex}`)
+		logger.log(`Image error at index ${currentIndex}`);
 		if (currentIndex === 0) {
 			onImageLoaded?.(false);
 		}

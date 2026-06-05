@@ -1,3 +1,4 @@
+import { logger } from './logger.svelte';
 import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 export class GoogleMapsService implements IMapService {
@@ -101,7 +102,7 @@ export class GoogleMapsService implements IMapService {
 		} catch (error) {
 			this.lastLocationFound = false;
 			this.resetToDefault();
-			console.log('Address not found, showing default location');
+			logger.log('Address not found, showing default location');
 		}
 	}
 

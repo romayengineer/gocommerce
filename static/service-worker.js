@@ -1,21 +1,28 @@
 const CACHE_VERSION = 'v1';
 const CACHES_TO_MANAGE = [`images-${CACHE_VERSION}`, `assets-${CACHE_VERSION}`];
 
+// Simple logger for service worker
+function swLog(message, ...args) {
+	// Service workers can't access localStorage directly, so we check if debug mode was passed via message
+	// For now, we'll just log to console in a consistent format
+	console.log(`[Service Worker] ${message}`, ...args);
+}
+
 // Install event
 self.addEventListener('install', (event) => {
-	console.log('[Service Worker] Installing...');
+	swLog('Installing...');
 	self.skipWaiting();
 });
 
 // Activate event
 self.addEventListener('activate', (event) => {
-	console.log('[Service Worker] Activating...');
+	swLog('Activating...');
 	event.waitUntil(
 		caches.keys().then((cacheNames) => {
 			return Promise.all(
 				cacheNames.map((cacheName) => {
 					if (!CACHES_TO_MANAGE.includes(cacheName)) {
-						console.log('[Service Worker] Deleting old cache:', cacheName);
+						swLog('Deleting old cache:', cacheName);
 						return caches.delete(cacheName);
 					}
 				})
@@ -46,7 +53,7 @@ self.addEventListener('fetch', (event) => {
 				return cache.match(request).then((cachedResponse) => {
 					// Return from cache if available
 					if (cachedResponse) {
-						console.log('[Service Worker] Serving from cache:', request.url);
+						swLog('Serving from cache:', request.url);
 						return cachedResponse;
 					}
 
@@ -61,11 +68,11 @@ self.addEventListener('fetch', (event) => {
 							// Clone and cache the response
 							const responseToCache = response.clone();
 							cache.put(request, responseToCache);
-							console.log('[Service Worker] Cached:', request.url);
+							swLog('Cached:', request.url);
 							return response;
 						})
 						.catch((error) => {
-							console.log('[Service Worker] Fetch failed, returning cached:', request.url);
+							swLog('Fetch failed, returning cached:', request.url);
 							// Try to return cached version even if stale
 							return cache.match(request);
 						});
