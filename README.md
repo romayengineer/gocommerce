@@ -24,6 +24,8 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Smart navigation arrows (only in detail view)
   - Image counter (e.g., "1 of 7")
   - Auto-wrapping navigation
+  - **Automatic product filtering:** Only displays products with successfully loaded first images
+  - Broken image handling: Products hidden if first image fails to load
 - 💾 **Intelligent Image Caching** - Service Worker powered
   - First load: Downloads images, caches automatically
   - Subsequent loads: Serves from cache instantly
@@ -181,12 +183,16 @@ src/
 - Language preference saved to localStorage
 - Instant switching without page reload
 
-### 🎠 Product Image Carousel
+### 🎠 Product Image Carousel & Smart Image Loading
 - Each product has multiple related emoji "images"
 - Click arrows to browse through images
 - Counter shows position (e.g., "2 of 3")
 - Automatic wrapping (next after last → first)
 - Only shows controls when multiple images available
+- **Smart Image Filtering:** Products automatically hidden if their first image fails to load
+  - Prevents broken product cards from displaying
+  - Uses image load/error event tracking
+  - Reactive state management with SvelteSet for real-time updates
 
 ### 🛒 Shopping Cart
 - Real-time quantity controls
