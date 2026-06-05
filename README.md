@@ -404,8 +404,21 @@ npm run preview  # Test locally first
 ### Vercel
 ```bash
 npm run build
+# Push to 'build' branch to deploy
 # Vercel auto-detects SvelteKit
 ```
+
+**Configuration:**
+The project includes a `vercel.json` config that:
+- Restricts deployments to the `build` branch only (main branch is disabled)
+- Sets build command to `npm run build`
+- Sets output directory to `build/`
+- Pre-configures Leaflet as the default map provider
+
+**To deploy:**
+1. Push your changes to the `build` branch
+2. Vercel will automatically detect and deploy
+3. The main branch will not trigger deployments
 
 ### GitHub Pages
 ```bash
