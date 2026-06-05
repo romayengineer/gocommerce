@@ -1,12 +1,25 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFilters from '$lib/ProductFilters.svelte';
+	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
 	import { getDisplayProducts } from '$lib/products';
+
+	let isMobile = $state(false);
 
 	let sortBy = $state('name');
 	let filterCategory = $state('all');
 	let searchQuery = $state('');
+
+	onMount(() => {
+		const checkMobile = () => {
+			isMobile = window.innerWidth < 768;
+		};
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		return () => window.removeEventListener('resize', checkMobile);
+	});
 
 	const displayProducts = getDisplayProducts();
 	const categories: string[] = ['all', ...new Set(displayProducts.flatMap(p => p.categories))];
@@ -40,15 +53,27 @@
 
 	<div class="flex flex-col md:flex-row gap-8">
 		<aside class="md:w-48">
-			<ProductFilters
-				{sortBy}
-				{filterCategory}
-				{searchQuery}
-				{categories}
-				onSortChange={(value) => (sortBy = value)}
-				onCategoryChange={(value) => (filterCategory = value)}
-				onSearchChange={(value) => (searchQuery = value)}
-			/>
+			{#if isMobile}
+				<ProductFiltersMobile
+					{sortBy}
+					{filterCategory}
+					{searchQuery}
+					{categories}
+					onSortChange={(value) => (sortBy = value)}
+					onCategoryChange={(value) => (filterCategory = value)}
+					onSearchChange={(value) => (searchQuery = value)}
+				/>
+			{:else}
+				<ProductFilters
+					{sortBy}
+					{filterCategory}
+					{searchQuery}
+					{categories}
+					onSortChange={(value) => (sortBy = value)}
+					onCategoryChange={(value) => (filterCategory = value)}
+					onSearchChange={(value) => (searchQuery = value)}
+				/>
+			{/if}
 		</aside>
 
 		<div class="flex-1">
