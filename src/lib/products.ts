@@ -98,6 +98,8 @@ function cleanHtmlTags(text: string): string {
 	newText = newText.replace(/[ \t]+/g, ' ');
 	// trim leading spaces from each line (preserve newlines)
 	newText = newText.replace(/^[ \t]+/gm, '');
+	// collapse multiple consecutive newlines to at most two
+	newText = newText.replace(/\n{3,}/g, '\n\n');
 	// lower case
 	newText = newText.toLowerCase();
 	return newText;
