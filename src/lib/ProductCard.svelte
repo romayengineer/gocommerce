@@ -9,21 +9,31 @@
 
 	interface Props {
 		product: DisplayProduct;
+		onImageLoaded?: (loaded: boolean) => void;
 	}
 
-	const { product }: Props = $props();
+	const { product, onImageLoaded }: Props = $props();
 
 	function handleAddToCart(e: MouseEvent) {
 		e.preventDefault();
 		e.stopPropagation();
 		addToCart(product, 1);
 	}
+
+	function handleImageLoaded(loaded: boolean) {
+		onImageLoaded?.(loaded);
+	}
 </script>
 
 <Link href="#/products/{product.itemId}" class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
 		<div class="group-hover:opacity-80 transition-opacity">
-			<ProductImage images={product.images} alt={product.nameComplete} showNavigation={false} />
+			<ProductImage
+				images={product.images}
+				alt={product.nameComplete}
+				showNavigation={false}
+				onImageLoaded={handleImageLoaded}
+			/>
 		</div>
 
 		<div class="p-4 flex flex-col flex-1">
