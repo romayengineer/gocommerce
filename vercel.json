@@ -10,5 +10,6 @@
       "build": true,
       "main": false
     }
-  }
+  },
+  "productionBranch": "build"
 }
