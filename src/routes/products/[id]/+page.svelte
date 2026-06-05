@@ -40,7 +40,7 @@
 
 				<div class="mb-8">
 					<h4 class="font-semibold mb-2">Description:</h4>
-					<p class="text-gray-700">{@html product.description}</p>
+					<p class="text-gray-700 whitespace-pre-wrap">{product.description}</p>
 				</div>
 
 				{#if product.properties.length > 0}

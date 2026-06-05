@@ -88,6 +88,21 @@ export function filterPropertiesByNames(
 	});
 }
 
+function cleanHtmlTags(text: string): string {
+	let newText = text
+	// replace </p> </br> for \n
+	newText = text.replace(/<\/p>/g, '\n').replace(/<br\s*\/?>/gi, '\n');
+	// remove all remaining html tags
+	newText = newText.replace(/<[^>]*>/g, '');
+	// collapse multiple consecutive spaces into one (preserve newlines)
+	newText = newText.replace(/[ \t]+/g, ' ');
+	// trim leading spaces from each line (preserve newlines)
+	newText = newText.replace(/^[ \t]+/gm, '');
+	// lower case
+	newText = newText.toLowerCase();
+	return newText;
+}
+
 export function getDisplayProducts(): DisplayProduct[] {
 	return products.flatMap((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
@@ -96,7 +111,7 @@ export function getDisplayProducts(): DisplayProduct[] {
 			nameComplete: item.nameComplete,
 			productId: product.productId,
 			productName: product.productName,
-			description: product.description,
+			description: cleanHtmlTags(product.description),
 			brand: product.brand,
 			brandId: product.brandId,
 			categories: product.categories,
