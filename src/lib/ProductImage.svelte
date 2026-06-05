@@ -1,14 +1,30 @@
 <script lang="ts">
+	import { logger } from './logger.svelte';
+
 	interface Props {
 		images: string[];
 		alt?: string;
 		showNavigation?: boolean;
+		onImageLoaded?: (loaded: boolean) => void;
 	}
 
-	const { images = [], alt = 'Product', showNavigation = true }: Props = $props();
+	const { images = [], alt = 'Product', showNavigation = true, onImageLoaded }: Props = $props();
 
 	let currentIndex = $state(0);
 	let imageList = $derived(images && images.length > 0 ? images : ['']);
+
+	function handleImageLoad() {
+		if (currentIndex === 0) {
+			onImageLoaded?.(true);
+		}
+	}
+
+	function handleImageError() {
+		logger.log(`Image error at index ${currentIndex}`);
+		if (currentIndex === 0) {
+			onImageLoaded?.(false);
+		}
+	}
 
 	function goToPrevious(e: MouseEvent) {
 		e.stopPropagation();
@@ -22,9 +38,16 @@
 </script>
 
 <div class="relative">
-	<div class="bg-gray-200 rounded-lg aspect-square flex items-center justify-center relative">
+	<div class="ounded-lg aspect-square flex items-center justify-center relative">
 		{#if imageList[currentIndex]}
-			<img src={imageList[currentIndex]} alt={alt} loading="lazy" class="w-full h-full object-cover rounded-lg" />
+			<img
+				src={imageList[currentIndex]}
+				alt={alt}
+				loading="lazy"
+				class="w-full h-full object-cover rounded-lg"
+				onload={handleImageLoad}
+				onerror={handleImageError}
+			/>
 		{/if}
 
 		{#if imageList.length > 1 && showNavigation}

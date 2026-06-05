@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { logger } from './logger.svelte';
 import { mapHasAddress, type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 // KEEP THIS DOCUMENTATION
@@ -72,12 +73,12 @@ export class LeafletService implements IMapService {
 			return;
 		}
 
-		console.log(JSON.stringify(config))
+		logger.log('Location config:', config);
 		const hasAddress = mapHasAddress(config)
 		if (!hasAddress) {
 			return;
 		}
-		console.log("updateLocation")
+		logger.log('Updating location');
 
 		try {
 			const params = new URLSearchParams({

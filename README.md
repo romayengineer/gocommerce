@@ -24,6 +24,8 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Smart navigation arrows (only in detail view)
   - Image counter (e.g., "1 of 7")
   - Auto-wrapping navigation
+  - **Automatic product filtering:** Only displays products with successfully loaded first images
+  - Broken image handling: Products hidden if first image fails to load
 - 💾 **Intelligent Image Caching** - Service Worker powered
   - First load: Downloads images, caches automatically
   - Subsequent loads: Serves from cache instantly
@@ -45,6 +47,8 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Numerical sorting for size variants
   - Separate display for other categories
   - Visual grouping with border indicators
+  - **Responsive design:** Full filters on desktop, collapsible mobile version
+  - Mobile filters automatically collapse sections to save space
 - 🎨 **Component Architecture** - Highly reusable atomic components
   - 25+ specialized, single-responsibility components
   - Zero code duplication
@@ -61,6 +65,10 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Network-first for other assets
   - Automatic fallback to cached versions when offline
   - Periodic cache updates
+- 🔍 **Custom Logger** - Reactive logging system with URL parameter control
+  - Enable/disable logs with `?debug` query parameter
+  - Programmatic control via `logger.setEnabled()` and `logger.toggle()`
+  - Used throughout the app for debugging image loading, cart operations, and service worker activity
 
 ## Getting Started
 
@@ -148,6 +156,7 @@ src/
     │   ├── en.json                # English translations
     │   └── es.json                # Spanish translations
     ├── i18n.ts                    # i18n configuration
+    ├── logger.svelte.ts           # Custom reactive logger with ?debug support
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
     ├── mapService.ts              # Map service interface & types
@@ -158,7 +167,8 @@ src/
     ├── ProductImage.svelte        # Image carousel component
     ├── ProductCard.svelte         # Product grid card
     ├── ProductGrid.svelte         # Product grid layout
-    ├── ProductFilters.svelte      # Category & sort filters
+    ├── ProductFilters.svelte      # Desktop category & sort filters
+    ├── ProductFiltersMobile.svelte # Mobile collapsible filters
     ├── CartItem.svelte            # Cart item component
     ├── CheckoutForm.svelte        # Checkout form component
     ├── MapDisplay.svelte          # Delivery location map
@@ -181,12 +191,16 @@ src/
 - Language preference saved to localStorage
 - Instant switching without page reload
 
-### 🎠 Product Image Carousel
+### 🎠 Product Image Carousel & Smart Image Loading
 - Each product has multiple related emoji "images"
 - Click arrows to browse through images
 - Counter shows position (e.g., "2 of 3")
 - Automatic wrapping (next after last → first)
 - Only shows controls when multiple images available
+- **Smart Image Filtering:** Products automatically hidden if their first image fails to load
+  - Prevents broken product cards from displaying
+  - Uses image load/error event tracking
+  - Reactive state management with SvelteSet for real-time updates
 
 ### 🛒 Shopping Cart
 - Real-time quantity controls
@@ -238,13 +252,65 @@ Both services share:
 - Error tracking and default location fallback
 - Multi-language error messages
 
+### 🔍 Logging & Debugging
+The app includes a custom reactive logger for debugging:
+
+**Features:**
+- Logs image loading, cart operations, and service worker activity
+- Automatically detects `?debug` query parameter in URL
+- Can be toggled programmatically from browser console
+- Errors always display regardless of debug state
+
+**Enable Logging:**
+```javascript
+// Via URL
+http://localhost:5173/?debug
+
+// Via browser console
+logger.setEnabled(true);
+logger.toggle();
+logger.setEnabled(false);
+
+// Check current state
+logger.isEnabled;
+```
+
+**Logger Locations:**
+- Image loading events: `ProductImage.svelte`
+- Cart operations: `cart.ts`
+- Service Worker events: `service-worker.js`
+- Location updates: `googleMapsService.ts`, `leafletService.ts`
+- Checkout: `CheckoutForm.svelte`
+
+### 🎯 Responsive Product Filters
+The product filters automatically adapt based on screen size:
+
+**Desktop Version (`ProductFilters`):**
+- Full-featured sidebar with all controls visible
+- Search, category, and sort options always accessible
+- Generous spacing and padding for mouse interaction
+
+**Mobile Version (`ProductFiltersMobile`):**
+- Collapsible sections (Search, Category, Sort) to save space
+- Each section toggles open/closed with smooth transitions
+- Rotating chevron indicators show expanded/collapsed state
+- Compact spacing optimized for touch interaction
+- Identical filtering functionality as desktop version
+
+**Responsive Behavior:**
+- Automatically switches at 768px breakpoint (Tailwind `md`)
+- Detects screen size on mount and on window resize
+- Same filter state maintained across both versions
+- Mobile version enables better UX on phones and tablets
+
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
 
 **Layout Components:**
 - `SidePanel` - Reusable card container
 - `ProductGrid` - Grid display for products
-- `ProductFilters` - Category & sort controls
+- `ProductFilters` - Desktop category & sort filters
+- `ProductFiltersMobile` - Mobile collapsible filters
 
 **UI Components:**
 - `Button` - Primary/secondary/danger variants
