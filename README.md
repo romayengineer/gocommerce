@@ -47,6 +47,8 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Numerical sorting for size variants
   - Separate display for other categories
   - Visual grouping with border indicators
+  - **Responsive design:** Full filters on desktop, collapsible mobile version
+  - Mobile filters automatically collapse sections to save space
 - 🎨 **Component Architecture** - Highly reusable atomic components
   - 25+ specialized, single-responsibility components
   - Zero code duplication
@@ -165,7 +167,8 @@ src/
     ├── ProductImage.svelte        # Image carousel component
     ├── ProductCard.svelte         # Product grid card
     ├── ProductGrid.svelte         # Product grid layout
-    ├── ProductFilters.svelte      # Category & sort filters
+    ├── ProductFilters.svelte      # Desktop category & sort filters
+    ├── ProductFiltersMobile.svelte # Mobile collapsible filters
     ├── CartItem.svelte            # Cart item component
     ├── CheckoutForm.svelte        # Checkout form component
     ├── MapDisplay.svelte          # Delivery location map
@@ -279,13 +282,35 @@ logger.isEnabled;
 - Location updates: `googleMapsService.ts`, `leafletService.ts`
 - Checkout: `CheckoutForm.svelte`
 
+### 🎯 Responsive Product Filters
+The product filters automatically adapt based on screen size:
+
+**Desktop Version (`ProductFilters`):**
+- Full-featured sidebar with all controls visible
+- Search, category, and sort options always accessible
+- Generous spacing and padding for mouse interaction
+
+**Mobile Version (`ProductFiltersMobile`):**
+- Collapsible sections (Search, Category, Sort) to save space
+- Each section toggles open/closed with smooth transitions
+- Rotating chevron indicators show expanded/collapsed state
+- Compact spacing optimized for touch interaction
+- Identical filtering functionality as desktop version
+
+**Responsive Behavior:**
+- Automatically switches at 768px breakpoint (Tailwind `md`)
+- Detects screen size on mount and on window resize
+- Same filter state maintained across both versions
+- Mobile version enables better UX on phones and tablets
+
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
 
 **Layout Components:**
 - `SidePanel` - Reusable card container
 - `ProductGrid` - Grid display for products
-- `ProductFilters` - Category & sort controls
+- `ProductFilters` - Desktop category & sort filters
+- `ProductFiltersMobile` - Mobile collapsible filters
 
 **UI Components:**
 - `Button` - Primary/secondary/danger variants
