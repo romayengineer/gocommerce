@@ -38,7 +38,7 @@
 
 		<div class="p-4 flex flex-col flex-1">
 			<h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.nameComplete}</h3>
-			<div class="text-gray-600 text-sm mb-2 line-clamp-2 prose prose-sm max-w-none">
+			<div class="max-h-0 md:max-h-full text-gray-600 text-sm mb-2 line-clamp-2 prose prose-sm max-w-none overflow-hidden">
 				{@html product.description}
 			</div>
 
