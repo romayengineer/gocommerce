@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "installCommand": "npm install",
+  "env": {
+    "VITE_MAP_PROVIDER": "leaflet"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "build": true,
+      "main": false
+    }
+  }
+}
