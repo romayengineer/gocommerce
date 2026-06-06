@@ -9,6 +9,14 @@
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
+		<script>
+			// Prevent getElementById from being called with empty strings
+			const originalGetElementById = document.getElementById;
+			document.getElementById = function(id) {
+				if (!id) return null;
+				return originalGetElementById.call(this, id);
+			};
+		</script>
 		<div id="app" style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
