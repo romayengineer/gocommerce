@@ -3,8 +3,12 @@ class CustomLogger {
 
 	private checkDebugParam(): boolean {
 		if (typeof window === 'undefined') return false;
-		const params = new URLSearchParams(window.location.search);
-		return params.has('debug');
+		const hash = window.location.hash;
+		const enabled = hash.includes('debug');
+		if (enabled) {
+			console.log("logging enabled");
+		}
+		return enabled;
 	}
 
 	log(message: string, ...args: any[]) {
