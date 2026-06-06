@@ -23,6 +23,9 @@ const config = {
       precompress: false,
       strict: true
     })
+  },
+  vitePlugin: {
+    inspector: false,
   }
 };
 

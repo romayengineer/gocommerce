@@ -3,6 +3,9 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
   plugins: [sveltekit()],
+  optimizeDeps: {
+    include: ['@splidejs/splide'],
+  },
   build: {
     rollupOptions: {
       output: {
