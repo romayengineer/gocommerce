@@ -25,13 +25,9 @@ init({
 	initialLocale: defaultLocale
 });
 
-// Set stored locale if available (client-side only)
-if (typeof window !== 'undefined') {
-	const stored = getStoredLocale();
-	if (stored) {
-		locale.set(stored);
-	}
-}
+// Always set the locale immediately
+const stored = getStoredLocale();
+locale.set(stored || defaultLocale);
 
 export const locales = ['en', 'es'];
 export const localeNames: Record<string, string> = {
