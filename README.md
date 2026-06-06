@@ -157,7 +157,6 @@ src/
     │   └── es.json                # Spanish translations
     ├── i18n.ts                    # i18n configuration
     ├── logger.svelte.ts           # Custom reactive logger with ?debug support
-    ├── carousel.svelte.ts         # Smooth image carousel with drag/swipe support
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
     ├── mapService.ts              # Map service interface & types
@@ -194,22 +193,23 @@ src/
 
 ### 🎠 Product Image Carousel & Smart Image Loading
 - Each product has multiple related emoji "images"
-- **Smooth sliding animations** - Images slide smoothly like Instagram carousel
+- **Powered by Splide** - Lightweight, modern carousel library
+- **Smooth fade animations** - Quick transitions between images
 - **Multiple navigation methods:**
   - **Drag/Swipe** - Click and drag left/right to navigate (desktop & mobile)
-  - **Click** - Click left/right side of image to go previous/next
   - **Arrow buttons** - On-screen navigation buttons
   - **Keyboard** - Use arrow keys to navigate
 - Counter shows position (e.g., "2 of 3")
-- Automatic wrapping (next after last → first)
+- Automatic looping (wraps to first after last image)
 - Only shows controls when multiple images available
 - **Smart Image Filtering:** Products automatically hidden if their first image fails to load
   - Prevents broken product cards from displaying
   - Uses image load/error event tracking
   - Reactive state management with SvelteSet for real-time updates
-- **Carousel Configuration** (`carousel.svelte.ts`):
-  - `DRAG_THRESHOLD` - Minimum pixels to drag before navigating (default: 50px)
-  - `ANIMATION_DURATION` - Smooth slide animation speed (default: 300ms)
+- **Splide Configuration** - Customizable via Splide options in `ProductImage.svelte`:
+  - `type: 'fade'` - Smooth fade transitions
+  - `speed: 300` - Animation duration in milliseconds
+  - `touchAngle: 30` - Touch sensitivity
 
 ### 🛒 Shopping Cart
 - Real-time quantity controls
@@ -445,6 +445,7 @@ npm run build
 - **Vite** - Lightning-fast build tool
 - **Adapter Static** - Single HTML file bundling
 - **Service Workers** - Intelligent image caching and offline support
+- **Splide** - Lightweight, modern carousel/slider library
 - **Leaflet** - Open-source mapping library with OpenStreetMap tiles (default)
 - **Nominatim** - Free, open-source geocoding API for address lookup
 - **Google Maps API** - Interactive maps and geocoding (optional alternative)

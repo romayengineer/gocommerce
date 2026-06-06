@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { logger } from './logger.svelte';
-	import { Carousel, ANIMATION_DURATION } from './carousel.svelte';
+	import { SplideCarousel } from './splideCarousel.svelte';
+	import type { Options } from '@splidejs/splide';
+	import '@splidejs/splide/dist/css/splide.min.css';
 
 	interface Props {
 		images: string[];
@@ -12,7 +14,26 @@
 	const { images = [], alt = 'Product', showNavigation = true, onImageLoaded }: Props = $props();
 
 	const imageList = $derived(images && images.length > 0 ? images : ['']);
-	const carousel = new Carousel(imageList.length);
+	let splideElement: HTMLDivElement | undefined = $state();
+
+	const carouselOptions: Options = {
+		type: 'loop',
+		rewind: true,
+		perPage: 1,
+		speed: 300,
+		arrows: false,
+		pagination: false,
+		// do not drag when showNavigation is false
+		drag: showNavigation,
+		keyboard: true,
+		touchAngle: 30,
+	};
+
+	const carousel = new SplideCarousel(carouselOptions, (index: number) => {
+		if (index === 0) {
+			onImageLoaded?.(true);
+		}
+	});
 
 	function handleImageLoad() {
 		if (carousel.currentIndex === 0) {
@@ -26,46 +47,40 @@
 			onImageLoaded?.(false);
 		}
 	}
+
+	$effect(() => {
+		if (splideElement && imageList.length > 0) {
+			carousel.init(splideElement);
+			return () => {
+				carousel.destroy();
+			};
+		}
+	});
 </script>
 
 <div class="relative">
-	<div
-		class="ounded-lg aspect-square flex items-center justify-center relative cursor-grab active:cursor-grabbing select-none touch-none overflow-hidden"
-		role="button"
-		tabindex="0"
-		aria-label="Product image carousel. Click left/right, drag, or press arrow keys to navigate"
-		onmousedown={carousel.handleDragStart}
-		onmousemove={carousel.handleDragMove}
-		onmouseup={carousel.handleDragEnd}
-		onmouseleave={carousel.handleDragEnd}
-		ontouchstart={carousel.handleDragStart}
-		ontouchmove={carousel.handleDragMove}
-		ontouchend={carousel.handleDragEnd}
-		onkeydown={carousel.handleKeyDown}
-		onclick={carousel.handleImageClick}
-	>
-		<div
-			class="flex w-full h-full"
-			style="transform: translateX(calc({carousel.getTranslate()}px - {carousel.currentIndex * 100}%)); transition: {carousel.isAnimating ? `transform ${ANIMATION_DURATION}ms ease-out` : 'none'};"
-		>
-			{#each imageList as image, i}
-				<div class="w-full h-full flex-shrink-0">
-					<img
-						src={image}
-						alt="{alt} {i + 1}"
-						loading="lazy"
-						draggable="false"
-						class="w-full h-full object-cover rounded-lg select-none pointer-events-none"
-						onload={i === carousel.currentIndex ? handleImageLoad : undefined}
-						onerror={i === carousel.currentIndex ? handleImageError : undefined}
-					/>
-				</div>
-			{/each}
+	<div bind:this={splideElement} class="splide rounded-lg overflow-hidden aspect-square">
+		<div class="splide__track">
+			<ul class="splide__list">
+				{#each imageList as image, i}
+					<li class="splide__slide w-full h-full">
+						<img
+							src={image}
+							alt="{alt} {i + 1}"
+							loading="lazy"
+							draggable="false"
+							class="w-full h-full object-cover select-none pointer-events-none"
+							onload={handleImageLoad}
+							onerror={handleImageError}
+						/>
+					</li>
+				{/each}
+			</ul>
 		</div>
 
 		{#if imageList.length > 1 && showNavigation}
 			<button
-				onclick={() => carousel.navigateWithAnimation('prev')}
+				onclick={() => carousel.prevSlide()}
 				class="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-70 transition-colors z-10"
 				title="Previous image"
 			>
@@ -73,7 +88,7 @@
 			</button>
 
 			<button
-				onclick={() => carousel.navigateWithAnimation('next')}
+				onclick={() => carousel.nextSlide()}
 				class="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-70 transition-colors z-10"
 				title="Next image"
 			>
@@ -86,3 +101,11 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	:global(.splide__slide) {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
