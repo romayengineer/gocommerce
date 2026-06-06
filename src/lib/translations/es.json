@@ -21,7 +21,6 @@
     "add": "Agregar"
   },
   "productDetail": {
-    "backToProducts": "← Volver a Productos",
     "inStock": "En Stock",
     "quantity": "Cantidad:",
     "addToCart": "Agregar al Carrito",

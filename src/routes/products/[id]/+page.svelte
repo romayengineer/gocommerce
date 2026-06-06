@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 	import { getDisplayProducts } from '$lib/products';
 	import { addToCart } from '$lib/cart';
-	import Link from '$lib/Link.svelte';
 	import Price from '$lib/Price.svelte';
 	import ProductImage from '$lib/ProductImage.svelte';
 	import ProductHeader from '$lib/ProductHeader.svelte';
@@ -24,9 +23,7 @@
 </script>
 
 {#if product}
-	<div class="max-w-6xl mx-auto px-4 py-12">
-		<Link href="#/products" class="mb-6 inline-block">{$t('productDetail.backToProducts')}</Link>
-
+	<div class="max-w-6xl mx-auto px-4">
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 			<ProductImage images={product.images} alt={product.nameComplete} />
 

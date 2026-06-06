@@ -21,7 +21,6 @@
     "add": "Add"
   },
   "productDetail": {
-    "backToProducts": "← Back to Products",
     "inStock": "In Stock",
     "quantity": "Quantity:",
     "addToCart": "Add to Cart",
