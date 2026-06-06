@@ -13,8 +13,8 @@
 <div>
 	<h1 class="text-2xl md:text-4xl font-bold mb-4">{product.nameComplete}</h1>
 	
-	<div class="grid grid-cols-2 gap-8">
-		<p class="text-xl text-gray-600 mb-6">{product.brand}</p>
+	<div class="grid grid-cols-2">
+		<p class="text-xl text-gray-600 mb-6 whitespace-nowrap">{product.brand}</p>
 
 		<div class="mb-6">
 			<Price amount={product.price} size="lg" />

@@ -22,6 +22,6 @@
 		value={quantity}
 		onchange={handleChange}
 		min="1"
-		class="w-20 p-2 border rounded"
+		class="w-14 p-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
 	/>
 </div>
