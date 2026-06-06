@@ -10,7 +10,9 @@
       "WebSearch",
       "WebFetch",
       "Skill(run)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(dos2unix *)",
+      "Bash(sed *)"
     ]
   }
 }
