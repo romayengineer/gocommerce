@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getDisplayProducts } from '$lib/products';
+	import { displayProductsList } from '$lib/products';
 	import { addToCart } from '$lib/cart';
 	import ProductImage from '$lib/ProductImage.svelte';
 	import ProductHeader from '$lib/ProductHeader.svelte';
@@ -11,7 +11,7 @@
 
 	let quantity = $state(1);
 
-	let product = $derived(getDisplayProducts().find(p => p.itemId === $page.params.id));
+	let product = $derived(displayProductsList.find(p => p.itemId === $page.params.id));
 
 	function handleAddToCart() {
 		if (product) {

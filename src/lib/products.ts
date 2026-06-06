@@ -125,3 +125,13 @@ export function getDisplayProducts(): DisplayProduct[] {
 	}
 	);
 }
+
+export var displayProductsList = getDisplayProducts()
+
+
+export function deleteProduct(productList: DisplayProduct[], productId: string) {
+	const index = productList.findIndex(p => p.itemId === productId);
+	if (index !== -1) {
+		productList.splice(index, 1);
+	}
+}

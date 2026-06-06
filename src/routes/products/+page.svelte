@@ -4,7 +4,7 @@
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFilters from '$lib/ProductFilters.svelte';
 	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
-	import { getDisplayProducts } from '$lib/products';
+	import { displayProductsList, deleteProduct } from '$lib/products';
 
 	let isMobile = $state(false);
 
@@ -21,7 +21,15 @@
 		return () => window.removeEventListener('resize', checkMobile);
 	});
 
-	const displayProducts = getDisplayProducts();
+	let displayProducts = $state(displayProductsList)
+
+	export function handleProductImageFailed(productId: string) {
+		// delete from real list this way next time the component is mounted the list is already filtered
+		deleteProduct(displayProductsList, productId)
+		// delete from state which triggers the update
+		deleteProduct(displayProducts, productId)
+	}
+
 	const categories: string[] = ['all', ...new Set(displayProducts.flatMap(p => p.categories))];
 
 	let filtered = $derived(
@@ -78,7 +86,7 @@
 
 		<div class="flex-1">
 			<p class="text-gray-600 mb-6">{$t('products.add')} {sorted.length} {sorted.length !== 1 ? 's' : ''}</p>
-			<ProductGrid products={sorted} />
+			<ProductGrid products={sorted} onProductImageFailed={handleProductImageFailed} />
 		</div>
 	</div>
 </div>
