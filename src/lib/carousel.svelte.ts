@@ -1,4 +1,7 @@
+// Minimum pixels to drag before triggering image change (lower = more sensitive)
 export const DRAG_THRESHOLD = 50;
+
+// Duration of smooth slide animation when navigating (in milliseconds)
 export const ANIMATION_DURATION = 300;
 
 export class Carousel {
@@ -7,6 +10,7 @@ export class Carousel {
 	dragOffset = $state(0);
 	isDragging = $state(false);
 	isAnimating = $state(false);
+	justDragged = $state(false);
 
 	private imageCount: number;
 	private onNavigate?: () => void;
@@ -56,11 +60,19 @@ export class Carousel {
 		if (Math.abs(this.dragOffset) > DRAG_THRESHOLD) {
 			this.navigateWithAnimation(this.dragOffset > 0 ? 'prev' : 'next');
 		}
+
+		// Only mark as dragged if there was actual movement
+		if (Math.abs(this.dragOffset) > 0) {
+			this.justDragged = true;
+		}
 		this.dragOffset = 0;
 	};
 
 	handleImageClick = (e: MouseEvent) => {
-		if (this.isDragging || Math.abs(this.dragOffset) > 10) return;
+		if (this.isDragging || this.justDragged) {
+			this.justDragged = false;
+			return;
+		}
 
 		const container = e.currentTarget as HTMLElement;
 		const rect = container.getBoundingClientRect();
