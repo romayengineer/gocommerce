@@ -63,7 +63,7 @@
 </script>
 
 <div class="relative">
-	<div bind:this={splideElement} class="splide rounded-lg overflow-hidden aspect-square">
+	<div bind:this={splideElement} class="splide overflow-hidden aspect-square">
 		<div class="splide__track">
 			<ul class="splide__list">
 				{#each imageList as image, i}

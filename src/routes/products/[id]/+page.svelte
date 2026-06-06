@@ -23,11 +23,11 @@
 </script>
 
 {#if product}
-	<div class="max-w-6xl mx-auto px-4">
+	<div class="max-w-6xl mx-auto">
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 			<ProductImage images={product.images} alt={product.nameComplete} />
 
-			<div>
+			<div class="px-4 md:px-0">
 				<ProductHeader name={product.nameComplete} category={product.brand} />
 
 				<div class="mb-6">
