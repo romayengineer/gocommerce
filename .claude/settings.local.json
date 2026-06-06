@@ -12,7 +12,9 @@
       "Bash(pkill -f \"vite dev\")",
       "Bash(npx tsc *)",
       "WebSearch",
-      "WebFetch(domain:nominatim.org)"
+      "WebFetch(domain:nominatim.org)",
+      "Skill(run)",
+      "Read(//tmp/**)"
     ]
   }
 }
