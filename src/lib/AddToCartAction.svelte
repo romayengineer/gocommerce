@@ -11,7 +11,7 @@
 
 <Button
 	variant="primary"
-	class="w-full py-3"
+	class="w-full py-3 whitespace-nowrap"
 	{onclick}
 >
 	{$t('productDetail.addToCart')}

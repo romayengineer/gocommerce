@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { page } from '$app/stores';
 	import { getDisplayProducts } from '$lib/products';
 	import { addToCart } from '$lib/cart';
-	import Price from '$lib/Price.svelte';
 	import ProductImage from '$lib/ProductImage.svelte';
 	import ProductHeader from '$lib/ProductHeader.svelte';
 	import QuantitySelector from '$lib/QuantitySelector.svelte';
@@ -28,11 +26,16 @@
 			<ProductImage images={product.images} alt={product.nameComplete} />
 
 			<div class="px-4 md:px-0">
-				<ProductHeader name={product.nameComplete} brand={product.brand} />
+				<ProductHeader {product} />
 
-				<div class="mb-6">
-					<Price amount={product.price} size="lg" />
-					<p class="text-sm text-gray-500 mt-1">{$t('productDetail.inStock')}</p>
+				<div class="grid grid-cols-2 gap-8">
+					<div class="mb-8">
+						<QuantitySelector {quantity} onchange={(q) => (quantity = q)} />
+					</div>
+
+					<div class="mb-4">
+						<AddToCartAction onclick={handleAddToCart} />
+					</div>
 				</div>
 
 				<div class="mb-8">
@@ -53,14 +56,6 @@
 						</div>
 					</div>
 				{/if}
-
-				<div class="mb-8">
-					<QuantitySelector {quantity} onchange={(q) => (quantity = q)} />
-				</div>
-
-				<div class="mb-4">
-					<AddToCartAction onclick={handleAddToCart} />
-				</div>
 
 				<ProductDetailsBox itemId={product.itemId} productName={product.nameComplete} brand={product.brand} />
 			</div>
