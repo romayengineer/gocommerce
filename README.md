@@ -157,6 +157,7 @@ src/
     │   └── es.json                # Spanish translations
     ├── i18n.ts                    # i18n configuration
     ├── logger.svelte.ts           # Custom reactive logger with ?debug support
+    ├── carousel.svelte.ts         # Smooth image carousel with drag/swipe support
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
     ├── mapService.ts              # Map service interface & types
@@ -193,7 +194,12 @@ src/
 
 ### 🎠 Product Image Carousel & Smart Image Loading
 - Each product has multiple related emoji "images"
-- Click arrows to browse through images
+- **Smooth sliding animations** - Images slide smoothly like Instagram carousel
+- **Multiple navigation methods:**
+  - **Drag/Swipe** - Click and drag left/right to navigate (desktop & mobile)
+  - **Click** - Click left/right side of image to go previous/next
+  - **Arrow buttons** - On-screen navigation buttons
+  - **Keyboard** - Use arrow keys to navigate
 - Counter shows position (e.g., "2 of 3")
 - Automatic wrapping (next after last → first)
 - Only shows controls when multiple images available
@@ -201,6 +207,9 @@ src/
   - Prevents broken product cards from displaying
   - Uses image load/error event tracking
   - Reactive state management with SvelteSet for real-time updates
+- **Carousel Configuration** (`carousel.svelte.ts`):
+  - `DRAG_THRESHOLD` - Minimum pixels to drag before navigating (default: 50px)
+  - `ANIMATION_DURATION` - Smooth slide animation speed (default: 300ms)
 
 ### 🛒 Shopping Cart
 - Real-time quantity controls
