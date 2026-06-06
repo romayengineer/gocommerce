@@ -23,6 +23,7 @@
   "dependencies": {
     "@splidejs/splide": "^4.1.4",
     "@types/leaflet": "^1.9.21",
+    "@vercel/config": "^0.5.1",
     "formsnap": "^2.0.1",
     "leaflet": "^1.9.4",
     "superforms": "^0.0.1",
