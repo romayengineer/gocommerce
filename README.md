@@ -157,6 +157,7 @@ src/
     │   └── es.json                # Spanish translations
     ├── i18n.ts                    # i18n configuration
     ├── logger.svelte.ts           # Custom reactive logger with ?debug support
+    ├── splideCarousel.svelte.ts   # Splide carousel class with state management
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
     ├── mapService.ts              # Map service interface & types
@@ -193,23 +194,26 @@ src/
 
 ### 🎠 Product Image Carousel & Smart Image Loading
 - Each product has multiple related emoji "images"
-- **Powered by Splide** - Lightweight, modern carousel library
+- **Powered by Splide** - Lightweight, modern carousel library with custom class wrapper
+- **Class-based architecture** - `SplideCarousel` class in `splideCarousel.svelte.ts` manages all carousel logic
 - **Smooth fade animations** - Quick transitions between images
 - **Multiple navigation methods:**
   - **Drag/Swipe** - Click and drag left/right to navigate (desktop & mobile)
-  - **Arrow buttons** - On-screen navigation buttons
+  - **Custom arrow buttons** - Styled with Tailwind, independent of Splide UI
   - **Keyboard** - Use arrow keys to navigate
-- Counter shows position (e.g., "2 of 3")
+- **Custom counter** - Shows position (e.g., "2 of 3") with matching oval styling
 - Automatic looping (wraps to first after last image)
 - Only shows controls when multiple images available
+- **Conditional drag** - Drag is disabled when navigation is hidden
 - **Smart Image Filtering:** Products automatically hidden if their first image fails to load
   - Prevents broken product cards from displaying
   - Uses image load/error event tracking
   - Reactive state management with SvelteSet for real-time updates
-- **Splide Configuration** - Customizable via Splide options in `ProductImage.svelte`:
-  - `type: 'fade'` - Smooth fade transitions
+- **Carousel Configuration** - Customizable via `SplideCarousel` in `splideCarousel.svelte.ts`:
+  - `type: 'loop'` - Seamless infinite looping
   - `speed: 300` - Animation duration in milliseconds
-  - `touchAngle: 30` - Touch sensitivity
+  - `touchAngle: 30` - Touch sensitivity for swipe detection
+  - `drag: showNavigation` - Conditional drag based on navigation visibility
 
 ### 🛒 Shopping Cart
 - Real-time quantity controls
