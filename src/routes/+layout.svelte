@@ -26,6 +26,9 @@
 	function isSecureContext(): boolean {
 		return window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 	}
+
+	// log screen dimensions
+	logger.log(`Width: ${window.innerWidth}px, Height: ${window.innerHeight}px`);
 </script>
 
 <div class="min-h-screen flex flex-col bg-gray-50">
