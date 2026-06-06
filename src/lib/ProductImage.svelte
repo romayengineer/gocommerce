@@ -16,6 +16,8 @@
 	const imageList = $derived(images && images.length > 0 ? images : ['']);
 	let splideElement: HTMLDivElement | undefined = $state();
 
+	// keep this line do not make the splide component reactive
+	// svelte-ignore state_referenced_locally
 	const carouselOptions: Options = {
 		type: 'loop',
 		rewind: true,
