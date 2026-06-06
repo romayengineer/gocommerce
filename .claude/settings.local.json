@@ -1,18 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx sv *)",
-      "Bash(npm install *)",
-      "Bash(npm run *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
       "Bash(curl *)",
       "Bash(pkill -f \"npm run dev\")",
-      "Bash(npm list *)",
-      "Bash(grep *)",
-      "Bash(npm uninstall *)",
       "Bash(pkill -f \"vite dev\")",
-      "Bash(npx tsc *)",
+      "Bash(grep *)",
       "WebSearch",
-      "WebFetch(domain:nominatim.org)",
+      "WebFetch",
       "Skill(run)",
       "Read(//tmp/**)"
     ]
