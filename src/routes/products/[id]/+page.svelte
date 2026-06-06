@@ -28,7 +28,7 @@
 			<ProductImage images={product.images} alt={product.nameComplete} />
 
 			<div class="px-4 md:px-0">
-				<ProductHeader name={product.nameComplete} category={product.brand} />
+				<ProductHeader name={product.nameComplete} brand={product.brand} />
 
 				<div class="mb-6">
 					<Price amount={product.price} size="lg" />
