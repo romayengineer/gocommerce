@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+	.x-font-title {
+		@apply text-xl md:text-3xl;
+	}
+}
+
 * {
 	margin: 0;
 	padding: 0;
