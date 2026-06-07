@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
+	import { ShoppingCart } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import Button from '$lib/Button.svelte';
 	import CartItem from '$lib/CartItem.svelte';
@@ -9,11 +10,13 @@
 	import { cart, removeFromCart, updateQuantity } from '$lib/cart';
 
 	let total = $derived($cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
-	let itemCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
 </script>
 
 <div class="max-w-5xl mx-auto px-2 py-6 md:py-12">
-	<h1 class="text-2xl md:text-3xl font-bold mb-2 md:mb-6">{$t('cart.title')}</h1>
+	<div class="flex items-center gap-2 mb-2 md:mb-6">
+		<ShoppingCart size={30} />
+		<h1 class="text-xl md:text-3xl">{$t('cart.title')}</h1>
+	</div>
 
 	{#if $cart.length === 0}
 		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
