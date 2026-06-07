@@ -57,7 +57,7 @@
 </script>
 
 <div class="max-w-7xl mx-auto px-4 py-12">
-	<h1 class="x-font-title font-bold mb-8">{$t('products.title')}</h1>
+	<h1 class="x-text-xl font-bold mb-8">{$t('products.title')}</h1>
 
 	<div class="flex flex-col md:flex-row gap-8">
 		<aside class="md:w-48">

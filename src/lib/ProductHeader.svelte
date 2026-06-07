@@ -11,7 +11,7 @@
 </script>
 
 <div>
-	<h1 class="text-2xl md:text-4xl font-bold mb-4">{product.nameComplete}</h1>
+	<h1 class="x-text-2xl font-bold mb-4">{product.nameComplete}</h1>
 	
 	<div class="grid grid-cols-2">
 		<p class="text-xl text-gray-600 mb-6 whitespace-nowrap">{product.brand}</p>
