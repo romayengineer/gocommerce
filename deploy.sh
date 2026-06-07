@@ -4,8 +4,14 @@ set -e
 
 # Create alias for git command
 
+if command -v wgit &> /dev/null; then
+  GIT=wgit
+else
+  GIT=git
+fi
+
 function _git() {
-  wgit $@
+  $GIT $@
 }
 
 # Colors for output
