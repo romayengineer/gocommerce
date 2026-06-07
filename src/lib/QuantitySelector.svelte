@@ -35,7 +35,7 @@
 		value={quantity}
 		onchange={handleChange}
 		min="1"
-		class="w-14 h-8 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-center"
+		class="w-8 h-8 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-center appearance-none"
 	/>
 	<button
 		onclick={increment}
