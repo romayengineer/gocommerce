@@ -50,4 +50,20 @@
 	button {
 		border: 1px solid #d1d5db;
 	}
+
+	input[type="number"] {
+		text-align: center !important;
+		padding: 0 !important;
+	}
+
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type="number"] {
+		-moz-appearance: textfield;
+		appearance: textfield;
+	}
 </style>

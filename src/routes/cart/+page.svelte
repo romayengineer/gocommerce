@@ -20,7 +20,7 @@
 	{:else}
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 			<div class="lg:col-span-2">
-				<div class="bg-white rounded-lg shadow">
+				<div class="bg-white rounded-lg">
 					{#each $cart as item (item.product.itemId)}
 						<CartItem
 							{item}

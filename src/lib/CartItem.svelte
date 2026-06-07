@@ -13,7 +13,7 @@
 
 	const { item, onQuantityChange, onRemove }: Props = $props();
 </script>
-<div>
+<div class="shadow">
 	<Button class="bg-white text-2xl text-red-600 px-3 py-1 float-right" onclick={onRemove}>
 		x
 	</Button>
