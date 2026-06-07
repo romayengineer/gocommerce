@@ -12,8 +12,8 @@
 	let itemCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
 </script>
 
-<div class="max-w-5xl mx-auto px-4 py-12">
-	<h1 class="text-4xl font-bold mb-8">{$t('cart.title')}</h1>
+<div class="max-w-5xl mx-auto px-2 py-6 md:py-12">
+	<h1 class="text-2xl md:text-3xl font-bold mb-2 md:mb-6">{$t('cart.title')}</h1>
 
 	{#if $cart.length === 0}
 		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
