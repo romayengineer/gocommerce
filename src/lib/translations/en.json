@@ -30,6 +30,7 @@
     "rating": "Rating:"
   },
   "cart": {
+    "keepBuying": "add more products",
     "title": "Shopping Cart",
     "empty": "Your cart is empty",
     "continueShopping": "Continue Shopping",

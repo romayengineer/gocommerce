@@ -6,7 +6,7 @@
 	import EmptyState from '$lib/EmptyState.svelte';
 	import OrderSummaryLine from '$lib/OrderSummaryLine.svelte';
 	import SidePanel from '$lib/SidePanel.svelte';
-	import { cart, removeFromCart, updateQuantity, clearCart } from '$lib/cart';
+	import { cart, removeFromCart, updateQuantity } from '$lib/cart';
 
 	let total = $derived($cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
 	let itemCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
@@ -18,9 +18,9 @@
 	{#if $cart.length === 0}
 		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
 	{:else}
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+		<div class="grid grid-cols-1 lg:grid-cols-3 md:gap-8">
 			<div class="lg:col-span-2">
-				<div class="bg-white rounded-lg">
+				<div class="bg-white py-2">
 					{#each $cart as item (item.product.itemId)}
 						<CartItem
 							{item}
@@ -32,13 +32,7 @@
 			</div>
 
 			<div class="h-fit">
-				<SidePanel title={$t('cart.title')} sticky={true}>
-
-					<div class="space-y-3 mb-6 pb-6 border-b">
-						<OrderSummaryLine label={$t('cart.subtotal') + ':'} amount={total} />
-						<OrderSummaryLine label={$t('cart.shipping') + ':'} amount={total > 100 ? 0 : 10} />
-						<OrderSummaryLine label={$t('cart.tax') + ':'} amount={total * 0.1} />
-					</div>
+				<SidePanel sticky={true}>
 
 					<div class="mb-6">
 						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total + (total > 100 ? 0 : 10) + total * 0.1} isBold={true} />
@@ -48,15 +42,9 @@
 						{$t('cart.checkout')}
 					</Button>
 
-					<Button variant="secondary" class="w-full py-3" onclick={() => clearCart()}>
-						{$t('cart.clearCart')}
+					<Button variant="secondary" class="w-full py-3" onclick={() => goto('#/products')}>
+						{$t('cart.keepBuying')}
 					</Button>
-
-					{#if total > 100}
-						<div class="mt-4 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-700">
-							🎉 Free shipping on orders over $100!
-						</div>
-					{/if}
 				</SidePanel>
 			</div>
 		</div>

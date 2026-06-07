@@ -30,6 +30,7 @@
     "rating": "Calificación:"
   },
   "cart": {
+    "keepBuying": "seguir comprando",
     "title": "Carrito de Compras",
     "empty": "Tu carrito está vacío",
     "continueShopping": "Continuar Comprando",
