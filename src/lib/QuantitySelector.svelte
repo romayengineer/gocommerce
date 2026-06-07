@@ -44,3 +44,10 @@
 		+
 	</button>
 </div>
+
+
+<style>
+	button {
+		border: 1px solid #d1d5db;
+	}
+</style>
