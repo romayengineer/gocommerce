@@ -66,7 +66,7 @@ echo ""
 
 # Rebase build onto origin/master
 echo -e "${YELLOW}Rebasing build onto origin/$CURRENT_BRANCH...${NC}"
-$GIT rebase --no-edit "origin/$CURRENT_BRANCH"
+$GIT rebase "origin/$CURRENT_BRANCH"
 echo -e "${GREEN}✓ Rebased build onto origin/$CURRENT_BRANCH${NC}"
 echo ""
 
