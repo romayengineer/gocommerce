@@ -64,10 +64,10 @@ $GIT pull origin build
 echo -e "${GREEN}✓ Pulled origin/build${NC}"
 echo ""
 
-# Merge origin/master to build
-echo -e "${YELLOW}Merging origin/$CURRENT_BRANCH into build...${NC}"
-$GIT merge --no-edit "origin/$CURRENT_BRANCH"
-echo -e "${GREEN}✓ Merged origin/$CURRENT_BRANCH into build${NC}"
+# Rebase build onto origin/master
+echo -e "${YELLOW}Rebasing build onto origin/$CURRENT_BRANCH...${NC}"
+$GIT rebase --no-edit "origin/$CURRENT_BRANCH"
+echo -e "${GREEN}✓ Rebased build onto origin/$CURRENT_BRANCH${NC}"
 echo ""
 
 # Push build
