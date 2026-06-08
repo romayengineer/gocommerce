@@ -22,7 +22,7 @@
 		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
 	{:else}
 		<div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-2">
-			<div class="lg:col-span-2">
+			<div class="grid lg:col-span-2 lg:gap-2">
 				{#each $cart as item (item.product.itemId)}
 					<CartItem
 						{item}

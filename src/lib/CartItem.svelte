@@ -15,7 +15,7 @@
 	const { item, onQuantityChange, onRemove }: Props = $props();
 </script>
 
-<div class="border-b border-1 border-grey-100">
+<div class="border-b border-1 border-grey-100 bg-white lg:shadow">
 	<div class="grid grid-cols-[auto_1fr] py-4 px-2">
 		{#if item.product.images.length > 0}
 			<div class="w-16 h-30">
