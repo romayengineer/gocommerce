@@ -30,7 +30,7 @@
 
 			<ProductHeader {product} />
 
-			<div class="grid grid-cols-2 gap-2">
+			<div class="grid grid-cols-2 gap-10">
 				<div class="mb-8">
 					<QuantitySelector {quantity} onchange={(q) => (quantity = q)} />
 				</div>
