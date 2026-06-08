@@ -7,27 +7,12 @@
 	const { sortBy, filterCategory, searchQuery, categories, onSortChange, onCategoryChange, onSearchChange }: Props = $props();
 
 	const { sizes, others } = $derived(categorizeItems(categories));
-
-	let expandedSections = $state({
-		search: true,
-		category: false,
-		sort: false
-	});
-
-	function toggleSection(section: keyof typeof expandedSections) {
-		expandedSections[section] = !expandedSections[section];
-	}
 </script>
 
 <div class="bg-white rounded-lg shadow space-y-2">
 	<!-- Search Section -->
 	<div class="border-b">
-		<CollapsibleSectionButton
-			label="Search"
-			isExpanded={expandedSections.search}
-			onToggle={() => toggleSection('search')}
-		/>
-		{#if expandedSections.search}
+		<CollapsibleSectionButton label="Search" isExpanded={true}>
 			<div class="px-3 pb-3">
 				<input
 					type="text"
@@ -37,17 +22,12 @@
 					class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 				/>
 			</div>
-		{/if}
+		</CollapsibleSectionButton>
 	</div>
 
 	<!-- Category Section -->
 	<div class="border-b">
-		<CollapsibleSectionButton
-			label="Category"
-			isExpanded={expandedSections.category}
-			onToggle={() => toggleSection('category')}
-		/>
-		{#if expandedSections.category}
+		<CollapsibleSectionButton label="Category">
 			<div class="px-3 pb-3 space-y-2">
 				{#if sizes.length > 0}
 					<div class="ml-1 border-l-2 border-gray-300 pl-2">
@@ -84,17 +64,12 @@
 					</div>
 				{/if}
 			</div>
-		{/if}
+		</CollapsibleSectionButton>
 	</div>
 
 	<!-- Sort Section -->
 	<div>
-		<CollapsibleSectionButton
-			label="Sort"
-			isExpanded={expandedSections.sort}
-			onToggle={() => toggleSection('sort')}
-		/>
-		{#if expandedSections.sort}
+		<CollapsibleSectionButton label="Sort">
 			<div class="px-3 pb-3">
 				<select
 					value={sortBy}
@@ -106,6 +81,6 @@
 					<option value="price-high">Price (High to Low)</option>
 				</select>
 			</div>
-		{/if}
+		</CollapsibleSectionButton>
 	</div>
 </div>
