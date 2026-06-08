@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { categorizeItems, type ProductFiltersProps } from './productFilters';
+	import CollapsibleSectionButton from './CollapsibleSectionButton.svelte';
 
 	type Props = ProductFiltersProps;
 
@@ -21,13 +22,11 @@
 <div class="bg-white rounded-lg shadow space-y-2">
 	<!-- Search Section -->
 	<div class="border-b">
-		<button
-			onclick={() => toggleSection('search')}
-			class="w-full flex items-center justify-between p-3 text-sm font-semibold hover:bg-gray-50"
-		>
-			<span>Search</span>
-			<span class={`text-gray-500 transition-transform ${expandedSections.search ? 'rotate-180' : ''}`}>▼</span>
-		</button>
+		<CollapsibleSectionButton
+			label="Search"
+			isExpanded={expandedSections.search}
+			onToggle={() => toggleSection('search')}
+		/>
 		{#if expandedSections.search}
 			<div class="px-3 pb-3">
 				<input
@@ -43,13 +42,11 @@
 
 	<!-- Category Section -->
 	<div class="border-b">
-		<button
-			onclick={() => toggleSection('category')}
-			class="w-full flex items-center justify-between p-3 text-sm font-semibold hover:bg-gray-50"
-		>
-			<span>Category</span>
-			<span class={`text-gray-500 transition-transform ${expandedSections.category ? 'rotate-180' : ''}`}>▼</span>
-		</button>
+		<CollapsibleSectionButton
+			label="Category"
+			isExpanded={expandedSections.category}
+			onToggle={() => toggleSection('category')}
+		/>
 		{#if expandedSections.category}
 			<div class="px-3 pb-3 space-y-2">
 				{#if sizes.length > 0}
@@ -92,13 +89,11 @@
 
 	<!-- Sort Section -->
 	<div>
-		<button
-			onclick={() => toggleSection('sort')}
-			class="w-full flex items-center justify-between p-3 text-sm font-semibold hover:bg-gray-50"
-		>
-			<span>Sort</span>
-			<span class={`text-gray-500 transition-transform ${expandedSections.sort ? 'rotate-180' : ''}`}>▼</span>
-		</button>
+		<CollapsibleSectionButton
+			label="Sort"
+			isExpanded={expandedSections.sort}
+			onToggle={() => toggleSection('sort')}
+		/>
 		{#if expandedSections.sort}
 			<div class="px-3 pb-3">
 				<select
