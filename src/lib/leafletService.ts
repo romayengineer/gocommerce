@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { logger } from './logger.svelte';
+import { type ShippingCoordinates } from './schemas'
 import { mapHasAddress, type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 // KEEP THIS DOCUMENTATION
@@ -34,6 +35,8 @@ export class LeafletService implements IMapService {
 	private updateTimeout: NodeJS.Timeout | null = null;
 	private readonly DEBOUNCE_DELAY = 2000;
 	private lastLocationFound = true;
+	public latitude: number | undefined = undefined
+	public longitude: number | undefined = undefined
 
 	async initialize(container: HTMLDivElement): Promise<void> {
 		this.mapContainer = container;
@@ -55,20 +58,20 @@ export class LeafletService implements IMapService {
 		this.marker = L.marker(DEFAULT_CENTER).addTo(this.map);
 	}
 
-	updateLocation(config: MapConfig): Promise<void> {
+	updateLocation(config: MapConfig): Promise<ShippingCoordinates | undefined> {
 		return new Promise((resolve) => {
 			if (this.updateTimeout) {
 				clearTimeout(this.updateTimeout);
 			}
 
 			this.updateTimeout = setTimeout(async () => {
-				await this.performLocationUpdate(config);
-				resolve();
+				let coordinates = await this.performLocationUpdate(config);
+				resolve(coordinates);
 			}, this.DEBOUNCE_DELAY);
 		});
 	}
 
-	private async performLocationUpdate(config: MapConfig): Promise<void> {
+	private async performLocationUpdate(config: MapConfig): Promise<ShippingCoordinates | undefined> {
 		if (!this.map || !this.marker) {
 			return;
 		}
@@ -118,13 +121,22 @@ export class LeafletService implements IMapService {
 
 			if (results.length > 0) {
 				const { lat, lon } = results[0];
-				const coordinates: L.LatLngExpression = [parseFloat(lat), parseFloat(lon)];
+				this.latitude = parseFloat(lat)
+				this.longitude = parseFloat(lon)
+				const coordinates: L.LatLngExpression = [this.latitude, this.longitude];
 				this.map.setView(coordinates, FOUND_LOCATION_ZOOM);
 				this.marker.setLatLng(coordinates);
 				this.lastLocationFound = true;
+				return {
+					latitude: this.latitude,
+					longitude: this.longitude,
+				}
 			} else {
+				this.latitude = undefined
+				this.longitude = undefined
 				this.lastLocationFound = false;
 				this.resetToDefault();
+				return;
 			}
 		} catch (error) {
 			this.lastLocationFound = false;

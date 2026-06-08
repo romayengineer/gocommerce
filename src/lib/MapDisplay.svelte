@@ -4,6 +4,7 @@
 	import ApiKeyMissing from './ApiKeyMissing.svelte';
 	import { createMapService } from './mapFactory';
 	import { type IMapService } from './mapService';
+	import { type ShippingCoordinates } from './schemas'
 
 	interface Props {
 		address?: string;
@@ -13,9 +14,11 @@
 		stateName?: string;
 		zipCode?: string;
 		country?: string;
+		coordinates: ShippingCoordinates;
+		onUpdateLocation?: (coordinates: ShippingCoordinates | undefined) => void;
 	}
 
-	const { address, amenity, city, county, stateName, zipCode, country }: Props = $props();
+	const { address, amenity, city, county, stateName, zipCode, country, coordinates = $bindable() , onUpdateLocation }: Props = $props();
 
 	let mapContainer = $state<HTMLDivElement>();
 	let apiKeyMissing = $state(false);
@@ -40,8 +43,17 @@
 
 	async function updateLocation() {
 		if (!mapService) return;
-		await mapService.updateLocation({ address, amenity, city, county, stateName, zipCode, country });
+		let value = await mapService.updateLocation({ address, amenity, city, county, stateName, zipCode, country });
+		console.log('value ', JSON.stringify(value));
+		if (value) {
+			coordinates.latitude = value.latitude;
+			coordinates.longitude = value.longitude;
+		} else {
+			coordinates.latitude = undefined;
+			coordinates.longitude = undefined;
+		}
 		locationNotFound = !mapService.wasLocationFound();
+		onUpdateLocation?.(value);
 	}
 
 	$effect(() => {

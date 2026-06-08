@@ -4,11 +4,11 @@
 	import { t } from 'svelte-i18n';
 	import { ARGENTINE_PROVINCES } from './argentineProvinces';
 	import { AMENITIES } from './amenities';
-	import type { ShippingFormData } from './schemas';
+	import type { ShippingFormData, FieldErrors } from './schemas';
 
 	interface Props {
 		formData: ShippingFormData;
-		errors: Record<string, string[] | undefined>;
+		errors: FieldErrors;
 		submitted: boolean;
 	}
 
@@ -29,7 +29,7 @@
 		required
 		bind:value={formData.firstName}
 		error={!!errors.firstName}
-		errorMessage={errors.firstName?.[0]}
+		errorMessages={errors.firstName?.errors}
 	/>
 
 	<FormField
@@ -38,7 +38,7 @@
 		required
 		bind:value={formData.lastName}
 		error={!!errors.lastName}
-		errorMessage={errors.lastName?.[0]}
+		errorMessages={errors.lastName?.errors}
 	/>
 
 	<FormField
@@ -48,7 +48,7 @@
 		required
 		bind:value={formData.email}
 		error={!!errors.email}
-		errorMessage={errors.email?.[0]}
+		errorMessages={errors.email?.errors}
 	/>
 
 	<FormField
@@ -58,7 +58,7 @@
 		required
 		bind:value={formData.phone}
 		error={!!errors.phone}
-		errorMessage={errors.phone?.[0]}
+		errorMessages={errors.phone?.errors}
 	/>
 
 	<div class="md:col-span-2">
@@ -68,7 +68,7 @@
 			required
 			bind:value={formData.address}
 			error={!!errors.address}
-			errorMessage={errors.address?.[0]}
+			errorMessages={errors.address?.errors}
 		/>
 	</div>
 
@@ -86,10 +86,10 @@
 	<FormField
 		id="city"
 		label={$t('shipping.city')}
-		required
+		required={false}
 		bind:value={formData.city}
 		error={!!errors.city}
-		errorMessage={errors.city?.[0]}
+		errorMessages={errors.city?.errors}
 	/>
 
 	<FormField
@@ -97,7 +97,7 @@
 		label={$t('shipping.county')}
 		bind:value={formData.county}
 		error={!!errors.county}
-		errorMessage={errors.county?.[0]}
+		errorMessages={errors.county?.errors}
 	/>
 
 	<SearchableSelect
@@ -112,10 +112,10 @@
 	<FormField
 		id="zipCode"
 		label={$t('shipping.zipCode')}
-		required
+		required={false}
 		bind:value={formData.zipCode}
 		error={!!errors.zipCode}
-		errorMessage={errors.zipCode?.[0]}
+		errorMessages={errors.zipCode?.errors}
 	/>
 
 	<FormField
@@ -124,7 +124,7 @@
 		required
 		bind:value={formData.country}
 		error={!!errors.country}
-		errorMessage={errors.country?.[0]}
+		errorMessages={errors.country?.errors}
 		editable={false}
 	/>
 </div>

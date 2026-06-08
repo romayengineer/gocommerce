@@ -1,3 +1,4 @@
+import { type ShippingCoordinates } from './schemas'
 /*
 ┌────────────────┬────────────┬──────────────────────────────────┐
 │     Level      │    Size    │             Example              │
@@ -39,7 +40,7 @@ export const FOUND_LOCATION_ZOOM = DEFAULT_ZOOM + 5;
 
 export interface IMapService {
 	initialize(container: HTMLDivElement): Promise<void>;
-	updateLocation(config: MapConfig): Promise<void>;
+	updateLocation(config: MapConfig): Promise<ShippingCoordinates | undefined>;
 	isInitialized(): boolean;
 	hasApiKey(): boolean;
 	wasLocationFound(): boolean;

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ErrorMessage from './ErrorMessage.svelte';
+
 	interface Props {
 		id: string;
 		label: string;
@@ -6,14 +8,14 @@
 		value?: string;
 		required?: boolean;
 		error?: boolean;
-		errorMessage?: string;
+		errorMessages?: string[];
 		editable?: boolean;
 		onchange?: (event: Event) => void;
 		onfocusin?: (event: FocusEvent) => void;
 		onfocusout?: (event: FocusEvent) => void;
 	}
 
-	let { id, label, type = 'text', value = $bindable(''), required = false, error = false, errorMessage = 'This field is required', editable = true, onchange, onfocusin, onfocusout }: Props = $props();
+	let { id, label, type = 'text', value = $bindable(''), required = false, error = false, errorMessages = ['This field is required'], editable = true, onchange, onfocusin, onfocusout }: Props = $props();
 </script>
 
 
@@ -36,6 +38,8 @@
 		class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent {!editable ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : ''}"
 	/>
 	{#if error}
-		<span class="text-red-500 text-sm mt-1">{errorMessage}</span>
+		{#each errorMessages as message}
+			<ErrorMessage messages={errorMessages}/>
+		{/each}
 	{/if}
 </div>

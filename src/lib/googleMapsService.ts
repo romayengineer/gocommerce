@@ -1,4 +1,5 @@
 import { logger } from './logger.svelte';
+import { type ShippingCoordinates } from './schemas'
 import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 export class GoogleMapsService implements IMapService {
@@ -63,7 +64,7 @@ export class GoogleMapsService implements IMapService {
 		}
 	}
 
-	async updateLocation(config: MapConfig): Promise<void> {
+	async updateLocation(config: MapConfig): Promise<ShippingCoordinates | undefined> {
 		if (!this.geocoder || !this.map) {
 			return;
 		}
