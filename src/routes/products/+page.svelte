@@ -58,7 +58,7 @@
 
 <div class="max-w-7xl mx-auto py-1">
 
-	<div class="flex flex-col md:flex-row gap-8">
+	<div class="flex flex-col md:flex-row gap-2">
 		<aside class="md:w-48">
 			{#if isMobile}
 				<ProductFiltersMobile
