@@ -15,10 +15,7 @@
 	const { item, onQuantityChange, onRemove }: Props = $props();
 </script>
 
-<div class="shadow border border-1 border-grey-100">
-	<Button class="bg-white text-red-600px-2 py-1 float-right hover:bg-white" onclick={onRemove}>
-		<Trash2 size={20} class="bg-white text-red-600"/>
-	</Button>
+<div class="border-b border-1 border-grey-100">
 	<div class="grid grid-cols-[auto_1fr] py-4 px-2">
 		{#if item.product.images.length > 0}
 			<div class="w-16 h-30">
@@ -26,7 +23,13 @@
 			</div>
 		{/if}
 		<div class="flex flex-col pl-4">
-			<h3 class="font-semibold text-lg pb-2 flex-1">{item.product.nameComplete}</h3>
+
+			<div class="flex items-start">
+				<h3 class="font-semibold text-lg pb-2 flex-1">{item.product.nameComplete}</h3>
+				<Button class="px-2 py-1 bg-white hover:bg-white" onclick={onRemove}>
+					<Trash2 size={20} class="bg-white text-gray-500"/>
+				</Button>
+			</div>
 
 			<div class="flex items-center gap-4">
 				<QuantitySelector quantity={item.quantity} onchange={onQuantityChange} />
