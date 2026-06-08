@@ -73,9 +73,6 @@
 		<Button type="submit" class="flex-1 py-3" disabled={submitting}>
 			{submitting ? 'Processing...' : 'Complete Order'}
 		</Button>
-		<Button variant="secondary" class="flex-1 py-3" onclick={goBack}>
-			Back to Cart
-		</Button>
 	</div>
 </form>
 
