@@ -1,15 +1,15 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
 import { logger } from './logger.svelte';
-import type { DisplayProduct } from './products';
-import { isValidProduct } from './products';
+import type { DisplayProduct, CartItem  } from './products';
+import { isValidCartItem, displayProductsList } from './products';
 
-export interface CartItem {
+const CART_KEY = 'ecommerce_cart';
+
+export interface CartItemFull {
 	product: DisplayProduct;
 	quantity: number;
 }
-
-const CART_KEY = 'ecommerce_cart';
 
 function createCartStore() {
 	const stored = browser ? localStorage.getItem(CART_KEY) : null;
@@ -19,13 +19,13 @@ function createCartStore() {
 
 	const ob = {
 		subscribe,
-		addToCart: (product: DisplayProduct, quantity: number) => {
+		addToCart: (productId: string, quantity: number) => {
 			update((items: CartItem[]) => {
-				const existing = items.find((item) => item.product.itemId === product.itemId);
+				const existing = items.find((item) => item.itemId === productId);
 				if (existing) {
 					existing.quantity += quantity;
 				} else {
-					items.push({ product, quantity });
+					items.push({ itemId: productId, quantity });
 				}
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(items));
 				return items;
@@ -33,17 +33,17 @@ function createCartStore() {
 		},
 		removeFromCart: (productId: string) => {
 			update((items: CartItem[]) => {
-				const filtered = items.filter((item) => item.product.itemId !== productId);
+				const filtered = items.filter((item) => item.itemId !== productId);
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(filtered));
 				return filtered;
 			});
 		},
 		updateQuantity: (productId: string, quantity: number) => {
 			update((items: CartItem[]) => {
-				const item = items.find((i) => i.product.itemId === productId);
+				const item = items.find((item) => item.itemId === productId);
 				if (item) {
 					if (quantity <= 0) {
-						items = items.filter((i) => i.product.itemId !== productId);
+						items = items.filter((item) => item.itemId !== productId);
 					} else {
 						item.quantity = quantity;
 					}
@@ -60,8 +60,8 @@ function createCartStore() {
 
 	// clear cart if any product is invalid so that the cart view can display the products
 	initial.some((item) => {
-		if (!isValidProduct(item.product)) {
-			logger.log("Invalid product, clearing cart");
+		if (!isValidCartItem(item)) {
+			logger.log("Invalid cart item, clearing cart");
 			ob.clearCart();
 			return true
 		}
@@ -72,8 +72,8 @@ function createCartStore() {
 
 export const cart = createCartStore();
 
-export async function addToCart(product: DisplayProduct, quantity: number): Promise<void> {
-	cart.addToCart(product, quantity);
+export async function addToCart(productId: string, quantity: number): Promise<void> {
+	cart.addToCart(productId, quantity);
 }
 
 export async function removeFromCart(productId: string): Promise<void> {
@@ -87,3 +87,18 @@ export async function updateQuantity(productId: string, quantity: number): Promi
 export async function clearCart(): Promise<void> {
 	cart.clearCart();
 }
+
+export const cartProducts = derived(cart, (items) => {
+	let products = items.map((item) => {
+		const product = displayProductsList.find((product) => product.itemId === item.itemId);
+		if (!product) {
+			removeFromCart(item.itemId);
+			return;
+		}
+		return {
+			product: product,
+			quantity: item.quantity,
+		} as CartItemFull;
+	});
+	return products.filter(Boolean);
+});

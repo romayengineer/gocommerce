@@ -17,7 +17,7 @@
 	function handleAddToCart(e: MouseEvent) {
 		e.preventDefault();
 		e.stopPropagation();
-		addToCart(product, 1);
+		addToCart(product.itemId, 1);
 	}
 
 	function handleImageLoaded(loaded: boolean) {

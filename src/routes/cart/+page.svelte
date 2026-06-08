@@ -7,9 +7,9 @@
 	import EmptyState from '$lib/EmptyState.svelte';
 	import OrderSummaryLine from '$lib/OrderSummaryLine.svelte';
 	import SidePanel from '$lib/SidePanel.svelte';
-	import { cart, removeFromCart, updateQuantity } from '$lib/cart';
+	import { cartProducts, removeFromCart, updateQuantity } from '$lib/cart';
 
-	let total = $derived($cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
+	let total = $derived($cartProducts.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
 </script>
 
 <div class="mx-auto max-w-2xl lg:max-w-4xl px-2 py-6 md:py-12">
@@ -18,12 +18,12 @@
 		<h1 class="x-text-xl">{$t('cart.title')}</h1>
 	</div>
 
-	{#if $cart.length === 0}
+	{#if $cartProducts.length === 0}
 		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
 	{:else}
 		<div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-2">
 			<div class="grid lg:col-span-2 lg:gap-2">
-				{#each $cart as item (item.product.itemId)}
+				{#each $cartProducts as item (item.product.itemId)}
 					<CartItem
 						{item}
 						onQuantityChange={(qty) => updateQuantity(item.product.itemId, qty)}

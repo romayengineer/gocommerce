@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { Trash2 } from 'lucide-svelte';
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
-	import { type CartItem } from './cart';
+	import { type CartItemFull } from './cart';
 
 	interface Props {
-		item: CartItem;
+		item: CartItemFull;
 		onQuantityChange: (quantity: number) => void;
 		onRemove: () => void;
 	}

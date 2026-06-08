@@ -15,7 +15,7 @@
 
 	function handleAddToCart() {
 		if (product) {
-			addToCart(product, quantity);
+			addToCart(product.itemId, quantity);
 		}
 	}
 </script>

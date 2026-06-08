@@ -63,13 +63,20 @@ export const displayProductSchema = z.object({
 
 export type DisplayProduct = z.infer<typeof displayProductSchema>;
 
+export const cartItemSchema = z.object({
+	itemId: z.string(),
+	quantity: z.number(),
+})
+
+export type CartItem = z.infer<typeof cartItemSchema>;
+
 export function createValidator<T extends z.ZodType>(schema: T) {
 	return (value: unknown): value is z.infer<T> => {
 		return schema.safeParse(value).success;
 	};
 }
 
-export const isValidProduct = createValidator(displayProductSchema);
+export const isValidCartItem = createValidator(cartItemSchema);
 
 import productsData from '../data/products.json';
 export const products: Product[] = productsData;
