@@ -89,7 +89,7 @@ export async function clearCart(): Promise<void> {
 }
 
 export const cartProducts = derived(cart, (items) => {
-	let products = items.map((item) => {
+	let products: (CartItemFull | undefined)[] = items.map((item) => {
 		const product = displayProductsList.find((product) => product.itemId === item.itemId);
 		if (!product) {
 			removeFromCart(item.itemId);
@@ -100,5 +100,5 @@ export const cartProducts = derived(cart, (items) => {
 			quantity: item.quantity,
 		} as CartItemFull;
 	});
-	return products.filter(Boolean);
+	return products.filter(Boolean) as CartItemFull[];
 });
