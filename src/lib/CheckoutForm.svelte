@@ -56,18 +56,21 @@
 	}
 </script>
 
-<form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="bg-white rounded-lg shadow p-8">
+<form class="bg-white rounded-lg shadow p-4 md:p-8" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 	<ShippingForm bind:formData bind:errors bind:submitted />
 
-	<MapDisplay
-		address={formData.address}
-		amenity={formData.amenity}
-		city={formData.city}
-		county={formData.county}
-		stateName={formData.stateName}
-		zipCode={formData.zipCode}
-		country={formData.country}
-	/>
+	<!-- this padding for mobile makes scroll easy -->
+	<div class="pl-4 pr-4 md:p-0">
+		<MapDisplay
+			address={formData.address}
+			amenity={formData.amenity}
+			city={formData.city}
+			county={formData.county}
+			stateName={formData.stateName}
+			zipCode={formData.zipCode}
+			country={formData.country}
+		/>
+	</div>
 
 	<div class="flex gap-4 mt-8">
 		<Button type="submit" class="flex-1 py-3" disabled={submitting}>
