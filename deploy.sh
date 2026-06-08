@@ -58,6 +58,12 @@ $GIT checkout build
 echo -e "${GREEN}✓ Checked out build branch${NC}"
 echo ""
 
+# Pull origin/build
+echo -e "${YELLOW}Pulling origin/build...${NC}"
+$GIT pull origin build
+echo -e "${GREEN}✓ Pulled origin/build${NC}"
+echo ""
+
 # Merge origin/master to build
 echo -e "${YELLOW}Merging origin/$CURRENT_BRANCH into build...${NC}"
 $GIT merge --no-edit "origin/$CURRENT_BRANCH"
