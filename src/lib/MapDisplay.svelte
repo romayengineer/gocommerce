@@ -63,7 +63,7 @@
 		{/if}
 		<div
 			bind:this={mapContainer}
-			class="w-full h-96 border border-gray-300 rounded-lg shadow-md"
+			class="w-full h-96 border border-gray-300 rounded-lg shadow-md relative z-0"
 		></div>
 	{/if}
 </div>
