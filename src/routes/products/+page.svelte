@@ -1,25 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFilters from '$lib/ProductFilters.svelte';
 	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
 	import { displayProductsList, deleteProduct } from '$lib/products';
 
-	let isMobile = $state(false);
-
 	let sortBy = $state('name');
 	let filterCategory = $state('all');
 	let searchQuery = $state('');
-
-	onMount(() => {
-		const checkMobile = () => {
-			isMobile = window.innerWidth < 768;
-		};
-		checkMobile();
-		window.addEventListener('resize', checkMobile);
-		return () => window.removeEventListener('resize', checkMobile);
-	});
 
 	let displayProducts = $state(displayProductsList)
 
@@ -58,30 +45,29 @@
 
 <div class="max-w-7xl mx-auto py-1">
 
-	<div class="flex flex-col md:flex-row gap-2">
-		<aside class="md:w-48">
-			{#if isMobile}
-				<ProductFiltersMobile
-					{sortBy}
-					{filterCategory}
-					{searchQuery}
-					{categories}
-					onSortChange={(value) => (sortBy = value)}
-					onCategoryChange={(value) => (filterCategory = value)}
-					onSearchChange={(value) => (searchQuery = value)}
-				/>
-			{:else}
-				<ProductFilters
-					{sortBy}
-					{filterCategory}
-					{searchQuery}
-					{categories}
-					onSortChange={(value) => (sortBy = value)}
-					onCategoryChange={(value) => (filterCategory = value)}
-					onSearchChange={(value) => (searchQuery = value)}
-				/>
-			{/if}
-		</aside>
+	<div class="flex flex-col lg:flex-row gap-2">
+		<div class="block lg:hidden">
+			<ProductFiltersMobile
+				{sortBy}
+				{filterCategory}
+				{searchQuery}
+				{categories}
+				onSortChange={(value) => (sortBy = value)}
+				onCategoryChange={(value) => (filterCategory = value)}
+				onSearchChange={(value) => (searchQuery = value)}
+			/>
+		</div>
+		<div class="hidden lg:flex">
+			<ProductFilters
+				{sortBy}
+				{filterCategory}
+				{searchQuery}
+				{categories}
+				onSortChange={(value) => (sortBy = value)}
+				onCategoryChange={(value) => (filterCategory = value)}
+				onSearchChange={(value) => (searchQuery = value)}
+			/>
+		</div>
 
 		<div class="flex-1">
 			<ProductGrid products={sorted} onProductImageFailed={handleProductImageFailed} />
