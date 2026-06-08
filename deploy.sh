@@ -10,10 +10,6 @@ else
   GIT=git
 fi
 
-function _git() {
-  $GIT $@
-}
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -25,13 +21,13 @@ echo ""
 
 # Check for uncommitted changes
 echo -e "${YELLOW}Checking for uncommitted changes...${NC}"
-if ! _git diff-index --quiet HEAD --; then
+if ! $GIT diff-index --quiet HEAD --; then
   echo -e "${RED}❌ Error: You have uncommitted changes. Please commit or stash them first.${NC}"
   exit 1
 fi
 
 # Check for untracked files
-if [ -n "$(_git ls-files --others --exclude-standard)" ]; then
+if [ -n "$($GIT ls-files --others --exclude-standard)" ]; then
   echo -e "${RED}❌ Error: You have untracked files. Please add or remove them first.${NC}"
   exit 1
 fi
@@ -40,10 +36,10 @@ echo -e "${GREEN}✓ No uncommitted changes${NC}"
 echo ""
 
 # Check current branch
-CURRENT_BRANCH=$(_git rev-parse --abbrev-ref HEAD)
+CURRENT_BRANCH=$($GIT rev-parse --abbrev-ref HEAD)
 echo -e "${YELLOW}Checking current branch...${NC}"
-if [ "$CURRENT_BRANCH" != "master" ] && [ "$CURRENT_BRANCH" != "main" ]; then
-  echo -e "${RED}❌ Error: Current branch is '$CURRENT_BRANCH'. Must be 'master' or 'main'.${NC}"
+if [ "$CURRENT_BRANCH" != "main" ]; then
+  echo -e "${RED}❌ Error: Current branch is '$CURRENT_BRANCH'. Must be 'main'.${NC}"
   exit 1
 fi
 
@@ -52,31 +48,31 @@ echo ""
 
 # Push master/main
 echo -e "${YELLOW}Pushing $CURRENT_BRANCH...${NC}"
-_git push origin "$CURRENT_BRANCH"
+$GIT push origin "$CURRENT_BRANCH"
 echo -e "${GREEN}✓ Pushed $CURRENT_BRANCH${NC}"
 echo ""
 
 # Checkout build
 echo -e "${YELLOW}Checking out build branch...${NC}"
-_git checkout build
+$GIT checkout build
 echo -e "${GREEN}✓ Checked out build branch${NC}"
 echo ""
 
 # Merge origin/master to build
 echo -e "${YELLOW}Merging origin/$CURRENT_BRANCH into build...${NC}"
-_git merge --no-edit "origin/$CURRENT_BRANCH"
+$GIT merge --no-edit "origin/$CURRENT_BRANCH"
 echo -e "${GREEN}✓ Merged origin/$CURRENT_BRANCH into build${NC}"
 echo ""
 
 # Push build
 echo -e "${YELLOW}Pushing build branch...${NC}"
-_git push origin build
+$GIT push origin build
 echo -e "${GREEN}✓ Pushed build branch${NC}"
 echo ""
 
 # Switch back to master/main
 echo -e "${YELLOW}Switching back to $CURRENT_BRANCH...${NC}"
-_git checkout "$CURRENT_BRANCH"
+$GIT checkout "$CURRENT_BRANCH"
 echo -e "${GREEN}✓ Switched back to $CURRENT_BRANCH${NC}"
 echo ""
 
