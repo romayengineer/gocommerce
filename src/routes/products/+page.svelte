@@ -56,8 +56,7 @@
 	);
 </script>
 
-<div class="max-w-7xl mx-auto px-4 py-4">
-	<h1 class="x-text-xl font-bold mb-8">{$t('products.title')}</h1>
+<div class="max-w-7xl mx-auto py-1">
 
 	<div class="flex flex-col md:flex-row gap-8">
 		<aside class="md:w-48">
@@ -85,7 +84,6 @@
 		</aside>
 
 		<div class="flex-1">
-			<p class="text-gray-600 mb-6">{$t('products.add')} {sorted.length} {sorted.length !== 1 ? 's' : ''}</p>
 			<ProductGrid products={sorted} onProductImageFailed={handleProductImageFailed} />
 		</div>
 	</div>
