@@ -71,10 +71,6 @@
 			submitting = false;
 		}
 	}
-
-	function goBack() {
-		goto('#/cart');
-	}
 </script>
 
 <form class="bg-white rounded-lg shadow p-4 md:p-8" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
