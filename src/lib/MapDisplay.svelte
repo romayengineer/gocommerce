@@ -73,9 +73,13 @@
 				<p class="text-yellow-800">{$t('shipping.locationNotFound')}</p>
 			</div>
 		{/if}
-		<div
-			bind:this={mapContainer}
-			class="w-full h-96 border border-gray-300 rounded-lg shadow-md relative z-0"
-		></div>
+		<div class="relative">
+			<div
+				bind:this={mapContainer}
+				class="w-full h-96 border border-gray-300 rounded-lg shadow-md overflow-hidden"
+			></div>
+			<!-- Transparent overlay prevents all map interactions (clicks, drags, zoom) while allowing page scroll -->
+			<div class="absolute inset-0 bg-transparent cursor-default"></div>
+		</div>
 	{/if}
 </div>
