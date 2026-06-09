@@ -60,7 +60,7 @@ echo ""
 
 # Pull origin/build
 echo -e "${YELLOW}Pulling origin/build...${NC}"
-$GIT pull origin build
+$GIT rebase origin/build
 echo -e "${GREEN}✓ Pulled origin/build${NC}"
 echo ""
 
