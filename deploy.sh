@@ -58,8 +58,8 @@ $GIT checkout build
 echo -e "${GREEN}✓ Checked out build branch${NC}"
 echo ""
 
-# Pull origin/build
-echo -e "${YELLOW}Pulling origin/build...${NC}"
+# Rebase origin/build onto build
+echo -e "${YELLOW}Rebasing origin/build onto build...${NC}"
 $GIT rebase origin/build
 echo -e "${GREEN}✓ Pulled origin/build${NC}"
 echo ""
