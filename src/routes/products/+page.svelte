@@ -7,8 +7,18 @@
 	let sortBy = $state('name');
 	let filterCategory = $state('all');
 	let searchQuery = $state('');
+	let debouncedSearchQuery = $state('');
 
 	let displayProducts = $state(displayProductsList)
+
+	$effect(() => {
+		// IMPORTANT (_) ensure the effect properly tracks the dependency on searchQuery
+		let _ = searchQuery;
+		const timer = setTimeout(() => {
+			debouncedSearchQuery = searchQuery;
+		}, 1000);
+		return () => clearTimeout(timer);
+	})
 
 	export function handleProductImageFailed(productId: string) {
 		// delete from real list this way next time the component is mounted the list is already filtered
@@ -25,8 +35,8 @@
 				if (filterCategory !== 'all' && !p.categories.some(cat => cat.endsWith(`${filterCategory}/`))) {
 					return false;
 				}
-				if (searchQuery.trim() !== '') {
-					const query = searchQuery.toLowerCase();
+				if (debouncedSearchQuery.trim() !== '') {
+					const query = debouncedSearchQuery.toLowerCase();
 					return p.nameComplete.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query);
 				}
 				return true;
