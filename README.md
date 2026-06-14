@@ -9,6 +9,7 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 - 🛒 Shopping cart with persistent storage (localStorage)
 - 💳 Smart product filtering by size/variations
 - 📊 Product sorting (name, price)
+- ♾️ **Infinite Scroll** - Loads 20 products initially, then 20 more as you scroll
 - 📱 **Mobile-first responsive design** - Optimized for all devices
 - ⚡ Lightning-fast static site generation
 - 🎨 Beautiful Tailwind CSS styling
@@ -315,6 +316,39 @@ The product filters automatically adapt based on screen size:
 - Detects screen size on mount and on window resize
 - Same filter state maintained across both versions
 - Mobile version enables better UX on phones and tablets
+
+### ♾️ Infinite Scroll
+The product grid implements efficient pagination with infinite scroll:
+
+**How It Works:**
+- **Initial Load:** First 20 products display immediately
+- **Auto-Load:** As users scroll to the bottom, the next 20 products load automatically
+- **Seamless:** No loading spinner or page jump - new products smoothly append to the grid
+- **Memory Efficient:** Uses `IntersectionObserver` API to detect scroll position without polling
+- **Works Offline:** Paginated products are loaded from the in-memory product list
+
+**Implementation Details:**
+- `displayedCount` state tracks how many products to show (starts at 20)
+- `visibleProducts` derived value slices the products array to display only the required amount
+- Sentinel element (`<div>`) placed at the bottom triggers `IntersectionObserver`
+- When sentinel enters viewport, `displayedCount` increases by 20
+- Continues until all products are displayed
+
+### 🔍 Search Debouncing
+Search queries are debounced to optimize performance and reduce unnecessary filtering:
+
+**How It Works:**
+- **User Input:** As users type in the search box, the raw query updates immediately
+- **1-Second Delay:** Actual search filtering waits 1 second after typing stops
+- **Optimized Performance:** Prevents filtering on every keystroke, reducing CPU usage
+- **Responsive Feel:** Search results still feel instant despite the debounce delay
+
+**Implementation Details:**
+- `searchQuery` state captures raw user input
+- `debouncedSearchQuery` state holds the delayed, filtered search term
+- `$effect` with 1000ms timeout ensures filtering only happens after typing pauses
+- Cleanup handler clears previous timeout when user types again
+- Products are filtered against `debouncedSearchQuery` for smooth UX
 
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
