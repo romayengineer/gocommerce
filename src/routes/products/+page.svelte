@@ -4,7 +4,7 @@
 	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
 	import { displayProductsList, deleteProduct } from '$lib/products';
 
-	let sortBy = $state('');
+	let sortBy = $state('random');
 	let filterCategory = $state('all');
 	let searchQuery = $state('');
 	let debouncedSearchQuery = $state('');
@@ -44,7 +44,7 @@
 	);
 
 	let sorted = $derived(
-		(sortBy === '') ?
+		(sortBy === 'random') ?
 			filtered
 		: [...filtered].sort((a, b) => {
 				if (sortBy === 'name') return a.productName.localeCompare(b.productName);

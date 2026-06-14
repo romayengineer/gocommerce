@@ -66,6 +66,7 @@
 	<div>
 		<h4 class="font-semibold mb-3">Sort By</h4>
 		<select value={sortBy} onchange={(e) => onSortChange(e.currentTarget.value)} class="w-full p-2 border rounded">
+			<option value="random">Random</option>
 			<option value="name">Name (A-Z)</option>
 			<option value="price-low">Price (Low to High)</option>
 			<option value="price-high">Price (High to Low)</option>
