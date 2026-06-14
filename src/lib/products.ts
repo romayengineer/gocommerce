@@ -112,8 +112,26 @@ function cleanHtmlTags(text: string): string {
 	return newText;
 }
 
+/**
+ * Shuffles an array using the Fisher-Yates algorithm.
+ * Fastest approach because: (1) O(n) time vs O(n log n) for sort-based shuffling,
+ * (2) only simple swap operations, no sorting overhead, (3) guarantees uniform
+ * random distribution (each permutation has equal probability 1/n!).
+ * Don't use array.sort(() => Math.random() - 0.5) — it's slower and statistically biased.
+ * @param array - The array to shuffle
+ * @returns A new shuffled copy of the array with uniform random distribution (O(n) time, O(n) space)
+ */
+export function shuffleFisherYates<T>(array: T[]): T[] {
+	const shuffled = [...array];
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled;
+}
+
 export function getDisplayProducts(): DisplayProduct[] {
-	return products.flatMap((product) => {
+	let displayProductsList = products.flatMap((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
 		return product.items.map((item) => ({
 			itemId: item.itemId,
@@ -129,8 +147,8 @@ export function getDisplayProducts(): DisplayProduct[] {
 			sellers: item.sellers,
 			price: item.sellers[0]?.commertialOffer.Price ?? 0
 		}))
-	}
-	);
+	});
+	return shuffleFisherYates(displayProductsList);
 }
 
 export var displayProductsList = getDisplayProducts()

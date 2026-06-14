@@ -4,7 +4,7 @@
 	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
 	import { displayProductsList, deleteProduct } from '$lib/products';
 
-	let sortBy = $state('name');
+	let sortBy = $state('');
 	let filterCategory = $state('all');
 	let searchQuery = $state('');
 	let debouncedSearchQuery = $state('');
@@ -44,12 +44,14 @@
 	);
 
 	let sorted = $derived(
-		[...filtered].sort((a, b) => {
-			if (sortBy === 'name') return a.productName.localeCompare(b.productName);
-			if (sortBy === 'price-low') return a.price - b.price;
-			if (sortBy === 'price-high') return b.price - a.price;
-			return 0;
-		})
+		(sortBy === '') ?
+			filtered
+		: [...filtered].sort((a, b) => {
+				if (sortBy === 'name') return a.productName.localeCompare(b.productName);
+				if (sortBy === 'price-low') return a.price - b.price;
+				if (sortBy === 'price-high') return b.price - a.price;
+				return 0;
+			})
 	);
 </script>
 
