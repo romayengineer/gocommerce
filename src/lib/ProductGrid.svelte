@@ -16,6 +16,8 @@
 
 	let topSentinel = $state<HTMLDivElement | undefined>();
 	let bottomSentinel = $state<HTMLDivElement | undefined>();
+	let topSentinelVisible = $state(false);
+	let bottomSentinelVisible = $state(false);
 	let windowWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
 	// Get current page from URL, default to 1
@@ -47,24 +49,13 @@
 	});
 
 	$effect(() => {
-		// Observer for scrolling down (next page)
+		// Observer for tracking sentinel visibility
 		const observerBottom = new IntersectionObserver((entries) => {
-			if (entries[0].isIntersecting && currentPage * itemsPerPage < products.length) {
-				const nextPage = currentPage + 1;
-				const newUrl = updatePageInUrl($page.url.toString(), nextPage);
-				goto(newUrl, { noScroll: true });
-				logger.log(`Page incremented to ${nextPage}`);
-			}
+			bottomSentinelVisible = entries[0].isIntersecting;
 		});
 
-		// Observer for scrolling up (previous page)
 		const observerTop = new IntersectionObserver((entries) => {
-			if (entries[0].isIntersecting && currentPage > 1) {
-				const prevPage = currentPage - 1;
-				const newUrl = updatePageInUrl($page.url.toString(), prevPage);
-				goto(newUrl, { noScroll: true });
-				logger.log(`Page decremented to ${prevPage}`);
-			}
+			topSentinelVisible = entries[0].isIntersecting;
 		});
 
 		if (bottomSentinel) {
@@ -78,6 +69,32 @@
 			observerBottom.disconnect();
 			observerTop.disconnect();
 		};
+	});
+
+	// Handle continuous page increment while bottom sentinel is visible
+	$effect(() => {
+		if (bottomSentinelVisible && currentPage * itemsPerPage < products.length) {
+			const timer = setTimeout(() => {
+				const nextPage = currentPage + 1;
+				const newUrl = updatePageInUrl($page.url.toString(), nextPage);
+				goto(newUrl, { noScroll: true });
+				logger.log(`Page incremented to ${nextPage}`);
+			}, 100);
+			return () => clearTimeout(timer);
+		}
+	});
+
+	// Handle continuous page decrement while top sentinel is visible
+	$effect(() => {
+		if (topSentinelVisible && currentPage > 1) {
+			const timer = setTimeout(() => {
+				const prevPage = currentPage - 1;
+				const newUrl = updatePageInUrl($page.url.toString(), prevPage);
+				goto(newUrl, { noScroll: true });
+				logger.log(`Page decremented to ${prevPage}`);
+			}, 100);
+			return () => clearTimeout(timer);
+		}
 	});
 
 	function handleProductImageLoaded(productId: string, loaded: boolean) {
