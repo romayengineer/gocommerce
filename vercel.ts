@@ -3,7 +3,6 @@ import { type VercelConfig } from '@vercel/config/v1';
 const config: VercelConfig = {
   // Project naming
   name: 'gocommerce',
-  public: false,
 
   // Build configuration
   buildCommand: 'npm run build',
