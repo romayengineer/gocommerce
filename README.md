@@ -165,10 +165,11 @@ src/
     ├── mapFactory.ts              # Map provider factory
     ├── googleMapsService.ts       # Google Maps implementation
     ├── leafletService.ts          # Leaflet + OpenStreetMap implementation
+    ├── urlUtils.ts                # URL pagination utilities (updatePageInUrl, getPageInUrl)
     ├── LanguageSwitcher.svelte    # Language selector dropdown
     ├── ProductImage.svelte        # Image carousel component
     ├── ProductCard.svelte         # Product grid card
-    ├── ProductGrid.svelte         # Product grid layout
+    ├── ProductGrid.svelte         # Product grid layout with pagination
     ├── ProductFilters.svelte      # Desktop category & sort filters
     ├── ProductFiltersMobile.svelte # Mobile collapsible filters
     ├── CartItem.svelte            # Cart item component
@@ -317,22 +318,32 @@ The product filters automatically adapt based on screen size:
 - Same filter state maintained across both versions
 - Mobile version enables better UX on phones and tablets
 
-### ♾️ Infinite Scroll
-The product grid implements efficient pagination with infinite scroll:
+### ♾️ Infinite Scroll with URL-Based Pagination
+The product grid implements efficient pagination with infinite scroll and URL synchronization:
 
 **How It Works:**
 - **Initial Load:** First 20 products display immediately
 - **Auto-Load:** As users scroll to the bottom, the next 20 products load automatically
-- **Seamless:** No loading spinner or page jump - new products smoothly append to the grid
+- **URL Synchronization:** Page number is reflected in the URL (`?page=1`, `?page=2`, etc.)
+- **Direct Navigation:** Users can navigate to specific pages via URL (e.g., `/#/products?page=5`)
+- **Scroll Position:** Scroll height is preserved when navigating between pages
+- **Seamless:** No page jump - new products smoothly append to the grid
 - **Memory Efficient:** Uses `IntersectionObserver` API to detect scroll position without polling
 - **Works Offline:** Paginated products are loaded from the in-memory product list
 
 **Implementation Details:**
-- `displayedCount` state tracks how many products to show (starts at 20)
+- `currentPage` derived value reads from URL query parameter (`?page=X`)
+- `displayedCount` calculated from page number: `currentPage * 20`
 - `visibleProducts` derived value slices the products array to display only the required amount
 - Sentinel element (`<div>`) placed at the bottom triggers `IntersectionObserver`
-- When sentinel enters viewport, `displayedCount` increases by 20
-- Continues until all products are displayed
+- When sentinel enters viewport, page number increments and URL updates
+- Scroll position automatically restored after navigation to prevent jarring page jumps
+- URL utilities in `urlUtils.ts` handle both hash-routed and standard URL formats
+
+**URL Utilities:**
+- `updatePageInUrl(url, page)` - Updates the page parameter in a URL while preserving other query params
+- `getPageInUrl(url)` - Extracts the current page number from a URL (defaults to 1)
+- Both functions support hash-routed URLs (e.g., `/#/products?page=2`)
 
 ### 🔍 Search Debouncing
 Search queries are debounced to optimize performance and reduce unnecessary filtering:
