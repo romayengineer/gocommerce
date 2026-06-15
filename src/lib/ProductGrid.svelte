@@ -2,6 +2,9 @@
 	import ProductCard from './ProductCard.svelte';
 	import type { DisplayProduct } from './products';
 	import { logger } from './logger.svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { updatePageInUrl, getPageInUrl } from './urlUtils';
 
 	interface Props {
 		products: DisplayProduct[];
@@ -11,14 +14,21 @@
 
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
-	let displayedCount = $state(20);
 	let sentinel = $state<HTMLDivElement | undefined>();
+
+	// Get current page from URL, default to 1
+	let currentPage = $derived(getPageInUrl($page.url.toString()));
+
+	// Calculate how many items to display based on page (each page shows 20 items)
+	let displayedCount = $derived(currentPage * 20);
 
 	$effect(() => {
 		const observer = new IntersectionObserver((entries) => {
 			if (entries[0].isIntersecting && displayedCount < products.length) {
-				displayedCount += 20;
-				logger.log(`displayedCount ${displayedCount}`)
+				const nextPage = currentPage + 1;
+				const newUrl = updatePageInUrl($page.url.toString(), nextPage);
+				goto(newUrl, { noScroll: true })
+				logger.log(`Page incremented to ${nextPage}`);
 			}
 		});
 
