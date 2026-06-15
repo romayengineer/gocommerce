@@ -318,38 +318,34 @@ The product filters automatically adapt based on screen size:
 - Same filter state maintained across both versions
 - Mobile version enables better UX on phones and tablets
 
-### ♾️ Bidirectional Pagination with URL Synchronization
-The product grid implements efficient pagination with bidirectional scroll support and URL synchronization:
+### ♾️ Infinite Scroll Pagination with Scroll Position Caching
+The product grid implements efficient infinite scroll pagination with automatic scroll position persistence:
 
 **How It Works:**
-- **Initial Load:** First page of products displays immediately (items per page = columns × rows)
-- **Scroll Down:** Bottom sentinel triggers page increment, loading next set of products
-- **Scroll Up:** Top sentinel triggers page decrement, loading previous set of products
-- **URL Synchronization:** Page number is reflected in the URL (`?page=1`, `?page=2`, etc.)
-- **Direct Navigation:** Users can navigate to specific pages via URL (e.g., `/#/products?page=5`)
-- **Scroll Position:** Scroll height is preserved when navigating between pages
-- **Performance Optimized:** Only current page + buffer pages rendered (not all previous pages)
-- **Memory Efficient:** Uses `IntersectionObserver` API to detect scroll position without polling
-- **Responsive Pages:** Items per page automatically calculated based on columns (2-4 per row)
-- **Works Offline:** Paginated products are loaded from the in-memory product list
+- **Scroll-Based Pagination:** Current page is calculated from scroll position in real-time
+- **Formula:** `currentPage = 1 + floor(scrollHeight_in_em / rowHeight_in_em)`
+- **Automatic Caching:** Scroll position saved to sessionStorage on every scroll event
+- **Smooth Recovery:** When returning to products page, scroll position restored automatically
+- **URL Synchronization:** Page number reflected in URL (`?page=X`) for shareable links
+- **Buffer Loading:** Page buffer (4 pages) preloads surrounding content for seamless scrolling
+- **Responsive Pages:** Items per page varies by screen size (2-4 per row)
+- **Works Offline:** All pagination from in-memory product list
 
 **Implementation Details:**
-- `currentPage` derived value reads from URL query parameter (`?page=X`)
-- `columns` dynamically calculated based on responsive breakpoints (2/3/4 columns)
-- `itemsPerPage = columns × rowsPerPage` - items per page varies by screen size
-- `visibleProducts` only renders products for current page + buffer pages for smooth scrolling
-- **Top Sentinel** (`topSentinel`) - Triggers when user scrolls to top, decrements page
-- **Bottom Sentinel** (`bottomSentinel`) - Triggers when user scrolls to bottom, increments page
-- Both sentinels use `IntersectionObserver` for efficient scroll detection
-- `pageHeight` dynamically calculated from `productCardHeight × rowsPerPage` to maintain scroll illusion
-- `pageBuffer` preloads surrounding pages for seamless scrolling experience
-- Scroll position automatically restored after navigation via `tick()` to prevent jarring jumps
-- URL utilities in `urlUtils.ts` handle both hash-routed and standard URL formats
+- **Scroll Tracking:** `scrollHeight` state captures `window.scrollY` on every scroll event
+- **SessionStorage:** Scroll position persisted to `sessionStorage` for automatic recovery on navigation
+- **Page Calculation:** `currentPage` derived from `scrollHeight / 16 / (productCardHeight + gap)`
+  - `scrollHeight / 16` converts pixels to em units (base font-size: 16px)
+  - Dividing by row height (`productCardHeight + gap`) gives the current page number
+- **Columns:** Dynamically calculated based on responsive breakpoints (2/3/4 columns)
+- **itemsPerPage:** `columns × rowsPerPage` - varies by screen size
+- **visibleProducts:** Renders current page ± buffer for smooth scrolling experience
+- **pageBuffer:** Set to 4 pages for generous preloading
+- **Automatic Recovery:** Scroll position restored on component mount from sessionStorage
+- **URL Utilities:** `updatePageInUrl(url, page)` updates URL with page parameter
 
-**URL Utilities:**
-- `updatePageInUrl(url, page)` - Updates the page parameter in a URL while preserving other query params
-- `getPageInUrl(url)` - Extracts the current page number from a URL (defaults to 1)
-- Both functions support hash-routed URLs (e.g., `/#/products?page=2`)
+**Scroll Height Conversion:**
+The component converts pixel-based scroll position to em units using the formula `px / 16` (where 16 is the base font size). This allows the pagination logic to work seamlessly with the component's rem-based dimensions.
 
 ### 🔍 Search Debouncing
 Search queries are debounced to optimize performance and reduce unnecessary filtering:
