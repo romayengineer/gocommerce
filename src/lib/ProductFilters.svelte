@@ -8,7 +8,7 @@
 	const { sizes, others } = $derived(categorizeItems(categories));
 </script>
 
-<div class="bg-white p-6 rounded-lg shadow">
+<div class="bg-white p-6 rounded-lg shadow sticky top-16 max-h-screen overflow-y-auto z-10">
 	<h3 class="font-bold text-lg mb-4">Filters</h3>
 
 	<div class="mb-6">
