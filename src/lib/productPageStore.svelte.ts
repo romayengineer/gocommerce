@@ -19,8 +19,7 @@ export class ProductPageStore {
 			}
 			if (this.debouncedSearchQuery.trim() !== '') {
 				const words = this.debouncedSearchQuery.toLowerCase().split(/\s+/).filter(w => w.length > 0);
-				const text = `${p.nameComplete} ${p.brand} ${p.description}`.toLowerCase();
-				return words.every(word => text.includes(word));
+				return words.every(word => p.allText.includes(word));
 			}
 			return true;
 		});

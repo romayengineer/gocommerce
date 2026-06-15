@@ -59,6 +59,7 @@ export const displayProductSchema = z.object({
 	properties: z.array(productPropertySchema),
 	sellers: z.array(productSellerAndPriceSchema),
 	price: z.number(),
+	allText: z.string(),
 })
 
 export type DisplayProduct = z.infer<typeof displayProductSchema>;
@@ -147,20 +148,24 @@ function removeUnwanted(dp: DisplayProduct): Boolean {
 export function getDisplayProducts(): DisplayProduct[] {
 	let displayProductsList = products.flatMap((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
-		return product.items.map((item) => ({
-			itemId: item.itemId,
-			nameComplete: item.nameComplete,
-			productId: product.productId,
-			productName: product.productName,
-			description: cleanHtmlTags(product.description),
-			brand: product.brand,
-			brandId: product.brandId,
-			categories: product.categories.map((c) => c.toLowerCase()),
-			images: item.images,
-			properties: properties,
-			sellers: item.sellers,
-			price: item.sellers[0]?.commertialOffer.Price ?? 0
-		})).filter(removeUnwanted)
+		return product.items.map((item): DisplayProduct => {
+			let clearnDescription = cleanHtmlTags(product.description);
+			return {
+				itemId: item.itemId,
+				nameComplete: item.nameComplete,
+				productId: product.productId,
+				productName: product.productName,
+				description: clearnDescription,
+				brand: product.brand,
+				brandId: product.brandId,
+				categories: product.categories.map((c) => c.toLowerCase()),
+				images: item.images,
+				properties: properties,
+				sellers: item.sellers,
+				price: item.sellers[0]?.commertialOffer.Price ?? 0,
+				allText: `${item.nameComplete} ${product.brand} ${clearnDescription}`.toLowerCase(),
+			}
+		}).filter(removeUnwanted);
 	});
 	return shuffleFisherYates(displayProductsList);
 }
