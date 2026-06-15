@@ -130,6 +130,20 @@ export function shuffleFisherYates<T>(array: T[]): T[] {
 	return shuffled;
 }
 
+function removeSets(dp: DisplayProduct): Boolean {
+	return !dp.nameComplete.includes("+")
+}
+
+function removeCategories(dp: DisplayProduct): Boolean {
+	return !dp.categories.some((c) => c.includes("sets de fragancia"))
+}
+
+function removeUnwanted(dp: DisplayProduct): Boolean {
+	if(!removeSets(dp)) return false
+	if(!removeCategories(dp)) return false
+	return true
+}
+
 export function getDisplayProducts(): DisplayProduct[] {
 	let displayProductsList = products.flatMap((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
@@ -146,7 +160,7 @@ export function getDisplayProducts(): DisplayProduct[] {
 			properties: properties,
 			sellers: item.sellers,
 			price: item.sellers[0]?.commertialOffer.Price ?? 0
-		}))
+		})).filter(removeUnwanted)
 	});
 	return shuffleFisherYates(displayProductsList);
 }
