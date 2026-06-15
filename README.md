@@ -318,26 +318,32 @@ The product filters automatically adapt based on screen size:
 - Same filter state maintained across both versions
 - Mobile version enables better UX on phones and tablets
 
-### ♾️ Infinite Scroll with URL-Based Pagination
-The product grid implements efficient pagination with infinite scroll and URL synchronization:
+### ♾️ Bidirectional Pagination with URL Synchronization
+The product grid implements efficient pagination with bidirectional scroll support and URL synchronization:
 
 **How It Works:**
-- **Initial Load:** First 20 products display immediately
-- **Auto-Load:** As users scroll to the bottom, the next 20 products load automatically
+- **Initial Load:** First page of products displays immediately (items per page = columns × rows)
+- **Scroll Down:** Bottom sentinel triggers page increment, loading next set of products
+- **Scroll Up:** Top sentinel triggers page decrement, loading previous set of products
 - **URL Synchronization:** Page number is reflected in the URL (`?page=1`, `?page=2`, etc.)
 - **Direct Navigation:** Users can navigate to specific pages via URL (e.g., `/#/products?page=5`)
 - **Scroll Position:** Scroll height is preserved when navigating between pages
-- **Seamless:** No page jump - new products smoothly append to the grid
+- **Performance Optimized:** Only current page + buffer pages rendered (not all previous pages)
 - **Memory Efficient:** Uses `IntersectionObserver` API to detect scroll position without polling
+- **Responsive Pages:** Items per page automatically calculated based on columns (2-4 per row)
 - **Works Offline:** Paginated products are loaded from the in-memory product list
 
 **Implementation Details:**
 - `currentPage` derived value reads from URL query parameter (`?page=X`)
-- `displayedCount` calculated from page number: `currentPage * 20`
-- `visibleProducts` derived value slices the products array to display only the required amount
-- Sentinel element (`<div>`) placed at the bottom triggers `IntersectionObserver`
-- When sentinel enters viewport, page number increments and URL updates
-- Scroll position automatically restored after navigation to prevent jarring page jumps
+- `columns` dynamically calculated based on responsive breakpoints (2/3/4 columns)
+- `itemsPerPage = columns × rowsPerPage` - items per page varies by screen size
+- `visibleProducts` only renders products for current page + buffer pages for smooth scrolling
+- **Top Sentinel** (`topSentinel`) - Triggers when user scrolls to top, decrements page
+- **Bottom Sentinel** (`bottomSentinel`) - Triggers when user scrolls to bottom, increments page
+- Both sentinels use `IntersectionObserver` for efficient scroll detection
+- `pageHeight` dynamically calculated from `productCardHeight × rowsPerPage` to maintain scroll illusion
+- `pageBuffer` preloads surrounding pages for seamless scrolling experience
+- Scroll position automatically restored after navigation via `tick()` to prevent jarring jumps
 - URL utilities in `urlUtils.ts` handle both hash-routed and standard URL formats
 
 **URL Utilities:**
