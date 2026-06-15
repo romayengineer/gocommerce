@@ -36,7 +36,10 @@
 
 	let currentPage = $state(1);
 
-	let maxHeight = $derived(Math.floor(products.length / itemsPerPage) * pageHeight);
+	let maxPage = $derived(Math.ceil(products.length / itemsPerPage));
+
+	let maxHeight = $derived(maxPage * pageHeight);
+
 
 	$effect(() => {
 		const handleResize = () => {
@@ -65,8 +68,8 @@
 	$effect(() => {
 		const _ = scrollHeight;
 		const timer = setTimeout(() => {
-			currentPage = 1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap)));
-		}, 200);
+			currentPage = Math.min(maxPage, 1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap))));
+		}, 100);
 		return () => clearTimeout(timer);
 	});
 
@@ -99,7 +102,7 @@
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
 	<div style="height: {maxHeight}rem">
-		<div style="margin-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem"
+		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem"
 				class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 			{#each visibleProducts as product (product.itemId)}
 				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
