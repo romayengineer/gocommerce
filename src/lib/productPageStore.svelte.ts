@@ -18,12 +18,9 @@ export class ProductPageStore {
 				return false;
 			}
 			if (this.debouncedSearchQuery.trim() !== '') {
-				const query = this.debouncedSearchQuery.toLowerCase();
-				return (
-					p.nameComplete.toLowerCase().includes(query) ||
-					p.brand.toLowerCase().includes(query) ||
-					p.description.toLowerCase().includes(query)
-				);
+				const words = this.debouncedSearchQuery.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+				const text = `${p.nameComplete} ${p.brand} ${p.description}`.toLowerCase();
+				return words.every(word => text.includes(word));
 			}
 			return true;
 		});
