@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ProductGrid from '$lib/ProductGrid.svelte';
-	import ProductFilters from '$lib/ProductFilters.svelte';
 	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
 	import { displayProductsList, deleteProduct } from '$lib/products';
 
