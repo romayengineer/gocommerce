@@ -334,13 +334,19 @@ The product grid implements efficient infinite scroll pagination with automatic 
 **Implementation Details:**
 - **Scroll Tracking:** `scrollHeight` state captures `window.scrollY` on every scroll event
 - **SessionStorage:** Scroll position persisted to `sessionStorage` for automatic recovery on navigation
-- **Page Calculation:** `currentPage` derived from `scrollHeight / 16 / (productCardHeight + gap)`
+- **Page Calculation:** `currentPage` updated via debounced `$effect` (100ms delay)
+  - Formula: `scrollHeight / 16 / (productCardHeight + gap)`
   - `scrollHeight / 16` converts pixels to em units (base font-size: 16px)
   - Dividing by row height (`productCardHeight + gap`) gives the current page number
+  - Capped at `maxPage` to prevent exceeding total pages
+- **Two-Stage Debounce:**
+  - Stage 1 (100ms): Scroll → Page calculation debounce prevents excessive page recalculations during rapid scrolling
+  - Stage 2 (100ms): Page → URL update debounce reduces navigation history clutter
 - **Columns:** Dynamically calculated based on responsive breakpoints (2/3/4 columns)
 - **itemsPerPage:** `columns × rowsPerPage` - varies by screen size
 - **visibleProducts:** Renders current page ± buffer for smooth scrolling experience
 - **pageBuffer:** Set to 4 pages for generous preloading
+- **maxPage/maxHeight:** Derived values for total pages and scrollable height in rem
 - **Automatic Recovery:** Scroll position restored on component mount from sessionStorage
 - **URL Utilities:** `updatePageInUrl(url, page)` updates URL with page parameter
 
