@@ -158,6 +158,7 @@ src/
     │   └── es.json                # Spanish translations
     ├── i18n.ts                    # i18n configuration
     ├── logger.svelte.ts           # Custom reactive logger with ?debug support
+    ├── windowWidth.svelte.ts      # WindowWidthManager class for responsive sizing
     ├── splideCarousel.svelte.ts   # Splide carousel class with state management
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
@@ -170,8 +171,7 @@ src/
     ├── ProductImage.svelte        # Image carousel component
     ├── ProductCard.svelte         # Product grid card
     ├── ProductGrid.svelte         # Product grid layout with pagination
-    ├── ProductFilters.svelte      # Desktop category & sort filters
-    ├── ProductFiltersMobile.svelte # Mobile collapsible filters
+    ├── ProductFiltersMobile.svelte # Responsive filters (desktop & mobile)
     ├── CartItem.svelte            # Cart item component
     ├── CheckoutForm.svelte        # Checkout form component
     ├── MapDisplay.svelte          # Delivery location map
@@ -297,26 +297,45 @@ logger.isEnabled;
 - Location updates: `googleMapsService.ts`, `leafletService.ts`
 - Checkout: `CheckoutForm.svelte`
 
+### 📱 Window Width Manager
+Centralized reactive window width tracking via class-based architecture:
+
+**WindowWidthManager Class (`windowWidth.svelte.ts`):**
+- Singleton instance that tracks `window.innerWidth` in real-time
+- Automatically updates on window resize events
+- Used across components for responsive design decisions
+- Class-based state management with Svelte 5 runes
+
+**Usage:**
+```typescript
+import { windowWidthManager } from './windowWidth.svelte';
+
+let isDesktop = $derived(windowWidthManager.width >= 1024);
+```
+
+**Used By:**
+- `ProductFiltersMobile.svelte` - Desktop/mobile layout switching
+- Any component requiring responsive width-based logic
+
 ### 🎯 Responsive Product Filters
-The product filters automatically adapt based on screen size:
+The product filters (`ProductFiltersMobile`) automatically adapt based on screen size:
 
-**Desktop Version (`ProductFilters`):**
-- Full-featured sidebar with all controls visible
-- Search, category, and sort options always accessible
-- Generous spacing and padding for mouse interaction
+**Desktop View (≥1024px):**
+- All filter sections always visible and expanded
+- Search, category, and sort options permanently accessible
+- Generous spacing for mouse interaction
 
-**Mobile Version (`ProductFiltersMobile`):**
-- Collapsible sections (Search, Category, Sort) to save space
-- Each section toggles open/closed with smooth transitions
-- Rotating chevron indicators show expanded/collapsed state
+**Mobile View (<1024px):**
+- Collapsible sections (Category, Sort) to save screen space
+- Settings button toggles filter panel visibility
+- Sections start closed and expand on user interaction
 - Compact spacing optimized for touch interaction
-- Identical filtering functionality as desktop version
 
 **Responsive Behavior:**
-- Automatically switches at 768px breakpoint (Tailwind `md`)
-- Detects screen size on mount and on window resize
-- Same filter state maintained across both versions
-- Mobile version enables better UX on phones and tablets
+- Monitors window width via `windowWidthManager` class (480ms debounce)
+- Auto-closes filter panel when resizing to desktop view
+- Filter state maintained across responsive transitions
+- Uses reactive Svelte state for instant responsiveness
 
 ### ♾️ Infinite Scroll Pagination with Scroll Position Caching
 The product grid implements efficient infinite scroll pagination with automatic scroll position persistence:
