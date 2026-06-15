@@ -159,6 +159,7 @@ src/
     ├── i18n.ts                    # i18n configuration
     ├── logger.svelte.ts           # Custom reactive logger with ?debug support
     ├── windowWidth.svelte.ts      # WindowWidthManager class for responsive sizing
+    ├── productPageStore.svelte.ts # ProductPageStore class for product page state
     ├── splideCarousel.svelte.ts   # Splide carousel class with state management
     ├── products.ts                # Product data & types
     ├── cart.ts                    # Cart store & logic
@@ -317,6 +318,41 @@ let isDesktop = $derived(windowWidthManager.width >= 1024);
 - `ProductFiltersMobile.svelte` - Desktop/mobile layout switching
 - Any component requiring responsive width-based logic
 
+### 🛍️ Product Page State Management
+Centralized state management for the product listing page:
+
+**ProductPageStore Class (`productPageStore.svelte.ts`):**
+- Singleton instance managing all product page state
+- Handles filtering, sorting, and searching
+- Real-time debounced search with word-by-word matching
+- Class-based architecture with Svelte 5 runes and reactive getters
+
+**Managed State:**
+- `sortBy` - Current sort order (random, name-asc, name-desc, price-asc, price-desc)
+- `filterCategory` - Selected category filter
+- `searchQuery` - Raw user input (updates immediately)
+- `debouncedSearchQuery` - Debounced search (1000ms delay)
+- `displayProducts` - Product list (tracks deletions when images fail)
+
+**Computed Properties:**
+- `categories` - Available categories from products
+- `filtered` - Products matching category + debounced search
+- `sorted` - Filtered products sorted by current order
+
+**Search Logic:**
+- Splits query into individual words via `/\s+/` regex
+- Matches all words independently (AND logic)
+- Searches across product name, brand, and description
+- Order-independent matching (e.g., "shirt red" matches "red shirt")
+
+**Usage:**
+```typescript
+import { productPageStore } from './productPageStore.svelte';
+
+<ProductFiltersMobile store={productPageStore} />
+<ProductGrid products={productPageStore.sorted} />
+```
+
 ### 🎯 Responsive Product Filters
 The product filters (`ProductFiltersMobile`) automatically adapt based on screen size:
 
@@ -372,30 +408,38 @@ The product grid implements efficient infinite scroll pagination with automatic 
 **Scroll Height Conversion:**
 The component converts pixel-based scroll position to em units using the formula `px / 16` (where 16 is the base font size). This allows the pagination logic to work seamlessly with the component's rem-based dimensions.
 
-### 🔍 Search Debouncing
-Search queries are debounced to optimize performance and reduce unnecessary filtering:
+### 🔍 Search & Filtering
+Search queries are debounced and split into individual words for flexible, order-independent searching:
 
 **How It Works:**
 - **User Input:** As users type in the search box, the raw query updates immediately
 - **1-Second Delay:** Actual search filtering waits 1 second after typing stops
+- **Word-by-Word Matching:** Search query is split by whitespace into individual words
+- **Order-Independent:** All words must match in any order (e.g., "shirt red" matches "red shirt")
+- **Multi-field Search:** Words are matched against product name, brand, and description
 - **Optimized Performance:** Prevents filtering on every keystroke, reducing CPU usage
-- **Responsive Feel:** Search results still feel instant despite the debounce delay
 
 **Implementation Details:**
 - `searchQuery` state captures raw user input
-- `debouncedSearchQuery` state holds the delayed, filtered search term
-- `$effect` with 1000ms timeout ensures filtering only happens after typing pauses
+- `debouncedSearchQuery` state holds the delayed search term
+- `$effect.root()` with 1000ms timeout ensures filtering only happens after typing pauses
+- Search words split by `/\s+/` regex (multiple spaces treated as single delimiter)
+- `words.every(word => text.includes(word))` ensures ALL words match (AND logic)
+- Combined text searches: `${nameComplete} ${brand} ${description}`
 - Cleanup handler clears previous timeout when user types again
-- Products are filtered against `debouncedSearchQuery` for smooth UX
 
 ### 💻 Component Architecture
 Instead of inline markup, every UI element is a reusable component:
 
+**State Management:**
+- `ProductPageStore` - Centralized product page state (filters, sorting, search, debouncing)
+- `WindowWidthManager` - Responsive sizing and breakpoint tracking
+- `cart.ts` - Shopping cart store & logic
+
 **Layout Components:**
 - `SidePanel` - Reusable card container
 - `ProductGrid` - Grid display for products
-- `ProductFilters` - Desktop category & sort filters
-- `ProductFiltersMobile` - Mobile collapsible filters
+- `ProductFiltersMobile` - Responsive filters (desktop & mobile)
 
 **UI Components:**
 - `Button` - Primary/secondary/danger variants
