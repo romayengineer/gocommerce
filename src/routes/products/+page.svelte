@@ -46,9 +46,10 @@
 		(sortBy === 'random') ?
 			filtered
 		: [...filtered].sort((a, b) => {
-				if (sortBy === 'name') return a.productName.localeCompare(b.productName);
-				if (sortBy === 'price-low') return a.price - b.price;
-				if (sortBy === 'price-high') return b.price - a.price;
+				if (sortBy === 'name-asc') return a.productName.localeCompare(b.productName);
+				if (sortBy === 'name-desc') return b.productName.localeCompare(a.productName);
+				if (sortBy === 'price-asc') return a.price - b.price;
+				if (sortBy === 'price-desc') return b.price - a.price;
 				return 0;
 			})
 	);
