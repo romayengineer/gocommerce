@@ -14,8 +14,8 @@
 
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
-	let sentinel = $state<HTMLDivElement | undefined>();
-	let gridContainer = $state<HTMLDivElement | undefined>();
+	let topSentinel = $state<HTMLDivElement | undefined>();
+	let bottomSentinel = $state<HTMLDivElement | undefined>();
 	let windowWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
 	// Get current page from URL, default to 1
@@ -47,20 +47,37 @@
 	});
 
 	$effect(() => {
-		const observer = new IntersectionObserver((entries) => {
+		// Observer for scrolling down (next page)
+		const observerBottom = new IntersectionObserver((entries) => {
 			if (entries[0].isIntersecting && currentPage * itemsPerPage < products.length) {
 				const nextPage = currentPage + 1;
 				const newUrl = updatePageInUrl($page.url.toString(), nextPage);
-				goto(newUrl, { noScroll: true })
+				goto(newUrl, { noScroll: true });
 				logger.log(`Page incremented to ${nextPage}`);
 			}
 		});
 
-		if (sentinel) {
-			observer.observe(sentinel);
+		// Observer for scrolling up (previous page)
+		const observerTop = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting && currentPage > 1) {
+				const prevPage = currentPage - 1;
+				const newUrl = updatePageInUrl($page.url.toString(), prevPage);
+				goto(newUrl, { noScroll: true });
+				logger.log(`Page decremented to ${prevPage}`);
+			}
+		});
+
+		if (bottomSentinel) {
+			observerBottom.observe(bottomSentinel);
+		}
+		if (topSentinel) {
+			observerTop.observe(topSentinel);
 		}
 
-		return () => observer.disconnect();
+		return () => {
+			observerBottom.disconnect();
+			observerTop.disconnect();
+		};
 	});
 
 	function handleProductImageLoaded(productId: string, loaded: boolean) {
@@ -81,10 +98,13 @@
 {#if products.length === 0}
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
-	<div bind:this={gridContainer} class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" style="padding-top: {Math.max(0, currentPage - (1 + pageBuffer)) * pageHeight}rem">
-		{#each visibleProducts as product (product.itemId)}
-			<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
-		{/each}
+	<div style="padding-top: {Math.max(0, currentPage - (1 + pageBuffer)) * pageHeight}rem">
+		<div bind:this={topSentinel} class="h-1"></div>
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+			{#each visibleProducts as product (product.itemId)}
+				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
+			{/each}
+		</div>
+		<div bind:this={bottomSentinel} class="h-1"></div>
 	</div>
-	<div bind:this={sentinel} class="h-96"></div>
 {/if}
