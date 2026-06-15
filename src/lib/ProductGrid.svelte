@@ -23,18 +23,20 @@
 		(windowWidth >= 768) ? 3 : 2
 	);
 
-	let rowsPerPage: number = 1;
-
-	const itemsPerPage = $derived(columns * rowsPerPage);
-
 	const productCardHeight = 30; // height of ProductCard in rem units
 	const gap = 0.5; // gap-2 = 0.5rem
 
-	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
+	const rowsPerPage: number = 1;
 
 	const pageBuffer = 4;
 
-	let currentPage = $derived(1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap))))
+	let itemsPerPage = $derived(columns * rowsPerPage);
+
+	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
+
+	let currentPage = $state(1);
+
+	let maxHeight = $derived(Math.floor(products.length / itemsPerPage) * pageHeight);
 
 	$effect(() => {
 		const handleResize = () => {
@@ -58,6 +60,14 @@
 		if (savedScroll) {
 			window.scrollTo(0, parseFloat(savedScroll));
 		}
+	});
+
+	$effect(() => {
+		const _ = scrollHeight;
+		const timer = setTimeout(() => {
+			currentPage = 1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap)));
+		}, 200);
+		return () => clearTimeout(timer);
 	});
 
 	$effect(() => {
@@ -88,9 +98,9 @@
 {#if products.length === 0}
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
-	<div>
-		<div style="height: {Math.max(0, currentPage - 1 - pageBuffer) * pageHeight}rem"></div>
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+	<div style="height: {maxHeight}rem">
+		<div style="margin-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem"
+				class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 			{#each visibleProducts as product (product.itemId)}
 				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
 			{/each}
