@@ -23,7 +23,9 @@
 		(windowWidthManager.width >= 768) ? 3 : 2
 	);
 
-	const productCardHeight = 30; // height of ProductCard in rem units
+	const fixRatio = 9
+
+	let productCardHeight = $derived(Math.min(35, windowWidthManager.width / columns / 8)); // height of ProductCard in rem units
 	const gap = 0.5; // gap-2 = 0.5rem
 
 	const rowsPerPage: number = 1;
