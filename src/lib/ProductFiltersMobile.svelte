@@ -1,14 +1,17 @@
 <script lang="ts">
-	import { categorizeItems, type ProductFiltersProps } from './productFilters';
+	import { categorizeItems } from './productFilters';
 	import CollapsibleSectionButton from './CollapsibleSectionButton.svelte';
 	import { Settings2 } from 'lucide-svelte'
 	import { windowWidthManager } from './windowWidth.svelte';
+	import type { ProductPageStore } from './productPageStore.svelte';
 
-	type Props = ProductFiltersProps;
+	interface Props {
+		store: ProductPageStore;
+	}
 
-	const { sortBy, filterCategory, searchQuery, categories, onSortChange, onCategoryChange, onSearchChange }: Props = $props();
+	const { store }: Props = $props();
 
-	const { sizes, others } = $derived(categorizeItems(categories));
+	const { sizes, others } = $derived(categorizeItems(store.categories));
 
 	let isDesktop = $derived(windowWidthManager.width >= 1024);
 	let isMobileFiltersOpen = $state(false);
@@ -30,8 +33,8 @@
 		<input
 			type="text"
 			placeholder="Search..."
-			value={searchQuery}
-			oninput={(e) => onSearchChange(e.currentTarget.value)}
+			value={store.searchQuery}
+			oninput={(e) => (store.searchQuery = e.currentTarget.value)}
 			class="flex-1 px-2 py-1.5 text-sm md:text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 		/>
 		<button
@@ -55,8 +58,8 @@
 									<label class="flex items-center cursor-pointer text-xs md:text-base">
 										<input
 											type="radio"
-											checked={filterCategory === size}
-											onchange={() => onCategoryChange(size)}
+											checked={store.filterCategory === size}
+											onchange={() => (store.filterCategory = size)}
 											class="mr-1.5"
 										/>
 										<span>{size}</span>
@@ -72,8 +75,8 @@
 								<label class="flex items-center cursor-pointer text-xs md:text-base">
 									<input
 										type="radio"
-										checked={filterCategory.endsWith(cat) || filterCategory === cat}
-										onchange={() => onCategoryChange(cat)}
+										checked={store.filterCategory.endsWith(cat) || store.filterCategory === cat}
+										onchange={() => (store.filterCategory = cat)}
 										class="mr-1.5"
 									/>
 									<span class="capitalize">{cat}</span>
@@ -90,8 +93,8 @@
 			<CollapsibleSectionButton label="Sort" isExpanded={isDesktop}>
 				<div class="px-3 py-3">
 					<select
-						value={sortBy}
-						onchange={(e) => onSortChange(e.currentTarget.value)}
+						value={store.sortBy}
+						onchange={(e) => (store.sortBy = e.currentTarget.value)}
 						class="w-full p-1.5 text-xs md:text-base border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="random">Random</option>
