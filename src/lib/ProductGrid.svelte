@@ -15,16 +15,38 @@
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
 	let sentinel = $state<HTMLDivElement | undefined>();
+	let gridContainer = $state<HTMLDivElement | undefined>();
+	let windowWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
 	// Get current page from URL, default to 1
 	let currentPage = $derived(getPageInUrl($page.url.toString()));
 
-	// Calculate how many items to display based on page (each page shows 20 items)
-	let displayedCount = $derived(currentPage * 20);
+	// Calculate number of columns based on responsive breakpoints
+	let columns: number = $derived(
+		(windowWidth >= 1024) ? 4 :
+		(windowWidth >= 768) ? 3 : 2
+	);
+
+	let rowsPerPage: number = 6;
+
+	const itemsPerPage = $derived(columns * rowsPerPage);
+
+	const productCardHeight = 30; // height of ProductCard in rem units
+	const gap = 0.5; // gap-2 = 0.5rem
+
+	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
+
+	$effect(() => {
+		const handleResize = () => {
+			windowWidth = window.innerWidth;
+		};
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	});
 
 	$effect(() => {
 		const observer = new IntersectionObserver((entries) => {
-			if (entries[0].isIntersecting && displayedCount < products.length) {
+			if (entries[0].isIntersecting && currentPage * itemsPerPage < products.length) {
 				const nextPage = currentPage + 1;
 				const newUrl = updatePageInUrl($page.url.toString(), nextPage);
 				goto(newUrl, { noScroll: true })
@@ -45,15 +67,15 @@
 		}
 	}
 
-	let visibleProducts = $derived(products.slice(0, displayedCount));
+	let visibleProducts = $derived(products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
 </script>
 
 {#if products.length === 0}
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
-	<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+	<div bind:this={gridContainer} class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" style="padding-top: {(currentPage - 1) * pageHeight}rem">
 		{#each visibleProducts as product (product.itemId)}
-			<ProductCard {product} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
+			<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
 		{/each}
 	</div>
 	<div bind:this={sentinel} class="h-96"></div>

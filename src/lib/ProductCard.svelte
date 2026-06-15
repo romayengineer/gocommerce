@@ -10,9 +10,10 @@
 	interface Props {
 		product: DisplayProduct;
 		onImageLoaded?: (loaded: boolean) => void;
+		height?: number;
 	}
 
-	const { product, onImageLoaded }: Props = $props();
+	const { product, onImageLoaded, height = 40 }: Props = $props();
 
 	function handleAddToCart(e: MouseEvent) {
 		e.preventDefault();
@@ -26,7 +27,7 @@
 </script>
 
 <Link href="#/products/{product.itemId}" class="group no-underline">
-	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
+	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}rem">
 		<div class="group-hover:opacity-80 transition-opacity">
 			<ProductImage
 				images={product.images}
