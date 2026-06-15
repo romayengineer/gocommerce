@@ -27,7 +27,7 @@
 		(windowWidth >= 768) ? 3 : 2
 	);
 
-	let rowsPerPage: number = 6;
+	let rowsPerPage: number = 1;
 
 	const itemsPerPage = $derived(columns * rowsPerPage);
 
@@ -35,6 +35,8 @@
 	const gap = 0.5; // gap-2 = 0.5rem
 
 	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
+
+	const pageBuffer = 1;
 
 	$effect(() => {
 		const handleResize = () => {
@@ -67,13 +69,19 @@
 		}
 	}
 
-	let visibleProducts = $derived(products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage));
+	function sliceProducts(currentPage: number): DisplayProduct[] {
+		const startIndex = Math.max(0, (currentPage - (1 + pageBuffer)) * itemsPerPage);
+		const endIndex = Math.min(products.length, (currentPage + pageBuffer) * itemsPerPage);
+		return products.slice(startIndex, endIndex);
+	}
+
+	let visibleProducts = $derived(sliceProducts(currentPage));
 </script>
 
 {#if products.length === 0}
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
-	<div bind:this={gridContainer} class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" style="padding-top: {(currentPage - 1) * pageHeight}rem">
+	<div bind:this={gridContainer} class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" style="padding-top: {Math.max(0, currentPage - (1 + pageBuffer)) * pageHeight}rem">
 		{#each visibleProducts as product (product.itemId)}
 			<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
 		{/each}
