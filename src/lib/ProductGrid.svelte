@@ -4,7 +4,7 @@
 	import { logger } from './logger.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { updatePageInUrl, getPageInUrl } from './urlUtils';
+	import { updatePageInUrl } from './urlUtils';
 
 	interface Props {
 		products: DisplayProduct[];
@@ -14,14 +14,8 @@
 
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
-	let topSentinel = $state<HTMLDivElement | undefined>();
-	let bottomSentinel = $state<HTMLDivElement | undefined>();
-	let topSentinelVisible = $state(false);
-	let bottomSentinelVisible = $state(false);
 	let windowWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
-
-	// Get current page from URL, default to 1
-	let currentPage = $derived(getPageInUrl($page.url.toString()));
+	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
 	// Calculate number of columns based on responsive breakpoints
 	let columns: number = $derived(
@@ -38,7 +32,9 @@
 
 	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
 
-	const pageBuffer = 1;
+	const pageBuffer = 4;
+
+	let currentPage = $derived(1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap))))
 
 	$effect(() => {
 		const handleResize = () => {
@@ -49,52 +45,29 @@
 	});
 
 	$effect(() => {
-		// Observer for tracking sentinel visibility
-		const observerBottom = new IntersectionObserver((entries) => {
-			bottomSentinelVisible = entries[0].isIntersecting;
-		});
-
-		const observerTop = new IntersectionObserver((entries) => {
-			topSentinelVisible = entries[0].isIntersecting;
-		});
-
-		if (bottomSentinel) {
-			observerBottom.observe(bottomSentinel);
-		}
-		if (topSentinel) {
-			observerTop.observe(topSentinel);
-		}
-
-		return () => {
-			observerBottom.disconnect();
-			observerTop.disconnect();
+		const handleScroll = () => {
+			scrollHeight = window.scrollY;
+			sessionStorage.setItem('productGridScroll', String(window.scrollY));
 		};
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
 	});
 
-	// Handle continuous page increment while bottom sentinel is visible
 	$effect(() => {
-		if (bottomSentinelVisible && currentPage * itemsPerPage < products.length) {
-			const timer = setTimeout(() => {
-				const nextPage = currentPage + 1;
-				const newUrl = updatePageInUrl($page.url.toString(), nextPage);
-				goto(newUrl, { noScroll: true });
-				logger.log(`Page incremented to ${nextPage}`);
-			}, 100);
-			return () => clearTimeout(timer);
+		const savedScroll = sessionStorage.getItem('productGridScroll');
+		if (savedScroll) {
+			window.scrollTo(0, parseFloat(savedScroll));
 		}
 	});
 
-	// Handle continuous page decrement while top sentinel is visible
 	$effect(() => {
-		if (topSentinelVisible && currentPage > 1) {
-			const timer = setTimeout(() => {
-				const prevPage = currentPage - 1;
-				const newUrl = updatePageInUrl($page.url.toString(), prevPage);
-				goto(newUrl, { noScroll: true });
-				logger.log(`Page decremented to ${prevPage}`);
-			}, 100);
-			return () => clearTimeout(timer);
-		}
+		const _ = currentPage;
+		const timer = setTimeout(() => {
+			const newUrl = updatePageInUrl($page.url.toString(), currentPage);
+			goto(newUrl, { noScroll: true });
+			logger.log(`Page changed to ${currentPage}`);
+		}, 100);
+		return () => clearTimeout(timer);
 	});
 
 	function handleProductImageLoaded(productId: string, loaded: boolean) {
@@ -104,8 +77,8 @@
 	}
 
 	function sliceProducts(currentPage: number): DisplayProduct[] {
-		const startIndex = Math.max(0, (currentPage - (1 + pageBuffer)) * itemsPerPage);
-		const endIndex = Math.min(products.length, (currentPage + pageBuffer) * itemsPerPage);
+		const startIndex = Math.max(0, (currentPage - 1 - pageBuffer) * itemsPerPage);
+		const endIndex = Math.min(products.length, (currentPage + 2 + pageBuffer) * itemsPerPage);
 		return products.slice(startIndex, endIndex);
 	}
 
@@ -116,12 +89,11 @@
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
 	<div>
-		<div bind:this={topSentinel} style="height: {Math.max(0, currentPage - (1 + pageBuffer)) * pageHeight}rem"></div>
+		<div style="height: {Math.max(0, currentPage - 1 - pageBuffer) * pageHeight}rem"></div>
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 			{#each visibleProducts as product (product.itemId)}
 				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
 			{/each}
 		</div>
-		<div bind:this={bottomSentinel} class="h-1"></div>
 	</div>
 {/if}
