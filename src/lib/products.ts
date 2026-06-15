@@ -141,7 +141,7 @@ export function getDisplayProducts(): DisplayProduct[] {
 			description: cleanHtmlTags(product.description),
 			brand: product.brand,
 			brandId: product.brandId,
-			categories: product.categories,
+			categories: product.categories.map((c) => c.toLowerCase()),
 			images: item.images,
 			properties: properties,
 			sellers: item.sellers,
