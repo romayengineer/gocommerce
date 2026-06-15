@@ -10,7 +10,16 @@
 
 	const { sizes, others } = $derived(categorizeItems(categories));
 
-	let isExpanded = $derived(windowWidthManager.width >= 1024);
+	let isDesktop = $derived(windowWidthManager.width >= 1024);
+	let isMobileFiltersOpen = $state(false);
+
+	let isExpanded = $derived(isDesktop || isMobileFiltersOpen);
+
+	$effect(() => {
+		if (isDesktop) {
+			isMobileFiltersOpen = false;
+		}
+	});
 </script>
 
 <div class="bg-white rounded-lg shadow sticky top-16 max-h-screen overflow-y-auto z-10">
@@ -26,8 +35,8 @@
 			class="flex-1 px-2 py-1.5 text-sm md:text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 		/>
 		<button
-			onclick={() => { isExpanded = !isExpanded }}
-			class="text-gray-600 hover:text-gray-900"
+			onclick={() => { isMobileFiltersOpen = !isMobileFiltersOpen }}
+			class="text-gray-600 hover:text-gray-900 lg:hidden"
 		>
 			<Settings2 size={20}/>
 		</button>
@@ -36,8 +45,8 @@
 	{#if isExpanded}
 		<!-- Category Section -->
 		<div class="border-b">
-			<CollapsibleSectionButton label="Category" {isExpanded}>
-				<div class="px-3 pb-3 space-y-2">
+			<CollapsibleSectionButton label="Category" isExpanded={isDesktop}>
+				<div class="px-3 py-3 space-y-2">
 					{#if sizes.length > 0}
 						<div class="ml-1 border-l-2 border-gray-300 pl-2">
 							<p class="text-xs md:text-base font-semibold text-gray-600 mb-1">Sizes</p>
@@ -78,8 +87,8 @@
 
 		<!-- Sort Section -->
 		<div>
-			<CollapsibleSectionButton label="Sort" {isExpanded}>
-				<div class="px-3 pb-3">
+			<CollapsibleSectionButton label="Sort" isExpanded={isDesktop}>
+				<div class="px-3 py-3">
 					<select
 						value={sortBy}
 						onchange={(e) => onSortChange(e.currentTarget.value)}

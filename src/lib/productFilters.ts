@@ -22,13 +22,15 @@ export function categorizeItems(items: string[]): CategorizedItems {
 		const isSize = parts.length === 2 && !isNaN(Number(parts[0])) && parts[1].toUpperCase() === 'ML';
 
 		if (isSize) {
-			sizes.add(item);
+			sizes.add(item.toLowerCase());
 		} else {
 			const pathParts = item.split('/').filter((part) => part !== '');
 			const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : item;
-			others.add(categoryName);
+			others.add(categoryName.toLowerCase());
 		}
 	}
+
+	let othersList = Array.from(others).sort();
 
 	let sizesList = Array.from(sizes);
 
@@ -38,5 +40,5 @@ export function categorizeItems(items: string[]): CategorizedItems {
 		return aNum - bNum;
 	});
 
-	return { sizes: sizesList, others: Array.from(others) };
+	return { sizes: sizesList, others: othersList };
 }
