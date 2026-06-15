@@ -98,8 +98,8 @@
 {#if products.length === 0}
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
-	<div style="padding-top: {Math.max(0, currentPage - (1 + pageBuffer)) * pageHeight}rem">
-		<div bind:this={topSentinel} class="h-1"></div>
+	<div>
+		<div bind:this={topSentinel} style="height: {Math.max(0, currentPage - (1 + pageBuffer)) * pageHeight}rem"></div>
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 			{#each visibleProducts as product (product.itemId)}
 				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
