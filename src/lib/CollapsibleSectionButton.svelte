@@ -21,7 +21,7 @@
 <div>
 	<button
 		onclick={toggleSection}
-		class="w-full flex items-center justify-between p-3 text-sm font-semibold hover:bg-gray-50"
+		class="w-full flex items-center justify-between p-3 text-sm md:text-base font-semibold hover:bg-gray-50"
 	>
 		<span>{label}</span>
 		<span class={`text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}>▼</span>

@@ -2,6 +2,7 @@
 	import { categorizeItems, type ProductFiltersProps } from './productFilters';
 	import CollapsibleSectionButton from './CollapsibleSectionButton.svelte';
 	import { Settings2 } from 'lucide-svelte'
+	import { windowWidthManager } from './windowWidth.svelte';
 
 	type Props = ProductFiltersProps;
 
@@ -9,10 +10,12 @@
 
 	const { sizes, others } = $derived(categorizeItems(categories));
 
-	let isAdvancedOpen = $state(false);
+	let isExpanded = $derived(windowWidthManager.width >= 1024);
 </script>
 
-<div class="bg-white rounded-lg shadow">
+<div class="bg-white rounded-lg shadow sticky top-16 max-h-screen overflow-y-auto z-10">
+	<h3 class="font-bold text-lg p-4 hidden lg:inline">Filters</h3>
+
 	<!-- Search Section -->
 	<div class="px-3 py-3 border-b flex items-center gap-2">
 		<input
@@ -20,27 +23,27 @@
 			placeholder="Search..."
 			value={searchQuery}
 			oninput={(e) => onSearchChange(e.currentTarget.value)}
-			class="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+			class="flex-1 px-2 py-1.5 text-sm md:text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 		/>
 		<button
-			onclick={() => { isAdvancedOpen = !isAdvancedOpen }}
+			onclick={() => { isExpanded = !isExpanded }}
 			class="text-gray-600 hover:text-gray-900"
 		>
 			<Settings2 size={20}/>
 		</button>
 	</div>
 
-	{#if isAdvancedOpen}
+	{#if isExpanded}
 		<!-- Category Section -->
 		<div class="border-b">
-			<CollapsibleSectionButton label="Category">
+			<CollapsibleSectionButton label="Category" {isExpanded}>
 				<div class="px-3 pb-3 space-y-2">
 					{#if sizes.length > 0}
 						<div class="ml-1 border-l-2 border-gray-300 pl-2">
-							<p class="text-xs font-semibold text-gray-600 mb-1">Sizes</p>
+							<p class="text-xs md:text-base font-semibold text-gray-600 mb-1">Sizes</p>
 							<div class="space-y-1">
 								{#each sizes as size}
-									<label class="flex items-center cursor-pointer text-xs">
+									<label class="flex items-center cursor-pointer text-xs md:text-base">
 										<input
 											type="radio"
 											checked={filterCategory === size}
@@ -57,7 +60,7 @@
 					{#if others.length > 0}
 						<div class="space-y-1">
 							{#each others as cat}
-								<label class="flex items-center cursor-pointer text-xs">
+								<label class="flex items-center cursor-pointer text-xs md:text-base">
 									<input
 										type="radio"
 										checked={filterCategory.endsWith(cat) || filterCategory === cat}
@@ -75,12 +78,12 @@
 
 		<!-- Sort Section -->
 		<div>
-			<CollapsibleSectionButton label="Sort">
+			<CollapsibleSectionButton label="Sort" {isExpanded}>
 				<div class="px-3 pb-3">
 					<select
 						value={sortBy}
 						onchange={(e) => onSortChange(e.currentTarget.value)}
-						class="w-full p-1.5 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+						class="w-full p-1.5 text-xs md:text-base border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="random">Random</option>
 						<option value="name">Name (A-Z)</option>

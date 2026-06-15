@@ -5,6 +5,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { updatePageInUrl } from './urlUtils';
+	import { windowWidthManager } from './windowWidth.svelte';
 
 	interface Props {
 		products: DisplayProduct[];
@@ -14,13 +15,12 @@
 
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
-	let windowWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
 	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
 	// Calculate number of columns based on responsive breakpoints
 	let columns: number = $derived(
-		(windowWidth >= 1024) ? 4 :
-		(windowWidth >= 768) ? 3 : 2
+		(windowWidthManager.width >= 1024) ? 4 :
+		(windowWidthManager.width >= 768) ? 3 : 2
 	);
 
 	const productCardHeight = 30; // height of ProductCard in rem units
@@ -40,14 +40,6 @@
 
 	let maxHeight = $derived(maxPage * pageHeight);
 
-
-	$effect(() => {
-		const handleResize = () => {
-			windowWidth = window.innerWidth;
-		};
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
-	});
 
 	$effect(() => {
 		const handleScroll = () => {

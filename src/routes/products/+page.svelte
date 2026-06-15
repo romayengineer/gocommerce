@@ -58,28 +58,15 @@
 <div class="max-w-7xl mx-auto py-1">
 
 	<div class="flex flex-col lg:flex-row gap-2">
-		<div class="block lg:hidden">
-			<ProductFiltersMobile
-				{sortBy}
-				{filterCategory}
-				{searchQuery}
-				{categories}
-				onSortChange={(value) => (sortBy = value)}
-				onCategoryChange={(value) => (filterCategory = value)}
-				onSearchChange={(value) => (searchQuery = value)}
-			/>
-		</div>
-		<div class="hidden lg:flex">
-			<ProductFilters
-				{sortBy}
-				{filterCategory}
-				{searchQuery}
-				{categories}
-				onSortChange={(value) => (sortBy = value)}
-				onCategoryChange={(value) => (filterCategory = value)}
-				onSearchChange={(value) => (searchQuery = value)}
-			/>
-		</div>
+		<ProductFiltersMobile
+			{sortBy}
+			{filterCategory}
+			{searchQuery}
+			{categories}
+			onSortChange={(value) => (sortBy = value)}
+			onCategoryChange={(value) => (filterCategory = value)}
+			onSearchChange={(value) => (searchQuery = value)}
+		/>
 
 		<div class="flex-1">
 			<ProductGrid products={sorted} onProductImageFailed={handleProductImageFailed} />
