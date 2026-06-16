@@ -2,10 +2,7 @@
 	import { t } from 'svelte-i18n';
 	import Link from './Link.svelte';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
-	import { cart } from './cart';
-	import { ShoppingCart } from 'lucide-svelte';
-
-	let cartCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
+	import CartLink from './CartLink.svelte';
 </script>
 
 <nav class="bg-white shadow-md sticky top-0 z-50">
@@ -19,14 +16,7 @@
 
 				<LanguageSwitcher />
 
-				<Link href="#/cart" class="relative flex-shrink-0">
-					<span class="text-gray-700 hover:text-blue-600 text-2xl"><ShoppingCart size={30}/></span>
-					{#if cartCount > 0}
-						<span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-							{cartCount}
-						</span>
-					{/if}
-				</Link>
+				<CartLink />
 			</div>
 		</div>
 	</div>
