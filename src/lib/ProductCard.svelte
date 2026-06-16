@@ -1,11 +1,8 @@
 <script lang="ts">
-	import Button from './Button.svelte';
 	import Link from './Link.svelte';
-	import Price from './Price.svelte';
 	import ProductImage from './ProductImage.svelte';
+	import AddToCartButton from './AddToCartButton.svelte';
 	import type { DisplayProduct } from './products';
-	import { addToCart } from './cart';
-	import { ShoppingCart } from 'lucide-svelte';
 
 	interface Props {
 		product: DisplayProduct;
@@ -14,12 +11,6 @@
 	}
 
 	const { product, onImageLoaded, height = 40 }: Props = $props();
-
-	function handleAddToCart(e: MouseEvent) {
-		e.preventDefault();
-		e.stopPropagation();
-		addToCart(product.itemId, 1);
-	}
 
 	function handleImageLoaded(loaded: boolean) {
 		onImageLoaded?.(loaded);
@@ -45,10 +36,7 @@
 				</div>
 				<p class="text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
 			</div>
-			<Button onclick={handleAddToCart} class="w-full md:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
-				<ShoppingCart size={25} class='flex-shrink-0'/>
-				<Price amount={product.price} size="md" />
-			</Button>
+			<AddToCartButton itemId={product.itemId} price={product.price} />
 		</div>
 	</div>
 </Link>
