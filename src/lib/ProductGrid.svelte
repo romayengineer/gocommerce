@@ -39,9 +39,9 @@
 
 	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
 
-	let currentPage = $state(1);
-
 	let maxPage = $derived(Math.ceil(products.length / itemsPerPage));
+
+	let currentPage = $state(pageFromScrollHeight());
 
 	let maxHeight = $derived(maxPage * pageHeight);
 
@@ -62,21 +62,27 @@
 		}
 	});
 
+	function pageFromScrollHeight(): number {
+		return Math.min(maxPage, 1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap))));
+	}
+
 	$effect(() => {
 		const _ = scrollHeight;
 		const timer = setTimeout(() => {
-			currentPage = Math.min(maxPage, 1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap))));
+			currentPage = pageFromScrollHeight();
 		}, 100);
 		return () => clearTimeout(timer);
 	});
 
+	function changePage() {
+		const newUrl = updatePageInUrl($page.url.toString(), currentPage);
+		goto(newUrl, { noScroll: true });
+		logger.log(`Page changed to ${currentPage}`);
+	}
+
 	$effect(() => {
 		const _ = currentPage;
-		const timer = setTimeout(() => {
-			const newUrl = updatePageInUrl($page.url.toString(), currentPage);
-			goto(newUrl, { noScroll: true });
-			logger.log(`Page changed to ${currentPage}`);
-		}, 100);
+		const timer = setTimeout(changePage, 100);
 		return () => clearTimeout(timer);
 	});
 
