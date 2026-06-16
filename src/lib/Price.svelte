@@ -33,6 +33,6 @@
 	let formattedPrice = $derived(formatPrice(amount, $locale));
 </script>
 
-<span class="font-bold {sizeClasses[size as Size]} {className || ''}">
+<span class="font-bold pl-2 {sizeClasses[size as Size]} {className || ''}">
 	${formattedPrice}
 </span>
