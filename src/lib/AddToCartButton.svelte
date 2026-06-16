@@ -18,7 +18,11 @@
 	}
 </script>
 
-<Button onclick={handleAddToCart} class="w-full md:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
+
+<Button
+	onclick={handleAddToCart}
+	class="w-full md:w-auto flex items-center justify-center gap-2 whitespace-nowrap bg-gradient-to-r from-blue-400 to-transparent"
+>
 	<ShoppingCart size={25} class="flex-shrink-0" />
 	<Price amount={price} size="md" />
 </Button>

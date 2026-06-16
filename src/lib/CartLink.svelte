@@ -39,7 +39,7 @@
 <Link href="#/cart" class="relative flex-shrink-0">
 	<span class="text-gray-700 hover:text-blue-600 text-2xl"><ShoppingCart size={30}/></span>
 	{#if cartCount > 0}
-		<span class="absolute top-0 right-0 bg-red-500 text-white text-base font-bold rounded-full w-5 h-5 flex items-center justify-center {isShaking ? 'shake' : ''}">
+		<span class="absolute top-0 right-0 bg-red-500 text-white text-base font-bold rounded-full w-5 h-5 p-3 flex items-center justify-center {isShaking ? 'shake' : ''}">
 			{cartCount}
 		</span>
 	{/if}
