@@ -45,8 +45,8 @@
 				</div>
 				<p class="text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
 			</div>
-			<Button onclick={handleAddToCart} class="w-full md:w-auto">
-				<ShoppingCart size={25} class='inline-block'/>
+			<Button onclick={handleAddToCart} class="w-full md:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
+				<ShoppingCart size={25} class='flex-shrink-0'/>
 				<Price amount={product.price} size="md" />
 			</Button>
 		</div>
