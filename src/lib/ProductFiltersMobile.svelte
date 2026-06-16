@@ -26,7 +26,10 @@
 </script>
 
 <div class="bg-white rounded-lg shadow sticky top-16 max-h-screen overflow-y-auto z-10">
-	<h3 class="font-bold text-lg p-4 hidden lg:inline">Filters</h3>
+	<div class="hidden lg:inline">
+		<div class="h-3"></div>
+		<h3 class="font-bold text-lg pl-3">Filters</h3>
+	</div>
 
 	<!-- Search Section -->
 	<div class="px-3 py-3 border-b flex items-center gap-2">
