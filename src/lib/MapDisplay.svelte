@@ -76,7 +76,7 @@
 		<div class="relative">
 			<div
 				bind:this={mapContainer}
-				class="w-full h-96 border border-gray-300 rounded-lg shadow-md overflow-hidden"
+				class="w-full h-96 border border-gray-300 rounded-lg shadow-md overflow-hidden relative z-0"
 			></div>
 			<!-- Transparent overlay prevents all map interactions (clicks, drags, zoom) while allowing page scroll -->
 			<div class="absolute inset-0 bg-transparent cursor-default"></div>
