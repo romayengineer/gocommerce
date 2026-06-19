@@ -1,4 +1,5 @@
-import { displayProductsList, deleteProduct, type DisplayProduct } from './products';
+import type { DisplayProduct } from './products';
+import { displayProductsList, deleteProduct } from './products';
 
 export class ProductPageStore {
 	sortBy = $state('random');

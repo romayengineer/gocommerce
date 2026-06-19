@@ -1,6 +1,6 @@
 import { GoogleMapsService } from './googleMapsService';
 import { LeafletService } from './leafletService';
-import { type IMapService } from './mapService';
+import type { IMapService } from './mapService';
 
 type MapProvider = 'google' | 'leaflet';
 

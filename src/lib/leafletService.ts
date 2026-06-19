@@ -1,8 +1,9 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { logger } from './logger.svelte';
-import { type ShippingCoordinates } from './schemas'
-import { mapHasAddress, type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
+
+import type { ShippingCoordinates } from './schemas'
+import type { CenterZoom, IMapService, MapConfig } from './mapService';
+import { mapHasAddress, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 // KEEP THIS DOCUMENTATION
 /*
@@ -38,50 +39,52 @@ export class LeafletService implements IMapService {
 	public latitude: number | undefined = undefined
 	public longitude: number | undefined = undefined
 
-	async initialize(container: HTMLDivElement): Promise<void> {
+	async initialize(container: HTMLDivElement, config?: MapConfig): Promise<void> {
 		this.mapContainer = container;
-		this.initializeMap();
+		await this.initializeMap(config);
 	}
 
-	private initializeMap(): void {
+	private async initializeMap(config?: MapConfig): Promise<void> {
 		if (!this.mapContainer) {
 			throw new Error('Map container not set');
 		}
 
-		this.map = L.map(this.mapContainer).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+		let centerZoom = await this.getCenter(config);
+
+		this.map = L.map(this.mapContainer).setView(centerZoom.center, centerZoom.zoom);
 
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
 			attribution: '© OpenStreetMap contributors'
 		}).addTo(this.map);
 
-		this.marker = L.marker(DEFAULT_CENTER).addTo(this.map);
+		this.marker = L.marker(centerZoom.center).addTo(this.map);
 	}
 
-	updateLocation(config: MapConfig): Promise<ShippingCoordinates | undefined> {
-		return new Promise((resolve) => {
-			if (this.updateTimeout) {
-				clearTimeout(this.updateTimeout);
+	private async getCenter(config?: MapConfig): Promise<CenterZoom> {
+		if (config) {
+			const coordinates: L.LatLngLiteral | undefined = await this.getLocation(config);
+			if (coordinates) {
+				return {
+					center: coordinates,
+					zoom: FOUND_LOCATION_ZOOM,
+					locationFound: true,
+				}
 			}
-
-			this.updateTimeout = setTimeout(async () => {
-				let coordinates = await this.performLocationUpdate(config);
-				resolve(coordinates);
-			}, this.DEBOUNCE_DELAY);
-		});
+		}
+		return {
+			center: DEFAULT_CENTER,
+			zoom: DEFAULT_ZOOM,
+			locationFound: false,
+		}
 	}
 
-	private async performLocationUpdate(config: MapConfig): Promise<ShippingCoordinates | undefined> {
-		if (!this.map || !this.marker) {
-			return;
-		}
+	private async getLocation(config: MapConfig): Promise<L.LatLngLiteral | undefined> {
 
-		logger.log('Location config:', config);
 		const hasAddress = mapHasAddress(config)
 		if (!hasAddress) {
 			return;
 		}
-		logger.log('Updating location');
 
 		try {
 			const params = new URLSearchParams({
@@ -121,36 +124,47 @@ export class LeafletService implements IMapService {
 
 			if (results.length > 0) {
 				const { lat, lon } = results[0];
-				this.latitude = parseFloat(lat)
-				this.longitude = parseFloat(lon)
-				const coordinates: L.LatLngExpression = [this.latitude, this.longitude];
-				this.map.setView(coordinates, FOUND_LOCATION_ZOOM);
-				this.marker.setLatLng(coordinates);
-				this.lastLocationFound = true;
-				return {
-					latitude: this.latitude,
-					longitude: this.longitude,
-				}
-			} else {
-				this.latitude = undefined
-				this.longitude = undefined
-				this.lastLocationFound = false;
-				this.resetToDefault();
-				return;
+				const coordinates: L.LatLngLiteral = {
+					lat: parseFloat(lat),
+					lng: parseFloat(lon)
+				};
+				return coordinates;
 			}
 		} catch (error) {
-			this.lastLocationFound = false;
-			this.resetToDefault();
+			return
 		}
 	}
 
-	private resetToDefault(): void {
+	updateLocation(config: MapConfig): Promise<ShippingCoordinates | undefined> {
+		return new Promise((resolve) => {
+			if (this.updateTimeout) {
+				clearTimeout(this.updateTimeout);
+			}
+
+			this.updateTimeout = setTimeout(async () => {
+				let coordinates = await this.performLocationUpdate(config);
+				resolve(coordinates);
+			}, this.DEBOUNCE_DELAY);
+		});
+	}
+
+	private async performLocationUpdate(config: MapConfig): Promise<ShippingCoordinates | undefined> {
 		if (!this.map || !this.marker) {
 			return;
 		}
-		const defaultCoords: L.LatLngExpression = [DEFAULT_CENTER.lat, DEFAULT_CENTER.lng];
-		this.map.setView(defaultCoords, DEFAULT_ZOOM);
-		this.marker.setLatLng(defaultCoords);
+
+		const centerZoom: CenterZoom = await this.getCenter(config);
+
+		this.map.setView(centerZoom.center, centerZoom.zoom);
+		this.marker.setLatLng(centerZoom.center);
+		this.lastLocationFound = centerZoom.locationFound;
+
+		if (centerZoom.locationFound) {
+			return {
+				latitude: centerZoom.center.lat,
+				longitude: centerZoom.center.lng,
+			}
+		}
 	}
 
 	wasLocationFound(): boolean {

@@ -5,7 +5,8 @@
 	import Button from './Button.svelte';
 	import ShippingForm from './ShippingForm.svelte';
 	import MapDisplay from './MapDisplay.svelte';
-	import { shippingFormSchema, type ShippingFormData, type FieldErrors } from '$lib/schemas';
+	import type { ShippingFormData, FieldErrors } from '$lib/schemas';
+	import { shippingFormSchema } from '$lib/schemas';
 	import { saveCheckoutForm, loadCheckoutForm } from './checkoutFormStore';
 	import ErrorMessage from './ErrorMessage.svelte';
 

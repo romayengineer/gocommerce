@@ -1,6 +1,7 @@
 import { logger } from './logger.svelte';
-import { type ShippingCoordinates } from './schemas'
-import { type IMapService, type MapConfig, DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
+import type {  ShippingCoordinates } from './schemas'
+import type { IMapService, MapConfig }  from './mapService';
+import { DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from './mapService';
 
 export class GoogleMapsService implements IMapService {
 	private apiKey: string;
