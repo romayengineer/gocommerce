@@ -15,10 +15,14 @@ export class ProductPageStore {
 			const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : category;
 			return categoryName.toLowerCase();
 		}))).sort();
-	} 
+	}
 
 	get categories(): string[] {
 		return this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories).concat('all'))));
+	}
+
+	get sizes(): string[] {
+		return Array.from(new Set(this.displayProducts.map(p => p.size).concat('all')));
 	}
 
 	get brands(): string[] {
