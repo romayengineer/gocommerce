@@ -9,8 +9,16 @@ export class ProductPageStore {
 
 	displayProducts = $state(displayProductsList);
 
+	cleanCategories(categories: string[]): string[] {
+		return Array.from(new Set(categories.map(category => {
+			const pathParts = category.split('/').filter((part) => part !== '');
+			const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : category;
+			return categoryName.toLowerCase();
+		}))).sort();
+	} 
+
 	get categories(): string[] {
-		return Array.from(new Set(this.displayProducts.flatMap(p => p.categories).concat('all')));
+		return this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories).concat('all'))));
 	}
 
 	get brands(): string[] {
