@@ -5,6 +5,7 @@ export class ProductPageStore {
 	sortBy = $state('random');
 	filterCategory = $state('all');
 	filterSize = $state('all');
+	filterBrand = $state('all');
 	searchQuery = $state('');
 	debouncedSearchQuery = $state('');
 
@@ -15,11 +16,11 @@ export class ProductPageStore {
 			const pathParts = category.split('/').filter((part) => part !== '');
 			const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : category;
 			return categoryName.toLowerCase();
-		}))).sort();
+		})));
 	}
 
 	get categories(): string[] {
-		return this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories).concat('all'))));
+		return ['all', ...this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories)))).sort()];
 	}
 
 	sortSizes(a: string, b: string): number {
@@ -29,19 +30,25 @@ export class ProductPageStore {
 	}
 
 	get sizes(): string[] {
-		return Array.from(new Set(this.displayProducts.map(p => p.size).concat('all'))).sort(this.sortSizes);
+		return ['all', ...Array.from(new Set(this.displayProducts.map(p => p.size))).sort(this.sortSizes)];
 	}
 
 	get brands(): string[] {
-		return Array.from(new Set(this.displayProducts.map(p => p.brand).concat('all')));
+		return ['all', ...Array.from(new Set(this.displayProducts.map(p => p.brand))).sort()];
 	}
 
 	get filtered(): DisplayProduct[] {
+		const category = this.filterCategory.toLowerCase();
+		const brand = this.filterBrand.toLowerCase();
+		const size = this.filterSize.toUpperCase();
 		return this.displayProducts.filter((p) => {
-			if (this.filterCategory !== 'all' && !p.categories.some(cat => cat.endsWith(`${this.filterCategory}/`))) {
+			if (category !== 'all' && !p.categories.some(cat => cat.endsWith(`${category}/`))) {
 				return false;
 			}
-			if (this.filterSize !== 'all' && !(p.size === this.filterSize)) {
+			if (brand !== 'all' && !(p.brand === brand)) {
+				return false;
+			}
+			if (size !== 'ALL' && !(p.size === size)) {
 				return false;
 			}
 			if (this.debouncedSearchQuery.trim() !== '') {

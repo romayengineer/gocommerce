@@ -17,6 +17,8 @@
 
 	let sizes =  $derived(store.sizes);
 
+	let brands =  $derived(store.brands);
+
 	let isDesktop = $derived(windowWidthManager.width >= 1024);
 	let isMobileFiltersOpen = $state(false);
 
@@ -79,6 +81,29 @@
 
 		
 		<div class="border-b">
+			<CollapsibleSectionButton label="Brands" isExpanded={isDesktop}>
+				<div class="px-3 py-3 space-y-2">
+					{#if brands.length > 0}
+						<div class="space-y-1">
+							{#each brands as brand}
+								<label class="flex items-center cursor-pointer text-xs md:text-base">
+									<input
+										type="radio"
+										checked={store.filterBrand === brand}
+										onchange={() => (store.filterBrand = brand)}
+										class="mr-1.5"
+									/>
+									<span class="capitalize">{brand}</span>
+								</label>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			</CollapsibleSectionButton>
+		</div>
+
+		
+		<div class="border-b">
 			<CollapsibleSectionButton label="Sizes" isExpanded={isDesktop}>
 				<div class="px-3 py-3 space-y-2">
 					{#if sizes.length > 0}
@@ -91,7 +116,7 @@
 										onchange={() => (store.filterSize = size)}
 										class="mr-1.5"
 									/>
-									<span>{size}</span>
+									<span class="capitalize">{size}</span>
 								</label>
 							{/each}
 						</div>
