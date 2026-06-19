@@ -2,6 +2,11 @@
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import ProductFiltersMobile from '$lib/ProductFiltersMobile.svelte';
 	import { productPageStore } from '$lib/productPageStore.svelte';
+
+	$effect(() => {
+		productPageStore.sorted;
+		window.scrollTo(0, 0);
+	});
 </script>
 
 <div class="max-w-7xl mx-auto py-1">
