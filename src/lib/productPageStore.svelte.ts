@@ -21,8 +21,14 @@ export class ProductPageStore {
 		return this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories).concat('all'))));
 	}
 
+	sortSizes(a: string, b: string): number {
+		const aNum = Number(a.split(/\s+/)[0]);
+		const bNum = Number(b.split(/\s+/)[0]);
+		return aNum - bNum;
+	}
+
 	get sizes(): string[] {
-		return Array.from(new Set(this.displayProducts.map(p => p.size).concat('all')));
+		return Array.from(new Set(this.displayProducts.map(p => p.size).concat('all'))).sort(this.sortSizes);
 	}
 
 	get brands(): string[] {
