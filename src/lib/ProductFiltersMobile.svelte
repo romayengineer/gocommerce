@@ -38,6 +38,7 @@
 			placeholder="Search..."
 			value={store.searchQuery}
 			oninput={(e) => (store.searchQuery = e.currentTarget.value)}
+			spellcheck="false"
 			class="flex-1 px-2 py-1.5 text-sm md:text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 		/>
 		<button
