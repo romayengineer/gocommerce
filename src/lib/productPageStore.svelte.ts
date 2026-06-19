@@ -10,7 +10,11 @@ export class ProductPageStore {
 	displayProducts = $state(displayProductsList);
 
 	get categories(): string[] {
-		return ['all', ...new Set(this.displayProducts.flatMap(p => p.categories))];
+		return Array.from(new Set(this.displayProducts.flatMap(p => p.categories).concat('all')));
+	}
+
+	get brands(): string[] {
+		return Array.from(new Set(this.displayProducts.map(p => p.brand).concat('all')));
 	}
 
 	get filtered(): DisplayProduct[] {
