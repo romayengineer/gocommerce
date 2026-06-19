@@ -56,6 +56,25 @@
 	</div>
 
 	{#if isExpanded}
+		<!-- Sort Section -->
+		<div>
+			<CollapsibleSectionButton label="Sort" isExpanded={isDesktop}>
+				<div class="px-3 py-3">
+					<select
+						value={store.sortBy}
+						onchange={(e) => (store.sortBy = e.currentTarget.value)}
+						class="w-full p-1.5 text-xs md:text-base border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+					>
+						<option value="random">Random</option>
+						<option value="name-asc">Name (A-Z)</option>
+						<option value="name-desc">Name (Z-A)</option>
+						<option value="price-asc">Price (Low to High)</option>
+						<option value="price-desc">Price (High to Low)</option>
+					</select>
+				</div>
+			</CollapsibleSectionButton>
+		</div>
+
 		<!-- Category Section -->
 		<div class="border-b">
 			<CollapsibleSectionButton label="Category" isExpanded={isDesktop}>
@@ -121,25 +140,6 @@
 							{/each}
 						</div>
 					{/if}
-				</div>
-			</CollapsibleSectionButton>
-		</div>
-
-		<!-- Sort Section -->
-		<div>
-			<CollapsibleSectionButton label="Sort" isExpanded={isDesktop}>
-				<div class="px-3 py-3">
-					<select
-						value={store.sortBy}
-						onchange={(e) => (store.sortBy = e.currentTarget.value)}
-						class="w-full p-1.5 text-xs md:text-base border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-					>
-						<option value="random">Random</option>
-						<option value="name-asc">Name (A-Z)</option>
-						<option value="name-desc">Name (Z-A)</option>
-						<option value="price-asc">Price (Low to High)</option>
-						<option value="price-desc">Price (High to Low)</option>
-					</select>
 				</div>
 			</CollapsibleSectionButton>
 		</div>
