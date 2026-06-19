@@ -4,6 +4,7 @@ import { displayProductsList, deleteProduct } from './products';
 export class ProductPageStore {
 	sortBy = $state('random');
 	filterCategory = $state('all');
+	filterSize = $state('all');
 	searchQuery = $state('');
 	debouncedSearchQuery = $state('');
 
@@ -38,6 +39,9 @@ export class ProductPageStore {
 	get filtered(): DisplayProduct[] {
 		return this.displayProducts.filter((p) => {
 			if (this.filterCategory !== 'all' && !p.categories.some(cat => cat.endsWith(`${this.filterCategory}/`))) {
+				return false;
+			}
+			if (this.filterSize !== 'all' && !(p.size === this.filterSize)) {
 				return false;
 			}
 			if (this.debouncedSearchQuery.trim() !== '') {

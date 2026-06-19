@@ -11,7 +11,11 @@
 
 	const { store }: Props = $props();
 
-	const { sizes, others } = $derived(categorizeItems(store.categories));
+	// const { sizes, others } = $derived(categorizeItems(store.categories));
+
+	let others = $derived(store.categories);
+
+	let sizes =  $derived(store.sizes);
 
 	let isDesktop = $derived(windowWidthManager.width >= 1024);
 	let isMobileFiltersOpen = $state(false);
@@ -54,25 +58,6 @@
 		<div class="border-b">
 			<CollapsibleSectionButton label="Category" isExpanded={isDesktop}>
 				<div class="px-3 py-3 space-y-2">
-					{#if sizes.length > 0}
-						<div class="ml-1 border-l-2 border-gray-300 pl-2">
-							<p class="text-xs md:text-base font-semibold text-gray-600 mb-1">Sizes</p>
-							<div class="space-y-1">
-								{#each sizes as size}
-									<label class="flex items-center cursor-pointer text-xs md:text-base">
-										<input
-											type="radio"
-											checked={store.filterCategory === size}
-											onchange={() => (store.filterCategory = size)}
-											class="mr-1.5"
-										/>
-										<span>{size}</span>
-									</label>
-								{/each}
-							</div>
-						</div>
-					{/if}
-
 					{#if others.length > 0}
 						<div class="space-y-1">
 							{#each others as cat}
@@ -84,6 +69,29 @@
 										class="mr-1.5"
 									/>
 									<span class="capitalize">{cat}</span>
+								</label>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			</CollapsibleSectionButton>
+		</div>
+
+		
+		<div class="border-b">
+			<CollapsibleSectionButton label="Sizes" isExpanded={isDesktop}>
+				<div class="px-3 py-3 space-y-2">
+					{#if sizes.length > 0}
+						<div class="space-y-1">
+							{#each sizes as size}
+								<label class="flex items-center cursor-pointer text-xs md:text-base">
+									<input
+										type="radio"
+										checked={store.filterSize === size}
+										onchange={() => (store.filterSize = size)}
+										class="mr-1.5"
+									/>
+									<span>{size}</span>
 								</label>
 							{/each}
 						</div>
