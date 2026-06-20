@@ -11,8 +11,17 @@ export interface CartItemFull {
 	quantity: number;
 }
 
+interface HasID {
+	productId: string;
+	itemId: string; 
+}
+
+const sameItem = (item: HasID, productId: string, itemId: string): boolean => {
+	return item.productId === productId && item.itemId === itemId;
+}
+
 const findItem = (items: CartItem[], productId: string, itemId: string): CartItem | undefined => {
-	return items.find((item) => item.productId === productId && item.itemId === itemId);
+	return items.find((item) => sameItem(item, productId, itemId));
 }
 
 function createCartStore() {
@@ -37,7 +46,7 @@ function createCartStore() {
 		},
 		removeFromCart: (productId: string, itemId: string) => {
 			update((items: CartItem[]) => {
-				const filtered = items.filter((item) => item.productId !== productId && item.itemId !== itemId);
+				const filtered = items.filter((item) => !sameItem(item, productId, itemId));
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(filtered));
 				return filtered;
 			});
@@ -47,7 +56,7 @@ function createCartStore() {
 				const item = findItem(items, productId, itemId);
 				if (item) {
 					if (quantity <= 0) {
-						items = items.filter((item) => item.productId !== productId && item.itemId !== itemId);
+						items = items.filter((item) => !sameItem(item, productId, itemId));
 					} else {
 						item.quantity = quantity;
 					}
