@@ -25,7 +25,7 @@
 	}
 </script>
 
-<Link href="#/products/{product.itemId}" class="group no-underline">
+<Link href="#/products/{product.productId}" class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}rem">
 		<div class="group-hover:opacity-80 transition-opacity">
 			<ProductImage
@@ -47,7 +47,7 @@
 					<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
 				</div>
 			</div>
-			<AddToCartButton itemId={product.itemId} price={product.items[itemSelected].price} />
+			<AddToCartButton productId={product.productId} itemId={product.items[itemSelected].itemId} price={product.items[itemSelected].price} />
 		</div>
 	</div>
 </Link>

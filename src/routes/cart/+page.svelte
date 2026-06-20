@@ -26,8 +26,8 @@
 				{#each $cartProducts as item (item.product.itemId)}
 					<CartItem
 						{item}
-						onQuantityChange={(qty) => updateQuantity(item.product.itemId, qty)}
-						onRemove={() => removeFromCart(item.product.itemId)}
+						onQuantityChange={(qty) => updateQuantity(item.product.productId, item.product.itemId, qty)}
+						onRemove={() => removeFromCart(item.product.productId, item.product.itemId)}
 					/>
 				{/each}
 			</div>

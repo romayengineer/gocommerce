@@ -11,6 +11,10 @@ export interface CartItemFull {
 	quantity: number;
 }
 
+const findItem = (items: CartItem[], productId: string, itemId: string): CartItem | undefined => {
+	return items.find((item) => item.itemId === productId && item.itemId === itemId);
+}
+
 function createCartStore() {
 	const stored = browser ? localStorage.getItem(CART_KEY) : null;
 	const initial: CartItem[] = stored ? JSON.parse(stored) : [];
@@ -19,31 +23,31 @@ function createCartStore() {
 
 	const ob = {
 		subscribe,
-		addToCart: (productId: string, quantity: number) => {
+		addToCart: (productId: string, itemId: string, quantity: number) => {
 			update((items: CartItem[]) => {
-				const existing = items.find((item) => item.itemId === productId);
+				const existing = findItem(items, productId, itemId);
 				if (existing) {
 					existing.quantity += quantity;
 				} else {
-					items.push({ itemId: productId, quantity });
+					items.push({ productId, itemId, quantity });
 				}
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(items));
 				return items;
 			});
 		},
-		removeFromCart: (productId: string) => {
+		removeFromCart: (productId: string, itemId: string) => {
 			update((items: CartItem[]) => {
-				const filtered = items.filter((item) => item.itemId !== productId);
+				const filtered = items.filter((item) => item.productId !== productId && item.itemId !== itemId);
 				if (browser) localStorage.setItem(CART_KEY, JSON.stringify(filtered));
 				return filtered;
 			});
 		},
-		updateQuantity: (productId: string, quantity: number) => {
+		updateQuantity: (productId: string, itemId: string, quantity: number) => {
 			update((items: CartItem[]) => {
-				const item = items.find((item) => item.itemId === productId);
+				const item = findItem(items, productId, itemId);
 				if (item) {
 					if (quantity <= 0) {
-						items = items.filter((item) => item.itemId !== productId);
+						items = items.filter((item) => item.productId !== productId && item.itemId !== itemId);
 					} else {
 						item.quantity = quantity;
 					}
@@ -72,16 +76,16 @@ function createCartStore() {
 
 export const cart = createCartStore();
 
-export async function addToCart(productId: string, quantity: number): Promise<void> {
-	cart.addToCart(productId, quantity);
+export async function addToCart(productId: string, itemId: string, quantity: number): Promise<void> {
+	cart.addToCart(productId, itemId, quantity);
 }
 
-export async function removeFromCart(productId: string): Promise<void> {
-	cart.removeFromCart(productId);
+export async function removeFromCart(productId: string, itemId: string): Promise<void> {
+	cart.removeFromCart(productId, itemId);
 }
 
-export async function updateQuantity(productId: string, quantity: number): Promise<void> {
-	cart.updateQuantity(productId, quantity);
+export async function updateQuantity(productId: string, itemId: string, quantity: number): Promise<void> {
+	cart.updateQuantity(productId, itemId, quantity);
 }
 
 export async function clearCart(): Promise<void> {
@@ -91,13 +95,30 @@ export async function clearCart(): Promise<void> {
 // TODO fix cart
 export const cartProducts = derived(cart, (items) => {
 	let products: (CartItemFull | undefined)[] = items.map((item) => {
-		const product = displayProductsList.find((product) => product.itemId === item.itemId);
+		const product = displayProductsList.find((product) => product.productId === item.productId);
 		if (!product) {
-			removeFromCart(item.itemId);
+			removeFromCart(item.productId, item.itemId);
+			return;
+		}
+		const productItem = product.items.find((productItem) => productItem.itemId === item.itemId);
+		if (!productItem) {
+			removeFromCart(item.productId, item.itemId);
 			return;
 		}
 		return {
-			product: product,
+			product: {
+				productId: product.productId,
+				nameComplete: product.nameComplete,
+				description: product.description,
+				brand: product.brand,
+				categories: product.categories,
+				properties: product.properties,
+				allText: product.allText,
+				images: product.images,
+				itemId: productItem.itemId,
+				size: productItem.size,
+				price: productItem.price,
+			},
 			quantity: item.quantity,
 		} as CartItemFull;
 	});

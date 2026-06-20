@@ -107,8 +107,8 @@
 	<div style="height: {maxHeight}rem">
 		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem"
 				class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-			{#each visibleProducts as product (product.itemId)}
-				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.itemId, loaded)} />
+			{#each visibleProducts as product (product.productId)}
+				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
 			{/each}
 		</div>
 	</div>

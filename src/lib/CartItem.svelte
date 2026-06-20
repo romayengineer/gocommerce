@@ -24,7 +24,7 @@
 		<div class="flex flex-col pl-4">
 
 			<div class="flex items-start">
-				<h3 class="font-semibold text-lg pb-2 flex-1">{item.product.nameComplete}</h3>
+				<h3 class="font-semibold text-lg pb-2 flex-1">{item.product.nameComplete} {item.product.size}</h3>
 				<Button class="px-2 py-1 bg-white hover:bg-white" onclick={onRemove}>
 					<Trash2 size={20} class="bg-white text-gray-500"/>
 				</Button>

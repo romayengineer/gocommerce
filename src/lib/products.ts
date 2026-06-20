@@ -47,6 +47,7 @@ export const productSchema = z.object({
 export type Product = z.infer<typeof productSchema>;
 
 export const displayProductItemsSchema = z.object({
+	productId: z.string(),
 	itemId: z.string(),
 	nameComplete: z.string(),
 	description: z.string(),
@@ -55,14 +56,14 @@ export const displayProductItemsSchema = z.object({
 	properties: z.array(productPropertySchema),
 	allText: z.string(),
 	images: z.array(z.string()),
-	price: z.number(),
 	size: z.string(),
+	price: z.number(),
 })
 
 export type DisplayProductItems = z.infer<typeof displayProductItemsSchema>;
 
 export const displayProductSchema = z.object({
-	itemId: z.string(),
+	productId: z.string(),
 	nameComplete: z.string(),
 	description: z.string(),
 	brand: z.string(),
@@ -71,14 +72,16 @@ export const displayProductSchema = z.object({
 	allText: z.string(),
 	images: z.array(z.string()),
 	items: z.array(z.object({
-		price: z.number(),
+		itemId: z.string(),
 		size: z.string(),
+		price: z.number(),
 	}))
 })
 
 export type DisplayProduct = z.infer<typeof displayProductSchema>;
 
 export const cartItemSchema = z.object({
+	productId: z.string(),
 	itemId: z.string(),
 	quantity: z.number(),
 })
@@ -168,6 +171,7 @@ export function getDisplayProductsItems(): DisplayProductItems[] {
 		return product.items.map((item): DisplayProductItems => {
 			const nameComplete = item.nameComplete.toLowerCase();
 			return {
+				productId: product.productId,
 				itemId: item.itemId,
 				nameComplete: nameComplete,
 				description: clearnDescription,
@@ -192,18 +196,16 @@ export function getDisplayProducts(): DisplayProduct[] {
 		const categories = product.categories.map((c) => c.toLowerCase());
 		const nameComplete = product.productName.toLowerCase();
 		return {
-			itemId: product.productId,
+			productId: product.productId,
 			nameComplete: nameComplete,
 			description: clearnDescription,
 			brand: brand,
 			categories: categories,
 			properties: properties,
 			allText: `${nameComplete} ${brand} ${clearnDescription}`,
-			// images: item.images,
-			// size: item.name.toUpperCase(),
-			// price: item.sellers[0]?.commertialOffer.Price ?? 0,
 			images: product.items[0]?.images,
 			items: product.items.map(item => ({
+				itemId: item.itemId,
 				size: item.name.toUpperCase(),
 				price: item.sellers[0]?.commertialOffer.Price ?? 0,
 			}))
@@ -216,7 +218,7 @@ export var displayProductsList = getDisplayProducts()
 
 
 export function deleteProduct(productList: DisplayProduct[], productId: string) {
-	const index = productList.findIndex(p => p.itemId === productId);
+	const index = productList.findIndex(p => p.productId === productId);
 	if (index !== -1) {
 		productList.splice(index, 1);
 	}

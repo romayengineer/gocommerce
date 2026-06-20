@@ -5,16 +5,17 @@
 	import { ShoppingCart } from 'lucide-svelte';
 
 	interface Props {
+		productId: string;
 		itemId: string;
 		price: number;
 	}
 
-	const { itemId, price }: Props = $props();
+	const { productId, itemId, price }: Props = $props();
 
 	function handleAddToCart(e: MouseEvent) {
 		e.preventDefault();
 		e.stopPropagation();
-		addToCart(itemId, 1);
+		addToCart(productId, itemId, 1);
 	}
 </script>
 
