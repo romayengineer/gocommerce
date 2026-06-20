@@ -149,23 +149,26 @@ function removeUnwanted(dp: DisplayProduct): Boolean {
 export function getDisplayProducts(): DisplayProduct[] {
 	let displayProductsList = products.flatMap((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
+		const clearnDescription = cleanHtmlTags(product.description);
+		const brand = product.brand.toLowerCase();
+		const categories = product.categories.map((c) => c.toLowerCase());
 		return product.items.map((item): DisplayProduct => {
-			let clearnDescription = cleanHtmlTags(product.description);
+			const nameComplete = item.nameComplete.toLowerCase();
 			return {
 				itemId: item.itemId,
-				nameComplete: item.nameComplete,
+				nameComplete: nameComplete,
 				productId: product.productId,
 				productName: product.productName,
 				description: clearnDescription,
 				size: item.name.toUpperCase(),
-				brand: product.brand.toLowerCase(),
+				brand: brand,
 				brandId: product.brandId,
-				categories: product.categories.map((c) => c.toLowerCase()),
+				categories: categories,
 				images: item.images,
 				properties: properties,
 				sellers: item.sellers,
 				price: item.sellers[0]?.commertialOffer.Price ?? 0,
-				allText: `${item.nameComplete} ${product.brand} ${clearnDescription}`.toLowerCase(),
+				allText: `${nameComplete} ${brand} ${clearnDescription}`,
 			}
 		}).filter(removeUnwanted);
 	});
