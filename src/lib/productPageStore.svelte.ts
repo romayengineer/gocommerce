@@ -1,5 +1,5 @@
 import type { DisplayProduct } from './products';
-import { displayProductsList, deleteProduct, displayProductsSizes } from './products';
+import { displayProductsList, deleteProduct, displayProductsSizes, displayProductsBrands } from './products';
 
 export class ProductPageStore {
 	sortBy = $state('random');
@@ -23,18 +23,12 @@ export class ProductPageStore {
 		return ['all', ...this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories)))).sort()];
 	}
 
-	sortSizes(a: string, b: string): number {
-		const aNum = Number(a.split(/\s+/)[0]);
-		const bNum = Number(b.split(/\s+/)[0]);
-		return aNum - bNum;
-	}
-
 	get sizes(): string[] {
-		return ['all', ...displayProductsSizes.sort(this.sortSizes)];
+		return ['all', ...displayProductsSizes];
 	}
 
 	get brands(): string[] {
-		return ['all', ...Array.from(new Set(this.displayProducts.map(p => p.brand))).sort()];
+		return ['all', ...displayProductsBrands];
 	}
 
 	get filtered(): DisplayProduct[] {

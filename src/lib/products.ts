@@ -198,6 +198,12 @@ export function sortSizes(a: ProductItem, b: ProductItem): number {
 	return aNum - bNum;
 }
 
+export function sortSizesString(a: string, b: string): number {
+	const aNum = Number(a.split(/\s+/)[0]);
+	const bNum = Number(b.split(/\s+/)[0]);
+	return aNum - bNum;
+}
+
 let displayProductsSizesSet: Set<string> = new Set()
 
 export function getDisplayProducts(): DisplayProduct[] {
@@ -231,7 +237,14 @@ export function getDisplayProducts(): DisplayProduct[] {
 }
 
 export var displayProductsList = getDisplayProducts()
-export const displayProductsSizes = Array.from(displayProductsSizesSet).filter((s: string) => s.includes("ML"))
+
+export const displayProductsBrands = Array.from(
+	new Set(displayProductsList.map((p) => p.brand)),
+).sort()
+
+export const displayProductsSizes = Array.from(
+	new Set(displayProductsList.flatMap((p) => p.items.map((i) => i.size))),
+).filter((s: string) => s.includes("ML")).sort(sortSizesString)
 
 
 export function deleteProduct(productList: DisplayProduct[], productId: string) {
