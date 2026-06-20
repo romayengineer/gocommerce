@@ -198,6 +198,8 @@ export function sortSizes(a: ProductItem, b: ProductItem): number {
 	return aNum - bNum;
 }
 
+let displayProductsSizesSet: Set<string> = new Set()
+
 export function getDisplayProducts(): DisplayProduct[] {
 	let displayProductsList = products.map((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
@@ -214,17 +216,22 @@ export function getDisplayProducts(): DisplayProduct[] {
 			properties: properties,
 			allText: `${nameComplete} ${brand} ${clearnDescription}`,
 			images: product.items[0]?.images,
-			items: product.items.map(item => ({
-				itemId: item.itemId,
-				size: item.name.toUpperCase(),
-				price: item.sellers[0]?.commertialOffer.Price ?? 0,
-			})).sort(sortSizes)
+			items: product.items.map(item => {
+				const size = item.name.toUpperCase();
+				displayProductsSizesSet.add(size);
+				return {
+					itemId: item.itemId,
+					size: size,
+					price: item.sellers[0]?.commertialOffer.Price ?? 0,
+				}
+			}).sort(sortSizes)
 		}
 	}).filter(removeUnwanted);
 	return shuffleFisherYates(displayProductsList);
 }
 
 export var displayProductsList = getDisplayProducts()
+export const displayProductsSizes = Array.from(displayProductsSizesSet).filter((s: string) => s.includes("ML"))
 
 
 export function deleteProduct(productList: DisplayProduct[], productId: string) {
