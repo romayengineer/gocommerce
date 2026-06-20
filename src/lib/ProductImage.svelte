@@ -104,6 +104,7 @@
 			</div>
 		{/if}
 	</div>
+	<div class="h-0 md:h-2"></div>
 </div>
 
 <style>
