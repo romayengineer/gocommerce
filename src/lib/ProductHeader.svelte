@@ -13,13 +13,13 @@
 </script>
 
 <div>
-	<h1 class="x-text-2xl font-bold mb-4">{product.nameComplete}</h1>
+	<h1 class="capitalize x-text-2xl font-bold mb-4">{product.nameComplete}</h1>
 	<div class="mb-4">
 		<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
 	</div>
 	
 	<div class="grid grid-cols-2 gap-10">
-		<p class="text-xl text-gray-600 mb-6 whitespace-nowrap">{product.brand}</p>
+		<p class="capitalize text-xl text-gray-600 mb-6 whitespace-nowrap">{product.brand}</p>
 
 		<div class="mb-6">
 			<Price amount={product.items[itemSelected].price} size="lg" />

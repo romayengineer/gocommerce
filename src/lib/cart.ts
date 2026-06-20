@@ -131,5 +131,10 @@ export const cartProducts = derived(cart, (items) => {
 			quantity: item.quantity,
 		} as CartItemFull;
 	});
-	return products.filter(Boolean) as CartItemFull[];
+	let productsFiltered = products.filter(Boolean) as CartItemFull[];
+	return productsFiltered.sort((a: CartItemFull, b: CartItemFull): number => {
+		const textA = `${a.product.brand} ${a.product.nameComplete} ${a.product.size}`;
+		const textB = `${b.product.brand} ${b.product.nameComplete} ${b.product.size}`;
+		return textA.localeCompare(textB)
+	})
 });
