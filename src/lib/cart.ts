@@ -12,7 +12,7 @@ export interface CartItemFull {
 }
 
 const findItem = (items: CartItem[], productId: string, itemId: string): CartItem | undefined => {
-	return items.find((item) => item.itemId === productId && item.itemId === itemId);
+	return items.find((item) => item.productId === productId && item.itemId === itemId);
 }
 
 function createCartStore() {
