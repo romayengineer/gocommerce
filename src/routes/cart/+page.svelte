@@ -35,7 +35,7 @@
 			<div class="lg:col-span-1">
 				<SidePanel sticky={true}>
 					<div class="mb-6">
-						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total + (total > 100 ? 0 : 10) + total * 0.1} isBold={true} />
+						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total} isBold={true} />
 					</div>
 
 					<Button class="w-full py-3 mb-3 whitespace-nowrap" onclick={() => goto('#/checkout')}>
