@@ -17,12 +17,8 @@
 	<div class="mb-4">
 		<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
 	</div>
-	
-	<div class="grid grid-cols-2 gap-10">
-		<p class="capitalize text-xl text-gray-600 mb-6 whitespace-nowrap">{product.brand}</p>
-
-		<div class="mb-6">
-			<Price amount={product.items[itemSelected].price} size="lg" />
-		</div>
+	<div class="mb-6 flex flex-wrap items-center gap-4">
+		<span class="capitalize text-xl text-gray-600">{product.brand}</span>
+		<Price amount={product.items[itemSelected].price} size="lg" />
 	</div>
 </div>
