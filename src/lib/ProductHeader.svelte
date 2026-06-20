@@ -5,16 +5,11 @@
 
 	interface Props {
 		product: DisplayProduct
+		itemSelected: number,
+		selectSize: (e: Event, index: number) => void
 	}
 
-	const { product }: Props = $props();
-
-	let itemSelected = $state(0)
-
-	function selectSize(e: Event, index: number) {
-		e.preventDefault();
-		itemSelected = index;
-	}
+	const { product, itemSelected, selectSize }: Props = $props();
 </script>
 
 <div>

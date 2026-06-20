@@ -11,11 +11,20 @@
 
 	let quantity = $state(1);
 
-	let product = $derived(displayProductsList.find(p => p.itemId === $page.params.id));
+	let product = $derived(displayProductsList.find(p => p.productId === $page.params.id));
+
+	let itemSelected = $state(0)
+
+	let itemId = $derived(product?.items[itemSelected].itemId)
+
+	function selectSize(e: Event, index: number) {
+		e.preventDefault();
+		itemSelected = index;
+	}
 
 	function handleAddToCart() {
 		if (product) {
-			addToCart(product.itemId, quantity);
+			addToCart(product.productId, itemId!, quantity);
 		}
 	}
 </script>
@@ -26,7 +35,7 @@
 			<ProductImage images={product.images} alt={product.nameComplete} />
 		</div>
 
-		<ProductHeader {product} />
+		<ProductHeader {product} {itemSelected} {selectSize}/>
 
 		<div class="grid grid-cols-2 gap-10">
 			<div class="mb-8">
@@ -57,7 +66,7 @@
 			</div>
 		{/if}
 
-		<ProductDetailsBox itemId={product.itemId} productName={product.nameComplete} brand={product.brand} />
+		<ProductDetailsBox productId={product.productId} productName={product.nameComplete} brand={product.brand} />
 	</div>
 {:else}
 	<ProductNotFound />
