@@ -62,6 +62,14 @@ export const displayProductItemsSchema = z.object({
 
 export type DisplayProductItems = z.infer<typeof displayProductItemsSchema>;
 
+export const productItemSchema =  z.object({
+	itemId: z.string(),
+	size: z.string(),
+	price: z.number(),
+})
+
+export type ProductItem = z.infer<typeof productItemSchema>;
+
 export const displayProductSchema = z.object({
 	productId: z.string(),
 	nameComplete: z.string(),
@@ -71,11 +79,7 @@ export const displayProductSchema = z.object({
 	properties: z.array(productPropertySchema),
 	allText: z.string(),
 	images: z.array(z.string()),
-	items: z.array(z.object({
-		itemId: z.string(),
-		size: z.string(),
-		price: z.number(),
-	}))
+	items: z.array(productItemSchema)
 })
 
 export type DisplayProduct = z.infer<typeof displayProductSchema>;
@@ -188,6 +192,12 @@ export function getDisplayProductsItems(): DisplayProductItems[] {
 	return shuffleFisherYates(displayProductsList);
 }
 
+export function sortSizes(a: ProductItem, b: ProductItem): number {
+	const aNum = Number(a.size.split(/\s+/)[0]);
+	const bNum = Number(b.size.split(/\s+/)[0]);
+	return aNum - bNum;
+}
+
 export function getDisplayProducts(): DisplayProduct[] {
 	let displayProductsList = products.map((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
@@ -208,7 +218,7 @@ export function getDisplayProducts(): DisplayProduct[] {
 				itemId: item.itemId,
 				size: item.name.toUpperCase(),
 				price: item.sellers[0]?.commertialOffer.Price ?? 0,
-			}))
+			})).sort(sortSizes)
 		}
 	}).filter(removeUnwanted);
 	return shuffleFisherYates(displayProductsList);
