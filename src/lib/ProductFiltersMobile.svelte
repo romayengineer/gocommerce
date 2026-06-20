@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { categorizeItems } from './productFilters';
 	import CollapsibleSectionButton from './CollapsibleSectionButton.svelte';
 	import { Settings2 } from 'lucide-svelte'
 	import { windowWidthManager } from './windowWidth.svelte';
@@ -10,8 +9,6 @@
 	}
 
 	const { store }: Props = $props();
-
-	// const { sizes, others } = $derived(categorizeItems(store.categories));
 
 	let others = $derived(store.categories);
 
