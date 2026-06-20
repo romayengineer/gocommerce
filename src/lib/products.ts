@@ -54,11 +54,9 @@ export const displayProductSchema = z.object({
 	description: z.string(),
 	size: z.string(),
 	brand: z.string(),
-	brandId: z.number(),
 	categories: z.array(z.string()),
 	images: z.array(z.string()),
 	properties: z.array(productPropertySchema),
-	sellers: z.array(productSellerAndPriceSchema),
 	price: z.number(),
 	allText: z.string(),
 })
@@ -162,11 +160,9 @@ export function getDisplayProducts(): DisplayProduct[] {
 				description: clearnDescription,
 				size: item.name.toUpperCase(),
 				brand: brand,
-				brandId: product.brandId,
 				categories: categories,
 				images: item.images,
 				properties: properties,
-				sellers: item.sellers,
 				price: item.sellers[0]?.commertialOffer.Price ?? 0,
 				allText: `${nameComplete} ${brand} ${clearnDescription}`,
 			}
