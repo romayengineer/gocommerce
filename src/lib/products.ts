@@ -49,8 +49,6 @@ export type Product = z.infer<typeof productSchema>;
 export const displayProductSchema = z.object({
 	itemId: z.string(),
 	nameComplete: z.string(),
-	productId: z.string(),
-	productName: z.string(),
 	description: z.string(),
 	size: z.string(),
 	brand: z.string(),
@@ -155,8 +153,6 @@ export function getDisplayProducts(): DisplayProduct[] {
 			return {
 				itemId: item.itemId,
 				nameComplete: nameComplete,
-				productId: product.productId,
-				productName: product.productName,
 				description: clearnDescription,
 				size: item.name.toUpperCase(),
 				brand: brand,
