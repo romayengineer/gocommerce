@@ -39,10 +39,10 @@
 		<div class="p-4 flex flex-col flex-1 justify-between">
 			<div>
 				<h3 class="capitalize font-semibold x-text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.nameComplete}</h3>
+				<p class="capitalize text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
 				<div class="max-h-0 md:max-h-full text-gray-600 text-sm mb-2 line-clamp-2 prose prose-sm max-w-none overflow-hidden">
 					{product.description}
 				</div>
-				<p class="capitalize text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
 			</div>
 			<div>
 				<div class="mb-2">
