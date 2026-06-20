@@ -236,15 +236,29 @@ export function getDisplayProducts(): DisplayProduct[] {
 	return shuffleFisherYates(displayProductsList);
 }
 
+
+
+function cleanCategories(categories: string[]): string[] {
+	return Array.from(new Set(categories.map(category => {
+		const pathParts = category.split('/').filter((part) => part !== '');
+		const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : category;
+		return categoryName.toLowerCase();
+	})));
+}
+
 export var displayProductsList = getDisplayProducts()
 
 export const displayProductsBrands = Array.from(
-	new Set(displayProductsList.map((p) => p.brand)),
+	new Set(displayProductsList.map(p => p.brand)),
 ).sort()
 
 export const displayProductsSizes = Array.from(
-	new Set(displayProductsList.flatMap((p) => p.items.map((i) => i.size))),
+	new Set(displayProductsList.flatMap(p => p.items.map((i) => i.size))),
 ).filter((s: string) => s.includes("ML")).sort(sortSizesString)
+
+export const displayProductsCategories = cleanCategories(
+	displayProductsList.flatMap(p => p.categories)
+).sort()
 
 
 export function deleteProduct(productList: DisplayProduct[], productId: string) {

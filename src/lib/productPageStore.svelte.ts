@@ -1,5 +1,6 @@
 import type { DisplayProduct } from './products';
-import { displayProductsList, deleteProduct, displayProductsSizes, displayProductsBrands } from './products';
+import { displayProductsList, deleteProduct } from './products';
+import { displayProductsSizes, displayProductsBrands, displayProductsCategories } from './products';
 
 export class ProductPageStore {
 	sortBy = $state('random');
@@ -11,16 +12,8 @@ export class ProductPageStore {
 
 	displayProducts = $state(displayProductsList);
 
-	cleanCategories(categories: string[]): string[] {
-		return Array.from(new Set(categories.map(category => {
-			const pathParts = category.split('/').filter((part) => part !== '');
-			const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : category;
-			return categoryName.toLowerCase();
-		})));
-	}
-
 	get categories(): string[] {
-		return ['all', ...this.cleanCategories(Array.from(new Set(this.displayProducts.flatMap(p => p.categories)))).sort()];
+		return ['all', ...displayProductsCategories];
 	}
 
 	get sizes(): string[] {
