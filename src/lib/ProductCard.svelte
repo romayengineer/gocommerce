@@ -43,11 +43,13 @@
 					{product.description}
 				</div>
 				<p class="capitalize text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
+			</div>
+			<div>
 				<div class="mb-2">
 					<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
 				</div>
+				<AddToCartButton productId={product.productId} itemId={product.items[itemSelected].itemId} price={product.items[itemSelected].price} />
 			</div>
-			<AddToCartButton productId={product.productId} itemId={product.items[itemSelected].itemId} price={product.items[itemSelected].price} />
 		</div>
 	</div>
 </Link>
