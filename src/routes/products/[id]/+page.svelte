@@ -37,14 +37,9 @@
 
 		<ProductHeader {product} {itemSelected} {selectSize}/>
 
-		<div class="grid grid-cols-2 gap-10">
-			<div class="mb-8">
-				<QuantitySelector {quantity} onchange={(q) => (quantity = q)} />
-			</div>
-
-			<div class="mb-4">
-				<AddToCartAction onclick={handleAddToCart} />
-			</div>
+		<div class="mb-8 flex flex-wrap justify-between">
+			<QuantitySelector {quantity} onchange={(q) => (quantity = q)} />
+			<AddToCartAction onclick={handleAddToCart} />
 		</div>
 
 		<div class="mb-8">
