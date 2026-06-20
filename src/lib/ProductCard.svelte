@@ -2,6 +2,7 @@
 	import Link from './Link.svelte';
 	import ProductImage from './ProductImage.svelte';
 	import AddToCartButton from './AddToCartButton.svelte';
+	import SizeSelector from './SizeSelector.svelte';
 	import type { DisplayProduct } from './products';
 
 	interface Props {
@@ -11,6 +12,13 @@
 	}
 
 	const { product, onImageLoaded, height = 40 }: Props = $props();
+
+	let itemSelected = $state(0)
+
+	function selectSize(e: Event, index: number) {
+		e.preventDefault();
+		itemSelected = index;
+	}
 
 	function handleImageLoaded(loaded: boolean) {
 		onImageLoaded?.(loaded);
@@ -35,8 +43,11 @@
 					{product.description}
 				</div>
 				<p class="capitalize text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
+				<div class="mb-2">
+					<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
+				</div>
 			</div>
-			<AddToCartButton itemId={product.itemId} price={product.price} />
+			<AddToCartButton itemId={product.itemId} price={product.items[itemSelected].price} />
 		</div>
 	</div>
 </Link>

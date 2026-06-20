@@ -46,17 +46,34 @@ export const productSchema = z.object({
 
 export type Product = z.infer<typeof productSchema>;
 
+export const displayProductItemsSchema = z.object({
+	itemId: z.string(),
+	nameComplete: z.string(),
+	description: z.string(),
+	brand: z.string(),
+	categories: z.array(z.string()),
+	properties: z.array(productPropertySchema),
+	allText: z.string(),
+	images: z.array(z.string()),
+	price: z.number(),
+	size: z.string(),
+})
+
+export type DisplayProductItems = z.infer<typeof displayProductItemsSchema>;
+
 export const displayProductSchema = z.object({
 	itemId: z.string(),
 	nameComplete: z.string(),
 	description: z.string(),
-	size: z.string(),
 	brand: z.string(),
 	categories: z.array(z.string()),
-	images: z.array(z.string()),
 	properties: z.array(productPropertySchema),
-	price: z.number(),
 	allText: z.string(),
+	images: z.array(z.string()),
+	items: z.array(z.object({
+		price: z.number(),
+		size: z.string(),
+	}))
 })
 
 export type DisplayProduct = z.infer<typeof displayProductSchema>;
@@ -128,42 +145,70 @@ export function shuffleFisherYates<T>(array: T[]): T[] {
 	return shuffled;
 }
 
-function removeSets(dp: DisplayProduct): Boolean {
+function removeSets(dp: any): Boolean {
 	return !dp.nameComplete.includes("+")
 }
 
-function removeCategories(dp: DisplayProduct): Boolean {
-	return !dp.categories.some((c) => c.includes("sets de fragancia"))
+function removeCategories(dp: any): Boolean {
+	return !dp.categories.some((c: string) => c.includes("sets de fragancia"))
 }
 
-function removeUnwanted(dp: DisplayProduct): Boolean {
+function removeUnwanted(dp: any): Boolean {
 	if(!removeSets(dp)) return false
 	if(!removeCategories(dp)) return false
 	return true
 }
 
-export function getDisplayProducts(): DisplayProduct[] {
+export function getDisplayProductsItems(): DisplayProductItems[] {
 	let displayProductsList = products.flatMap((product) => {
 		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
 		const clearnDescription = cleanHtmlTags(product.description);
 		const brand = product.brand.toLowerCase();
 		const categories = product.categories.map((c) => c.toLowerCase());
-		return product.items.map((item): DisplayProduct => {
+		return product.items.map((item): DisplayProductItems => {
 			const nameComplete = item.nameComplete.toLowerCase();
 			return {
 				itemId: item.itemId,
 				nameComplete: nameComplete,
 				description: clearnDescription,
-				size: item.name.toUpperCase(),
 				brand: brand,
 				categories: categories,
-				images: item.images,
 				properties: properties,
-				price: item.sellers[0]?.commertialOffer.Price ?? 0,
 				allText: `${nameComplete} ${brand} ${clearnDescription}`,
+				images: item.images,
+				size: item.name.toUpperCase(),
+				price: item.sellers[0]?.commertialOffer.Price ?? 0,
 			}
 		}).filter(removeUnwanted);
 	});
+	return shuffleFisherYates(displayProductsList);
+}
+
+export function getDisplayProducts(): DisplayProduct[] {
+	let displayProductsList = products.map((product) => {
+		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
+		const clearnDescription = cleanHtmlTags(product.description);
+		const brand = product.brand.toLowerCase();
+		const categories = product.categories.map((c) => c.toLowerCase());
+		const nameComplete = product.productName.toLowerCase();
+		return {
+			itemId: product.productId,
+			nameComplete: nameComplete,
+			description: clearnDescription,
+			brand: brand,
+			categories: categories,
+			properties: properties,
+			allText: `${nameComplete} ${brand} ${clearnDescription}`,
+			// images: item.images,
+			// size: item.name.toUpperCase(),
+			// price: item.sellers[0]?.commertialOffer.Price ?? 0,
+			images: product.items[0]?.images,
+			items: product.items.map(item => ({
+				size: item.name.toUpperCase(),
+				price: item.sellers[0]?.commertialOffer.Price ?? 0,
+			}))
+		}
+	}).filter(removeUnwanted);
 	return shuffleFisherYates(displayProductsList);
 }
 

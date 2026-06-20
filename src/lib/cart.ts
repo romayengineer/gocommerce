@@ -1,13 +1,13 @@
 import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
 import { logger } from './logger.svelte';
-import type { DisplayProduct, CartItem  } from './products';
+import type { DisplayProductItems, CartItem  } from './products';
 import { isValidCartItem, displayProductsList } from './products';
 
 const CART_KEY = 'ecommerce_cart';
 
 export interface CartItemFull {
-	product: DisplayProduct;
+	product: DisplayProductItems;
 	quantity: number;
 }
 
@@ -88,6 +88,7 @@ export async function clearCart(): Promise<void> {
 	cart.clearCart();
 }
 
+// TODO fix cart
 export const cartProducts = derived(cart, (items) => {
 	let products: (CartItemFull | undefined)[] = items.map((item) => {
 		const product = displayProductsList.find((product) => product.itemId === item.itemId);
