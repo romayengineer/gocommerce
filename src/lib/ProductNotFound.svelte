@@ -1,5 +1,12 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
 	import Link from './Link.svelte';
+
+	setTimeout(() => {
+		goto('/#/products', {
+			replaceState: true,
+		});
+	}, 3000)
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-12">
