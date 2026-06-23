@@ -270,6 +270,11 @@ export function deleteProduct(productList: DisplayProduct[], productId: string) 
 
 export function productFullUrl(product?: DisplayProduct): string {
 	if (!product) return '';
-	let productNameFull = `${product.brand} ${product.nameComplete}`.toLowerCase().replace(/ /g, "-");
+	let productNameFull = (
+		`${product.brand} ${product.nameComplete}`
+		.toLowerCase()
+		.replace(/\s+/g, "-")
+		.replace(/\//g, "-")
+	);
 	return `/#/products/${product.productId}/${productNameFull}`;
 }
