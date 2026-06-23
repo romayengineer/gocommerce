@@ -267,3 +267,9 @@ export function deleteProduct(productList: DisplayProduct[], productId: string) 
 		productList.splice(index, 1);
 	}
 }
+
+export function productFullUrl(product?: DisplayProduct): string {
+	if (!product) return '';
+	let productNameFull = `${product.brand} ${product.nameComplete}`.toLowerCase().replace(/ /g, "-");
+	return `/#/products/${product.productId}/${productNameFull}`;
+}

@@ -4,6 +4,7 @@
 	import AddToCartButton from './AddToCartButton.svelte';
 	import SizeSelector from './SizeSelector.svelte';
 	import type { DisplayProduct } from './products';
+	import { productFullUrl } from './products';
 
 	interface Props {
 		product: DisplayProduct;
@@ -12,6 +13,8 @@
 	}
 
 	const { product, onImageLoaded, height = 40 }: Props = $props();
+
+	let fullUrl = $derived(productFullUrl(product))
 
 	let itemSelected = $state(0)
 
@@ -25,7 +28,7 @@
 	}
 </script>
 
-<Link href="#/products/{product.productId}" class="group no-underline">
+<Link href={fullUrl} class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}rem">
 		<div class="group-hover:opacity-80 transition-opacity">
 			<ProductImage
