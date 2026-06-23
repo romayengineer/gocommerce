@@ -21,6 +21,13 @@
 
 	let isExpanded = $derived(isDesktop || isMobileFiltersOpen);
 
+	function onChange(func: (e: any) => void): ((e: any) => void) {
+		return (e) => {
+			window.scrollTo(0, 0);
+			return func(e);
+		}
+	}
+
 	$effect(() => {
 		if (isDesktop) {
 			isMobileFiltersOpen = false;
@@ -40,7 +47,7 @@
 			type="text"
 			placeholder="Search..."
 			value={store.searchQuery}
-			oninput={(e) => (store.searchQuery = e.currentTarget.value)}
+			oninput={onChange((e) => (store.searchQuery = e.currentTarget.value))}
 			spellcheck="false"
 			class="flex-1 px-2 py-1.5 text-sm md:text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 		/>
@@ -59,7 +66,7 @@
 				<div class="px-3 py-3">
 					<select
 						value={store.sortBy}
-						onchange={(e) => (store.sortBy = e.currentTarget.value)}
+						onchange={onChange((e) => (store.sortBy = e.currentTarget.value))}
 						class="w-full p-1.5 text-xs md:text-base border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="random">Random</option>
@@ -83,7 +90,7 @@
 									<input
 										type="radio"
 										checked={store.filterCategory.endsWith(cat) || store.filterCategory === cat}
-										onchange={() => (store.filterCategory = cat)}
+										onchange={onChange(() => (store.filterCategory = cat))}
 										class="mr-1.5"
 									/>
 									<span class="capitalize">{cat}</span>
@@ -106,7 +113,7 @@
 									<input
 										type="radio"
 										checked={store.filterBrand === brand}
-										onchange={() => (store.filterBrand = brand)}
+										onchange={onChange(() => (store.filterBrand = brand))}
 										class="mr-1.5"
 									/>
 									<span class="capitalize">{brand}</span>
@@ -129,7 +136,7 @@
 									<input
 										type="radio"
 										checked={store.filterSize === size}
-										onchange={() => (store.filterSize = size)}
+										onchange={onChange(() => (store.filterSize = size))}
 										class="mr-1.5"
 									/>
 									<span class="capitalize">{size}</span>
