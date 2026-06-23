@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/stores';
 	import Navigation from './lib/Navigation.svelte';
 	import Footer from './lib/Footer.svelte';
 	import './app.css';

@@ -2,7 +2,7 @@
 	import ProductCard from './ProductCard.svelte';
 	import type { DisplayProduct } from './products';
 	import { logger } from './logger.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { updatePageInUrl } from './urlUtils';
 	import { WindowWidthManager } from './windowWidth.svelte';
@@ -78,7 +78,7 @@
 	});
 
 	function changePage() {
-		const newUrl = updatePageInUrl($page.url.toString(), currentPage);
+		const newUrl = updatePageInUrl(page.url.toString(), currentPage);
 		goto(newUrl, { noScroll: true });
 		logger.log(`Page changed to ${currentPage}`);
 	}
