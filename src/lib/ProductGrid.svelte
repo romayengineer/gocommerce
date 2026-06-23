@@ -17,11 +17,12 @@
 
 	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
+	const productCardWidth = 300;
+
+	let leftMenuWidht = $derived((windowWidthManager.width >= 1024) ? 250 : 0)
+
 	// Calculate number of columns based on responsive breakpoints
-	let columns: number = $derived(
-		(windowWidthManager.width >= 1024) ? 4 :
-		(windowWidthManager.width >= 768) ? 3 : 2
-	);
+	let columns: number = $derived(Math.max(2, Math.min(5, Math.round((windowWidthManager.width - leftMenuWidht) / productCardWidth))));
 
 	const minHeight = 30
 	const maxHHight = 40
@@ -105,8 +106,7 @@
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
 	<div style="height: {maxHeight}rem">
-		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem"
-				class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem; display: grid; grid-template-columns: repeat({columns}, minmax(0, 1fr)); gap: 0.5rem;">
 			{#each visibleProducts as product (product.productId)}
 				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
 			{/each}

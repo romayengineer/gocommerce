@@ -30,7 +30,7 @@
 </script>
 
 {#if product}
-	<div class="max-w-6xl mx-auto px-2 md:px-4 md:pt-5">
+	<div class="max-w-8xl mx-auto px-2 md:px-4 md:pt-5">
 		<div class="md:float-left md:w-1/2 md:mr-4 mb-2 md:mb-0">
 			<ProductImage images={product.images} alt={product.nameComplete} />
 		</div>

@@ -6,7 +6,7 @@
 	const featured = displayProductsList.slice(0, 6);
 </script>
 
-<div class="max-w-7xl mx-auto px-4 py-12">
+<div class="max-w-8xl mx-auto px-4 py-12">
 	<section class="mb-16">
 		<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg p-12 mb-8">
 			<h1 class="text-5xl font-bold mb-4">{$t('header.title')}</h1>

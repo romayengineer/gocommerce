@@ -9,7 +9,7 @@
 	});
 </script>
 
-<div class="max-w-7xl mx-auto py-1">
+<div class="max-w-8xl mx-auto py-1">
 
 	<div class="flex flex-col lg:flex-row gap-2">
 		<ProductFiltersMobile store={productPageStore} />
