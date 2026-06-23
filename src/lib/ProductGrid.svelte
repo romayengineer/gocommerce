@@ -28,7 +28,7 @@
 
 	const minHeight = 30
 	const maxHHight = 40
-	const fixRatio = 9.5
+	const fixRatio = 7.5
 	const gap = 0.5; // gap-2 = 0.5rem
 
 	// height of ProductCard in rem units
