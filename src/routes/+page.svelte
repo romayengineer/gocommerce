@@ -2,8 +2,12 @@
 	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
 	import { displayProductsList } from '$lib/products';
+	import { windowWidthManager } from '$lib/windowWidth.svelte';
 
-	const featured = displayProductsList.slice(0, 6);
+	// 10
+	let gridRows = $derived(Math.ceil(10 / windowWidthManager.columns))
+
+	const featured = $derived(displayProductsList.slice(0, windowWidthManager.columns * gridRows));
 </script>
 
 <div class="max-w-8xl mx-auto px-4 py-12">

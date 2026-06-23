@@ -17,26 +17,19 @@
 
 	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
-	const productCardWidth = 300;
-
-	let leftMenuWidht = $derived((windowWidthManager.width >= 1024) ? 250 : 0)
-
-	// Calculate number of columns based on responsive breakpoints
-	let columns: number = $derived(Math.max(2, Math.min(5, Math.round((windowWidthManager.width - leftMenuWidht) / productCardWidth))));
-
 	const minHeight = 30
 	const maxHHight = 40
 	const fixRatio = 9.5
 
 	// height of ProductCard in rem units
-	let productCardHeight = $derived(Math.min(maxHHight, Math.max(minHeight, windowWidthManager.width / columns / fixRatio))); 
+	let productCardHeight = $derived(Math.min(maxHHight, Math.max(minHeight, windowWidthManager.width / windowWidthManager.columns / fixRatio))); 
 	const gap = 0.5; // gap-2 = 0.5rem
 
 	const rowsPerPage: number = 1;
 
 	const pageBuffer = 4;
 
-	let itemsPerPage = $derived(columns * rowsPerPage);
+	let itemsPerPage = $derived(windowWidthManager.columns * rowsPerPage);
 
 	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
 
@@ -106,7 +99,7 @@
 	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 {:else}
 	<div style="height: {maxHeight}rem">
-		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem; display: grid; grid-template-columns: repeat({columns}, minmax(0, 1fr)); gap: 0.5rem;">
+		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem; display: grid; grid-template-columns: repeat({windowWidthManager.columns}, minmax(0, 1fr)); gap: 0.5rem;">
 			{#each visibleProducts as product (product.productId)}
 				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
 			{/each}
