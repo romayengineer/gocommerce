@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { updatePageInUrl } from './urlUtils';
-	import { windowWidthManager } from './windowWidth.svelte';
+	import { WindowWidthManager } from './windowWidth.svelte';
 
 	interface Props {
 		products: DisplayProduct[];
@@ -15,15 +15,24 @@
 
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
+	let gridContainer = $state<HTMLDivElement>();
+	let windowWidthManager = $state(new WindowWidthManager());
+
+	$effect(() => {
+		if (gridContainer) {
+			windowWidthManager.setElement(gridContainer);
+		}
+	});
+
 	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
 	const minHeight = 30
 	const maxHHight = 40
 	const fixRatio = 9.5
+	const gap = 0.5; // gap-2 = 0.5rem
 
 	// height of ProductCard in rem units
 	let productCardHeight = $derived(Math.min(maxHHight, Math.max(minHeight, windowWidthManager.width / windowWidthManager.columns / fixRatio))); 
-	const gap = 0.5; // gap-2 = 0.5rem
 
 	const rowsPerPage: number = 1;
 
@@ -95,14 +104,16 @@
 	let visibleProducts = $derived(sliceProducts(currentPage));
 </script>
 
-{#if products.length === 0}
-	<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
-{:else}
-	<div style="height: {maxHeight}rem">
-		<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem; display: grid; grid-template-columns: repeat({windowWidthManager.columns}, minmax(0, 1fr)); gap: 0.5rem;">
-			{#each visibleProducts as product (product.productId)}
-				<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
-			{/each}
+<div bind:this={gridContainer}>
+	{#if products.length === 0}
+		<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
+	{:else}
+		<div style="height: {maxHeight}rem">
+			<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem; display: grid; grid-template-columns: repeat({windowWidthManager.columns}, minmax(0, 1fr)); gap: 0.5rem;">
+				{#each visibleProducts as product (product.productId)}
+					<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
+				{/each}
+			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
+</div>
