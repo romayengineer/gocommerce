@@ -64,16 +64,16 @@
 
 <div class="relative">
 	<div bind:this={splideElement} class="splide overflow-hidden aspect-square">
-		<div class="splide__track">
+		<div class="splide__track w-full h-full">
 			<ul class="splide__list">
 				{#each imageList as image, i}
-					<li class="splide__slide w-full h-full">
+					<li class="splide__slide">
 						<img
 							src={image}
 							alt="{alt} {i + 1}"
 							loading="lazy"
 							draggable="false"
-							class="w-full h-full object-cover select-none pointer-events-none"
+							class="max-w-full max-h-full object-contain select-none pointer-events-none"
 							onload={handleImageLoad}
 							onerror={handleImageError}
 						/>
