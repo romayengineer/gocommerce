@@ -17,8 +17,8 @@
 <div class="border-b border-1 border-grey-100 bg-white lg:shadow">
 	<div class="grid grid-cols-[auto_1fr] py-4 px-2">
 		{#if item.product.images.length > 0}
-			<div class="w-16 h-30">
-				<img src={item.product.images[0]} alt={item.product.nameComplete} class="w-full h-full object-cover rounded" />
+			<div class="w-24 h-24">
+				<img src={item.product.images[0]} alt={item.product.nameComplete} class="w-full h-full object-contain rounded" />
 			</div>
 		{/if}
 		<div class="flex flex-col pl-4">
