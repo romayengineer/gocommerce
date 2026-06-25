@@ -1,5 +1,5 @@
 import type { DisplayProduct } from './products';
-import { displayProductsList, deleteProduct } from './products';
+import { products, deleteProduct } from './products';
 import { displayProductsSizes, displayProductsBrands, displayProductsCategories } from './products';
 
 export class ProductPageStore {
@@ -10,7 +10,7 @@ export class ProductPageStore {
 	searchQuery = $state('');
 	debouncedSearchQuery = $state('');
 
-	displayProducts = $state(displayProductsList);
+	displayProducts = $state(products);
 
 	get categories(): string[] {
 		return ['all', ...displayProductsCategories];
@@ -63,8 +63,8 @@ export class ProductPageStore {
 		}
 
 		const sorted = [...this.filtered].sort((a, b) => {
-			if (this.sortBy === 'name-asc') return a.nameComplete.localeCompare(b.nameComplete);
-			if (this.sortBy === 'name-desc') return b.nameComplete.localeCompare(a.nameComplete);
+			if (this.sortBy === 'name-asc') return a.productName.localeCompare(b.productName);
+			if (this.sortBy === 'name-desc') return b.productName.localeCompare(a.productName);
 			if (this.sortBy === 'price-asc') return a.items[0].price - b.items[0].price;
 			if (this.sortBy === 'price-desc') return b.items[0].price - a.items[0].price;
 			return 0;
@@ -74,7 +74,7 @@ export class ProductPageStore {
 	}
 
 	handleProductImageFailed(productId: string) {
-		deleteProduct(displayProductsList, productId);
+		deleteProduct(products, productId);
 		deleteProduct(this.displayProducts, productId);
 	}
 }

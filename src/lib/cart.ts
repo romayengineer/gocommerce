@@ -2,7 +2,7 @@ import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
 import { logger } from './logger.svelte';
 import type { DisplayProductItems, CartItem  } from './products';
-import { isValidCartItem, displayProductsList } from './products';
+import { isValidCartItem, products } from './products';
 
 const CART_KEY = 'ecommerce_cart';
 
@@ -103,8 +103,8 @@ export async function clearCart(): Promise<void> {
 
 // TODO fix cart
 export const cartProducts = derived(cart, (items) => {
-	let products: (CartItemFull | undefined)[] = items.map((item) => {
-		const product = displayProductsList.find((product) => product.productId === item.productId);
+	let new_products: (CartItemFull | undefined)[] = items.map((item) => {
+		const product = products.find((product) => product.productId === item.productId);
 		if (!product) {
 			removeFromCart(item.productId, item.itemId);
 			return;
@@ -117,7 +117,7 @@ export const cartProducts = derived(cart, (items) => {
 		return {
 			product: {
 				productId: product.productId,
-				nameComplete: product.nameComplete,
+				productName: product.productName,
 				description: product.description,
 				brand: product.brand,
 				categories: product.categories,
@@ -131,10 +131,14 @@ export const cartProducts = derived(cart, (items) => {
 			quantity: item.quantity,
 		} as CartItemFull;
 	});
-	let productsFiltered = products.filter(Boolean) as CartItemFull[];
+	let productsFiltered = new_products.filter(Boolean) as CartItemFull[];
 	return productsFiltered.sort((a: CartItemFull, b: CartItemFull): number => {
-		const textA = `${a.product.brand} ${a.product.nameComplete} ${a.product.size}`;
-		const textB = `${b.product.brand} ${b.product.nameComplete} ${b.product.size}`;
-		return textA.localeCompare(textB)
+		const brandCompare = a.product.brand.localeCompare(b.product.brand);
+		if (brandCompare !== 0) return brandCompare;
+
+		const nameCompare = a.product.productName.localeCompare(b.product.productName);
+		if (nameCompare !== 0) return nameCompare;
+
+		return parseInt(a.product.size) - parseInt(b.product.size);
 	})
 });

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { displayProductsList } from '$lib/products';
+	import { products } from '$lib/products';
 	import { addToCart } from '$lib/cart';
 	import ProductImage from '$lib/ProductImage.svelte';
 	import ProductHeader from '$lib/ProductHeader.svelte';
@@ -12,7 +12,7 @@
 
 	let quantity = $state(1);
 
-	let product = $derived(displayProductsList.find(p => p.productId === productId));
+	let product = $derived(products.find(p => p.productId === productId));
 
 	let itemSelected = $state(0)
 
@@ -33,7 +33,7 @@
 {#if product}
 	<div class="max-w-8xl mx-auto px-2 md:px-4 md:pt-5">
 		<div class="md:float-left md:w-1/2 md:mr-4 mb-2 md:mb-0">
-			<ProductImage images={product.images} alt={product.nameComplete} />
+			<ProductImage images={product.images} alt={product.productName} />
 		</div>
 
 		<ProductHeader {product} {itemSelected} {selectSize}/>
@@ -62,7 +62,7 @@
 			</div>
 		{/if}
 
-		<ProductDetailsBox productId={product.productId} productName={product.nameComplete} brand={product.brand} />
+		<ProductDetailsBox productId={product.productId} productName={product.productName} brand={product.brand} />
 	</div>
 {:else}
 	<ProductNotFound />

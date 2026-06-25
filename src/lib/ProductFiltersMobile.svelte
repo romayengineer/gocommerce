@@ -139,7 +139,7 @@
 										onchange={onChange(() => (store.filterSize = size))}
 										class="mr-1.5"
 									/>
-									<span class="capitalize">{size}</span>
+									<span class="capitalize">{size} ML</span>
 								</label>
 							{/each}
 						</div>

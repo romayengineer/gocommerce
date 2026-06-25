@@ -33,7 +33,7 @@
 		<div class="group-hover:opacity-80 transition-opacity">
 			<ProductImage
 				images={product.images}
-				alt={product.nameComplete}
+				alt={product.productName}
 				showNavigation={false}
 				onImageLoaded={handleImageLoaded}
 			/>
@@ -41,7 +41,7 @@
 
 		<div class="p-4 flex flex-col flex-1 justify-between">
 			<div>
-				<h3 class="capitalize font-semibold x-text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.nameComplete}</h3>
+				<h3 class="capitalize font-semibold x-text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.productName}</h3>
 				<p class="capitalize text-gray-700 text-sm mb-4 font-medium">{product.brand}</p>
 				<div class="max-h-full text-gray-600 text-sm mb-2 line-clamp-2 prose prose-sm max-w-none overflow-hidden">
 					{product.description}

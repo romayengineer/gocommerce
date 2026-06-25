@@ -21,7 +21,7 @@
 				? 'bg-blue-600 text-white'
 				: 'bg-gray-200 text-gray-800 hover:bg-gray-300'}"
 		>
-			{item.size}
+			{item.size} ML
 		</button>
 	{/each}
 </div>

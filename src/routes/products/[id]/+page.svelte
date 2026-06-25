@@ -2,11 +2,11 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import ProductView from '$lib/ProductView.svelte';
-	import { displayProductsList, productFullUrl } from '$lib/products';
+	import { products, productFullUrl } from '$lib/products';
 
 	let productId: string = page.params.id!;
 
-	let product = $derived(displayProductsList.find(p => p.productId === productId));
+	let product = $derived(products.find(p => p.productId === productId));
 	let fullUrl = $derived(productFullUrl(product))
 
 	$effect(() => {

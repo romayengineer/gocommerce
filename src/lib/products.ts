@@ -1,5 +1,23 @@
 import { z } from 'zod';
 
+/**
+ * Shuffles an array using the Fisher-Yates algorithm.
+ * Fastest approach because: (1) O(n) time vs O(n log n) for sort-based shuffling,
+ * (2) only simple swap operations, no sorting overhead, (3) guarantees uniform
+ * random distribution (each permutation has equal probability 1/n!).
+ * Don't use array.sort(() => Math.random() - 0.5) — it's slower and statistically biased.
+ * @param array - The array to shuffle
+ * @returns A new shuffled copy of the array with uniform random distribution (O(n) time, O(n) space)
+ */
+export function shuffleFisherYates<T>(array: T[]): T[] {
+	const shuffled = [...array];
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled;
+}
+
 export const productPropertySchema = z.object({
 	name: z.string(),
 	values: z.array(z.string())
@@ -7,49 +25,23 @@ export const productPropertySchema = z.object({
 
 export type ProductProperty = z.infer<typeof productPropertySchema>;
 
-export const productPriceSchema = z.object({
-	Price: z.number(),
-	ListPrice: z.number()
-});
-
-export type ProductPrice = z.infer<typeof productPriceSchema>;
-
-export const productSellerAndPriceSchema = z.object({
-	sellerId: z.string(),
-	sellerName: z.string(),
-	commertialOffer: productPriceSchema
-});
-
-export type ProductSellerAndPrice = z.infer<typeof productSellerAndPriceSchema>;
-
-export const productItemVariantSchema = z.object({
-	itemId: z.string(),
-	name: z.string(),
-	nameComplete: z.string(),
-	ean: z.string(),
-	images: z.array(z.string()),
-	sellers: z.array(productSellerAndPriceSchema)
-});
-
-export type ProductItemVariant = z.infer<typeof productItemVariantSchema>;
-
-export const productSchema = z.object({
-	productId: z.string(),
-	productName: z.string(),
-	description: z.string(),
-	brand: z.string(),
-	brandId: z.number(),
+export const ProductsColumnarSchema = z.object({
+	productId: z.array(z.string()),
+	productName: z.array(z.string()),
+	description: z.array(z.string()),
+	brand: z.array(z.string()),
 	categories: z.array(z.string()),
-	properties: z.array(productPropertySchema),
-	items: z.array(productItemVariantSchema)
+	properties: z.array(z.string()),
+	images: z.array(z.string()),
+	items: z.array(z.string()),
 });
 
-export type Product = z.infer<typeof productSchema>;
+export type ProductsColumnar = z.infer<typeof ProductsColumnarSchema>;
 
 export const displayProductItemsSchema = z.object({
 	productId: z.string(),
 	itemId: z.string(),
-	nameComplete: z.string(),
+	productName: z.string(),
 	description: z.string(),
 	brand: z.string(),
 	categories: z.array(z.string()),
@@ -72,7 +64,7 @@ export type ProductItem = z.infer<typeof productItemSchema>;
 
 export const displayProductSchema = z.object({
 	productId: z.string(),
-	nameComplete: z.string(),
+	productName: z.string(),
 	description: z.string(),
 	brand: z.string(),
 	categories: z.array(z.string()),
@@ -101,142 +93,42 @@ export function createValidator<T extends z.ZodType>(schema: T) {
 export const isValidCartItem = createValidator(cartItemSchema);
 
 import productsData from '../data/products.json';
-export const products: Product[] = productsData;
 
-export function filterPropertiesByNames(
-	properties: ProductProperty[],
-	excludePatterns: string[],
-	caseSensitive = false
-): ProductProperty[] {
-	return properties.filter((prop) => {
-		const name = caseSensitive ? prop.name : prop.name.toLowerCase();
-		return !excludePatterns.some((pattern) => {
-			const p = caseSensitive ? pattern : pattern.toLowerCase();
-			return name.includes(p);
-		});
-	});
-}
+const productsColumnar: ProductsColumnar = productsData;
 
-function cleanHtmlTags(text: string): string {
-	let newText = text
-	// replace </p> </br> for \n
-	newText = text.replace(/<\/p>/g, '\n').replace(/<br\s*\/?>/gi, '\n');
-	// remove all remaining html tags
-	newText = newText.replace(/<[^>]*>/g, '');
-	// collapse multiple consecutive spaces into one (preserve newlines)
-	newText = newText.replace(/[ \t]+/g, ' ');
-	// trim leading spaces from each line (preserve newlines)
-	newText = newText.replace(/^[ \t]+/gm, '');
-	// collapse multiple consecutive newlines to at most two
-	newText = newText.replace(/\n{3,}/g, '\n\n');
-	// lower case
-	newText = newText.toLowerCase();
-	return newText;
-}
-
-/**
- * Shuffles an array using the Fisher-Yates algorithm.
- * Fastest approach because: (1) O(n) time vs O(n log n) for sort-based shuffling,
- * (2) only simple swap operations, no sorting overhead, (3) guarantees uniform
- * random distribution (each permutation has equal probability 1/n!).
- * Don't use array.sort(() => Math.random() - 0.5) — it's slower and statistically biased.
- * @param array - The array to shuffle
- * @returns A new shuffled copy of the array with uniform random distribution (O(n) time, O(n) space)
- */
-export function shuffleFisherYates<T>(array: T[]): T[] {
-	const shuffled = [...array];
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
-	return shuffled;
-}
-
-function removeSets(dp: any): Boolean {
-	return !dp.nameComplete.includes("+")
-}
-
-function removeCategories(dp: any): Boolean {
-	return !dp.categories.some((c: string) => c.includes("sets de fragancia"))
-}
-
-function removeUnwanted(dp: any): Boolean {
-	if(!removeSets(dp)) return false
-	if(!removeCategories(dp)) return false
-	return true
-}
-
-export function getDisplayProductsItems(): DisplayProductItems[] {
-	let displayProductsList = products.flatMap((product) => {
-		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
-		const clearnDescription = cleanHtmlTags(product.description);
-		const brand = product.brand.toLowerCase();
-		const categories = product.categories.map((c) => c.toLowerCase());
-		return product.items.map((item): DisplayProductItems => {
-			const nameComplete = item.nameComplete.toLowerCase();
+export const products: DisplayProduct[] = shuffleFisherYates(productsColumnar.productId.map((_, index) => {
+	const productId = productsColumnar.productId[index]
+	const productName = productsColumnar.productName[index];
+	const description = productsColumnar.description[index];
+	const brand = productsColumnar.brand[index];
+	const product: DisplayProduct = {
+		productId: productId,
+		productName: productName,
+		description: description,
+		brand: brand,
+		categories: productsColumnar.categories[index].split(";"),
+		properties: productsColumnar.properties[index].split(";").map(category => {
+			const parts = category.split("=");
 			return {
-				productId: product.productId,
-				itemId: item.itemId,
-				nameComplete: nameComplete,
-				description: clearnDescription,
-				brand: brand,
-				categories: categories,
-				properties: properties,
-				allText: `${nameComplete} ${brand} ${clearnDescription}`,
-				images: item.images,
-				size: item.name.toUpperCase(),
-				price: item.sellers[0]?.commertialOffer.Price ?? 0,
+				name: parts[0],
+				values: [parts[1]],
 			}
-		}).filter(removeUnwanted);
-	});
-	return shuffleFisherYates(displayProductsList);
-}
-
-export function sortSizes(a: ProductItem, b: ProductItem): number {
-	const aNum = Number(a.size.split(/\s+/)[0]);
-	const bNum = Number(b.size.split(/\s+/)[0]);
-	return aNum - bNum;
-}
-
-export function sortSizesString(a: string, b: string): number {
-	const aNum = Number(a.split(/\s+/)[0]);
-	const bNum = Number(b.split(/\s+/)[0]);
-	return aNum - bNum;
-}
-
-let displayProductsSizesSet: Set<string> = new Set()
-
-export function getDisplayProducts(): DisplayProduct[] {
-	let displayProductsList = products.map((product) => {
-		const properties = filterPropertiesByNames(product.properties, ["VÍA", "Internal tax"])
-		const clearnDescription = cleanHtmlTags(product.description);
-		const brand = product.brand.toLowerCase();
-		const categories = product.categories.map((c) => c.toLowerCase());
-		const nameComplete = product.productName.toLowerCase();
-		return {
-			productId: product.productId,
-			nameComplete: nameComplete,
-			description: clearnDescription,
-			brand: brand,
-			categories: categories,
-			properties: properties,
-			allText: `${nameComplete} ${brand} ${clearnDescription}`,
-			images: product.items[0]?.images,
-			items: product.items.map(item => {
-				const size = item.name.toUpperCase();
-				displayProductsSizesSet.add(size);
-				return {
-					itemId: item.itemId,
-					size: size,
-					price: item.sellers[0]?.commertialOffer.Price ?? 0,
-				}
-			}).sort(sortSizes)
-		}
-	}).filter(removeUnwanted);
-	return shuffleFisherYates(displayProductsList);
-}
-
-
+		}),
+		allText: `${productName} ${description} ${brand}`,
+		images: productsColumnar.images[index].split(";").map(url => `https://perfugroupar.vtexassets.com/arquivos/ids/${url}`),
+		items: productsColumnar.items[index].split(";").map(item => {
+			const parts = item.split("=");
+			const size = parts[0];
+			const price = parts[1];
+			return {
+				itemId: `${productId}${size}`,
+				size: size,
+				price: Number(price),
+			}
+		}),
+	}
+	return product;
+}))
 
 function cleanCategories(categories: string[]): string[] {
 	return Array.from(new Set(categories.map(category => {
@@ -246,18 +138,16 @@ function cleanCategories(categories: string[]): string[] {
 	})));
 }
 
-export var displayProductsList = getDisplayProducts()
-
 export const displayProductsBrands = Array.from(
-	new Set(displayProductsList.map(p => p.brand)),
+	new Set(products.map(p => p.brand)),
 ).sort()
 
 export const displayProductsSizes = Array.from(
-	new Set(displayProductsList.flatMap(p => p.items.map((i) => i.size))),
-).filter((s: string) => s.includes("ML")).sort(sortSizesString)
+	new Set(products.flatMap(p => p.items.map((i) => i.size))),
+)
 
 export const displayProductsCategories = cleanCategories(
-	displayProductsList.flatMap(p => p.categories)
+	products.flatMap(p => p.categories)
 ).sort()
 
 
@@ -271,7 +161,7 @@ export function deleteProduct(productList: DisplayProduct[], productId: string) 
 export function productFullUrl(product?: DisplayProduct): string {
 	if (!product) return '';
 	let productNameFull = (
-		`${product.brand} ${product.nameComplete}`
+		`${product.brand} ${product.productName}`
 		.toLowerCase()
 		.replace(/\s+/g, "-")
 		.replace(/\//g, "-")
