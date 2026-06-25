@@ -94,7 +94,7 @@ export const isValidCartItem = createValidator(cartItemSchema);
 
 import productsData from '../data/products.json';
 
-const productsColumnar: ProductsColumnar = productsData;
+let productsColumnar: ProductsColumnar = productsData;
 
 export const products: DisplayProduct[] = shuffleFisherYates(productsColumnar.productId.map((_, index) => {
 	const productId = productsColumnar.productId[index]
@@ -129,6 +129,10 @@ export const products: DisplayProduct[] = shuffleFisherYates(productsColumnar.pr
 	}
 	return product;
 }))
+
+// Free memory after one-time transformation
+// @ts-ignore
+productsColumnar = null;
 
 function cleanCategories(categories: string[]): string[] {
 	return Array.from(new Set(categories.map(category => {
