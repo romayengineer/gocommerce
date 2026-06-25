@@ -73,7 +73,7 @@
 							alt="{alt} {i + 1}"
 							loading="lazy"
 							draggable="false"
-							class="max-w-full max-h-full object-contain select-none pointer-events-none"
+							class="w-full h-full object-contain select-none pointer-events-none"
 							onload={handleImageLoad}
 							onerror={handleImageError}
 						/>
