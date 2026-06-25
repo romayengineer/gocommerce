@@ -11,6 +11,7 @@ const config: VercelConfig = {
   framework: 'sveltekit',
 
   // Environment variables
+  // these are not used on build-time only run-time for build-time variables set them up on vercel dashboard
   env: {
     VITE_MAP_PROVIDER: 'leaflet',
     VITE_S3_IMAGES_URL: 'https://gocommerce-assets-115663612.s3.sa-east-1.amazonaws.com/images',
