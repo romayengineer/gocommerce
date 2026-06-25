@@ -115,7 +115,7 @@ export const products: DisplayProduct[] = shuffleFisherYates(productsColumnar.pr
 			}
 		}),
 		allText: `${productName} ${description} ${brand}`,
-		images: productsColumnar.images[index].split(";").map(url => `https://perfugroupar.vtexassets.com/arquivos/ids/${url}`),
+		images: productsColumnar.images[index].split(";").map((url, imageIndex) => `${import.meta.env.VITE_S3_IMAGES_URL}/${productId}/${imageIndex + 1}.webp`),
 		items: productsColumnar.items[index].split(";").map(item => {
 			const parts = item.split("=");
 			const size = parts[0];

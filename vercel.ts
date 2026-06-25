@@ -13,6 +13,7 @@ const config: VercelConfig = {
   // Environment variables
   env: {
     VITE_MAP_PROVIDER: 'leaflet',
+    VITE_S3_IMAGES_URL: 'https://gocommerce-assets-115663612.s3.sa-east-1.amazonaws.com/images',
   },
 
   // URL handling for static site with hash routing
