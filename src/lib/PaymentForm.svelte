@@ -34,7 +34,7 @@
 
 				<div class="space-y-4">
 					<div class="border rounded-lg p-4">
-						<label class="text-sm text-gray-600 block mb-2">{$t('payment.accountAlias')}</label>
+						<div class="text-sm text-gray-600 block mb-2">{$t('payment.accountAlias')}</div>
 						<div class="flex items-center justify-between">
 							<span class="font-mono text-lg font-semibold">{bankAccountAlias}</span>
 							<button
@@ -53,7 +53,7 @@
 					</div>
 
 					<div class="border rounded-lg p-4">
-						<label class="text-sm text-gray-600 block mb-2">{$t('payment.accountNumber')}</label>
+						<div class="text-sm text-gray-600 block mb-2">{$t('payment.accountNumber')}</div>
 						<div class="flex items-center justify-between">
 							<span class="font-mono text-lg font-semibold">{bankAccountNumber}</span>
 							<button
@@ -71,7 +71,7 @@
 						</div>
 					</div>
 					<div class="border rounded-lg p-4">
-						<label class="text-sm text-gray-600 block mb-2">{$t('payment.accountOwnerName')}</label>
+						<div class="text-sm text-gray-600 block mb-2">{$t('payment.accountOwnerName')}</div>
 						<div class="flex items-center justify-between">
 							<span class="font-mono text-lg font-semibold">{bankAccountName}</span>
 							<button
@@ -90,7 +90,7 @@
 					</div>
 
 					<div class="border rounded-lg p-4">
-						<label class="text-sm text-gray-600 block mb-2">{$t('payment.bankName')}</label>
+						<div class="text-sm text-gray-600 block mb-2">{$t('payment.bankName')}</div>
 						<div class="flex items-center justify-between">
 							<span class="font-mono text-lg font-semibold">{bankName}</span>
 							<button
