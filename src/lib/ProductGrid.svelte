@@ -24,19 +24,17 @@
 		}
 	});
 
-	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
-
 	const minHeight = 30
 	const maxHHight = 40
 	const fixRatio = 7.5
 	const gap = 0.5; // gap-2 = 0.5rem
+	const rowsPerPage: number = 1;
+	const pageBuffer = 4;
+
+	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
 	// height of ProductCard in rem units
-	let productCardHeight = $derived(Math.min(maxHHight, Math.max(minHeight, windowWidthManager.width / windowWidthManager.columns / fixRatio))); 
-
-	const rowsPerPage: number = 1;
-
-	const pageBuffer = 4;
+	let productCardHeight = $derived(Math.min(maxHHight, Math.max(minHeight, windowWidthManager.width / windowWidthManager.columns / fixRatio)));
 
 	let itemsPerPage = $derived(windowWidthManager.columns * rowsPerPage);
 
@@ -47,6 +45,8 @@
 	let currentPage = $state(pageFromScrollHeight());
 
 	let maxHeight = $derived(maxPage * pageHeight);
+
+	let topPadding = $derived(Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight));
 
 
 	$effect(() => {
@@ -109,7 +109,7 @@
 		<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 	{:else}
 		<div style="height: {maxHeight}rem">
-			<div style="padding-top: {Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight)}rem; display: grid; grid-template-columns: repeat({windowWidthManager.columns}, minmax(0, 1fr)); gap: 0.5rem;">
+			<div style="padding-top: {topPadding}rem; display: grid; grid-template-columns: repeat({windowWidthManager.columns}, minmax(0, 1fr)); gap: 0.5rem;">
 				{#each visibleProducts as product (product.productId)}
 					<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
 				{/each}
