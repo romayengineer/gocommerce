@@ -22,7 +22,6 @@
 	</section>
 
 	<section>
-		<h2 class="text-3xl font-bold mb-8">{$t('home.featured')}</h2>
 		<ProductGrid products={featured} onProductImageFailed={(id) => productPageStore.handleProductImageFailed(id)}/>
 	</section>
 </div>

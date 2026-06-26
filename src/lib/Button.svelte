@@ -23,7 +23,7 @@
 	{type}
 	{onclick}
 	{disabled}
-	class="px-4 py-2 rounded font-semibold transition-colors {variantClasses[variant as Variant]} {disabled ? 'opacity-50 cursor-not-allowed' : ''} {className || ''}"
+	class="capitalize px-4 py-2 rounded font-semibold transition-colors {variantClasses[variant as Variant]} {disabled ? 'opacity-50 cursor-not-allowed' : ''} {className || ''}"
 >
 	{#if children}
 		{@render children()}

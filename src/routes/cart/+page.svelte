@@ -15,7 +15,7 @@
 <div class="mx-auto max-w-6xl px-2 py-6 md:py-12">
 	<div class="flex items-center gap-2 mb-2 md:mb-6">
 		<ShoppingCart size={30} />
-		<h1 class="x-text-xl">{$t('cart.title')}</h1>
+		<h1 class="capitalize x-text-xl">{$t('cart.title')}</h1>
 	</div>
 
 	{#if $cartProducts.length === 0}

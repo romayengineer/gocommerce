@@ -44,12 +44,12 @@
 		</div>
 
 		<div class="mb-8">
-			<h4 class="font-semibold mb-2">Description:</h4>
+			<h4 class="capitalize font-semibold mb-2">Description:</h4>
 			<p class="text-gray-700 whitespace-pre-wrap">{product.description}</p>
 		</div>
 
 		{#if product.properties.length > 0}
-			<div class="mb-8">
+			<div class="capitalize mb-8">
 				<h4 class="font-semibold mb-4">Properties:</h4>
 				<div class="space-y-3">
 					{#each product.properties as prop (prop.name)}
