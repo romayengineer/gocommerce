@@ -62,7 +62,7 @@
 	});
 </script>
 
-<div class="relative">
+<div class="relative bg-white">
 	<div bind:this={splideElement} class="splide overflow-hidden aspect-square">
 		<div class="splide__track w-full h-full">
 			<ul class="splide__list">
