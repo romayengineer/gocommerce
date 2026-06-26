@@ -92,7 +92,7 @@
 	});
 
 	function pageFromScrollHeight(): number {
-		return Math.max(1, Math.floor(scrollHeight / (gridState.cardHeight + gap)));
+		return 1 + Math.max(0, Math.floor(scrollHeight / (gridState.cardHeight + gap)));
 	}
 
 	$effect(() => {
