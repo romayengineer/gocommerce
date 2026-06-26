@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { products } from '$lib/products';
 	import { addToCart } from '$lib/cart';
-	import ProductImage from '$lib/ProductImage.svelte';
+	import ProductImageCarousel from '$lib/ProductImageCarousel.svelte';
 	import ProductHeader from '$lib/ProductHeader.svelte';
 	import QuantitySelector from '$lib/QuantitySelector.svelte';
 	import AddToCartAction from '$lib/AddToCartAction.svelte';
@@ -33,7 +33,7 @@
 {#if product}
 	<div class="max-w-8xl mx-auto px-2 md:px-4 md:pt-5">
 		<div class="md:float-left md:w-1/2 md:mr-4 mb-2 md:mb-0">
-			<ProductImage images={product.images} alt={product.productName} />
+			<ProductImageCarousel images={product.images} alt={product.productName} />
 		</div>
 
 		<ProductHeader {product} {itemSelected} {selectSize}/>

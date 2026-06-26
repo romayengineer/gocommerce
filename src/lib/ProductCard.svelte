@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Link from './Link.svelte';
-	import ProductImage from './ProductImage.svelte';
+	import ProductImageCarousel from './ProductImageCarousel.svelte';
 	import AddToCartButton from './AddToCartButton.svelte';
 	import SizeSelector from './SizeSelector.svelte';
 	import type { DisplayProduct } from './products';
@@ -31,7 +31,7 @@
 <Link href={fullUrl} class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}rem">
 		<div class="group-hover:opacity-80 transition-opacity">
-			<ProductImage
+			<ProductImageCarousel
 				images={product.images}
 				alt={product.productName}
 				showNavigation={false}
