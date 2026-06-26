@@ -23,11 +23,10 @@
 			windowWidthManager.setElement(gridContainer);
 		}
 	});
-
-	const minCardHeight = 30
-	const maxCardHight = 40
-	const fixRatio = 7.5
-	const gap = 0.5; // gap-2 = 0.5rem
+	const minCardHeight = 600;
+	const maxCardHight = minCardHeight * 1.2;
+	const fixRatio = 2;
+	const gap = 8; // gap-2 = 0.5rem = 8 px
 	const rowsPerPage: number = 1;
 	const pageBuffer = 4;
 
@@ -57,8 +56,8 @@
 		const itemsPerPage = windowWidthManager.columns * rowsPerPage;
 		const maxPage = Math.ceil(products.length / itemsPerPage);
 		const columns = windowWidthManager.columns;
-		// height of ProductCard in rem units
-		const productCardHeight = clamp(windowWidthManager.width / columns / fixRatio, minCardHeight, maxCardHight)
+		// height of ProductCard in px units
+		const productCardHeight = clamp(fixRatio * (windowWidthManager.width / columns), minCardHeight, maxCardHight)
 		const pageHeight = (productCardHeight + gap) * rowsPerPage;
 		const maxHeight = maxPage * pageHeight;
 		const topPadding = Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight);
@@ -70,8 +69,8 @@
 			columns: columns,
 			products: visibleProducts,
 		} as GridState
-		// const stateStr = JSON.stringify({...state, products: []});
-		// console.log(`state ${stateStr}`);
+		const stateStr = JSON.stringify({...state, products: []});
+		console.log(`state ${stateStr}`);
 		return state;
 	});
 
@@ -93,7 +92,7 @@
 	});
 
 	function pageFromScrollHeight(): number {
-		return Math.max(1, Math.floor((scrollHeight / 16) / (gridState.cardHeight + gap)));
+		return Math.max(1, Math.floor(scrollHeight / (gridState.cardHeight + gap)));
 	}
 
 	$effect(() => {
@@ -127,8 +126,8 @@
 	{#if gridState.products.length === 0}
 		<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 	{:else}
-		<div style="height: {gridState.height}rem">
-			<div style="padding-top: {gridState.topPadding}rem; display: grid; grid-template-columns: repeat({gridState.columns}, minmax(0, 1fr)); gap: 0.5rem;">
+		<div style="height: {gridState.height}px">
+			<div style="padding-top: {gridState.topPadding}px; display: grid; grid-template-columns: repeat({gridState.columns}, minmax(0, 1fr)); gap: {gap}px;">
 				{#each gridState.products as product (product.productId)}
 					<ProductCard {product} height={gridState.cardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
 				{/each}

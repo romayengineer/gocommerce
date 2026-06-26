@@ -29,7 +29,7 @@
 </script>
 
 <Link href={fullUrl} class="group no-underline">
-	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}rem">
+	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}px">
 		<div class="group-hover:opacity-80 transition-opacity flex-1 min-h-0">
 			<ProductImage
 				src={product.images[0]}
