@@ -24,8 +24,8 @@
 		}
 	});
 
-	const minHeight = 30
-	const maxHHight = 40
+	const minCardHeight = 30
+	const maxCardHight = 40
 	const fixRatio = 7.5
 	const gap = 0.5; // gap-2 = 0.5rem
 	const rowsPerPage: number = 1;
@@ -33,20 +33,49 @@
 
 	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
-	// height of ProductCard in rem units
-	let productCardHeight = $derived(Math.min(maxHHight, Math.max(minHeight, windowWidthManager.width / windowWidthManager.columns / fixRatio)));
-
 	let itemsPerPage = $derived(windowWidthManager.columns * rowsPerPage);
-
-	let pageHeight = $derived((productCardHeight + gap) * rowsPerPage);
 
 	let maxPage = $derived(Math.ceil(products.length / itemsPerPage));
 
-	let currentPage = $state(pageFromScrollHeight());
+	let currentPage = $state(1);
 
-	let maxHeight = $derived(maxPage * pageHeight);
+	function sliceProducts(currentPage: number): DisplayProduct[] {
+		const startIndex = Math.max(0, (currentPage - 1 - pageBuffer) * itemsPerPage);
+		const endIndex = Math.min(products.length, (currentPage + 2 + pageBuffer) * itemsPerPage);
+		return products.slice(startIndex, endIndex);
+	}
 
-	let topPadding = $derived(Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight));
+	interface GridState {
+		height: number;
+		topPadding: number;
+		columns: number;
+		cardHeight: number;
+		products: DisplayProduct[],
+	}
+
+	function clamp(value: number, min: number, max: number): number {
+		return Math.min(Math.max(value, min), max);
+	}
+
+	let gridState = $derived.by<GridState>(() => {
+		const columns = windowWidthManager.columns;
+		// height of ProductCard in rem units
+		const productCardHeight = clamp(windowWidthManager.width / columns / fixRatio, minCardHeight, maxCardHight)
+		const pageHeight = (productCardHeight + gap) * rowsPerPage;
+		const maxHeight = maxPage * pageHeight;
+		const topPadding = Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight);
+		const visibleProducts = sliceProducts(currentPage);
+		const state = {
+			height: maxHeight,
+			topPadding: topPadding,
+			columns: columns,
+			cardHeight: productCardHeight,
+			products: visibleProducts,
+		} as GridState
+		const stateStr = JSON.stringify({...state, products: []});
+		console.log(`state ${stateStr}`);
+		return state;
+	});
 
 
 	$effect(() => {
@@ -66,7 +95,7 @@
 	});
 
 	function pageFromScrollHeight(): number {
-		return Math.min(maxPage, 1 + Math.max(0, Math.floor((scrollHeight / 16) / (productCardHeight + gap))));
+		return Math.min(maxPage, 1 + Math.max(0, Math.floor((scrollHeight / 16) / (gridState.cardHeight + gap))));
 	}
 
 	$effect(() => {
@@ -94,24 +123,16 @@
 			onProductImageFailed?.(productId);
 		}
 	}
-
-	function sliceProducts(currentPage: number): DisplayProduct[] {
-		const startIndex = Math.max(0, (currentPage - 1 - pageBuffer) * itemsPerPage);
-		const endIndex = Math.min(products.length, (currentPage + 2 + pageBuffer) * itemsPerPage);
-		return products.slice(startIndex, endIndex);
-	}
-
-	let visibleProducts = $derived(sliceProducts(currentPage));
 </script>
 
 <div bind:this={gridContainer}>
-	{#if products.length === 0}
+	{#if gridState.products.length === 0}
 		<p class="text-gray-600 text-center py-12">{emptyMessage}</p>
 	{:else}
-		<div style="height: {maxHeight}rem">
-			<div style="padding-top: {topPadding}rem; display: grid; grid-template-columns: repeat({windowWidthManager.columns}, minmax(0, 1fr)); gap: 0.5rem;">
-				{#each visibleProducts as product (product.productId)}
-					<ProductCard {product} height={productCardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
+		<div style="height: {gridState.height}rem">
+			<div style="padding-top: {gridState.topPadding}rem; display: grid; grid-template-columns: repeat({gridState.columns}, minmax(0, 1fr)); gap: 0.5rem;">
+				{#each gridState.products as product (product.productId)}
+					<ProductCard {product} height={gridState.cardHeight} onImageLoaded={(loaded) => handleProductImageLoaded(product.productId, loaded)} />
 				{/each}
 			</div>
 		</div>
