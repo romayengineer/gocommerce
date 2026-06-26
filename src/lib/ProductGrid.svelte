@@ -69,8 +69,8 @@
 			columns: columns,
 			products: visibleProducts,
 		} as GridState
-		const stateStr = JSON.stringify({...state, products: []});
-		console.log(`state ${stateStr}`);
+		// const stateStr = JSON.stringify({...state, products: []});
+		// console.log(`state ${stateStr}`);
 		return state;
 	});
 
