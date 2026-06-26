@@ -33,13 +33,9 @@
 
 	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
 
-	let itemsPerPage = $derived(windowWidthManager.columns * rowsPerPage);
-
-	let maxPage = $derived(Math.ceil(products.length / itemsPerPage));
-
 	let currentPage = $state(1);
 
-	function sliceProducts(currentPage: number): DisplayProduct[] {
+	function sliceProducts(currentPage: number, itemsPerPage: number): DisplayProduct[] {
 		const startIndex = Math.max(0, (currentPage - 1 - pageBuffer) * itemsPerPage);
 		const endIndex = Math.min(products.length, (currentPage + 2 + pageBuffer) * itemsPerPage);
 		return products.slice(startIndex, endIndex);
@@ -58,13 +54,15 @@
 	}
 
 	let gridState = $derived.by<GridState>(() => {
+		const itemsPerPage = windowWidthManager.columns * rowsPerPage;
+		const maxPage = Math.ceil(products.length / itemsPerPage);
 		const columns = windowWidthManager.columns;
 		// height of ProductCard in rem units
 		const productCardHeight = clamp(windowWidthManager.width / columns / fixRatio, minCardHeight, maxCardHight)
 		const pageHeight = (productCardHeight + gap) * rowsPerPage;
 		const maxHeight = maxPage * pageHeight;
 		const topPadding = Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight);
-		const visibleProducts = sliceProducts(currentPage);
+		const visibleProducts = sliceProducts(currentPage, itemsPerPage);
 		const state = {
 			height: Math.round(maxHeight),
 			topPadding: Math.round(topPadding),
@@ -72,8 +70,8 @@
 			columns: columns,
 			products: visibleProducts,
 		} as GridState
-		const stateStr = JSON.stringify({...state, products: []});
-		console.log(`state ${stateStr}`);
+		// const stateStr = JSON.stringify({...state, products: []});
+		// console.log(`state ${stateStr}`);
 		return state;
 	});
 
@@ -95,7 +93,7 @@
 	});
 
 	function pageFromScrollHeight(): number {
-		return Math.min(maxPage, 1 + Math.max(0, Math.floor((scrollHeight / 16) / (gridState.cardHeight + gap))));
+		return Math.max(1, Math.floor((scrollHeight / 16) / (gridState.cardHeight + gap)));
 	}
 
 	$effect(() => {
