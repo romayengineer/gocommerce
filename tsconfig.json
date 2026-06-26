@@ -10,6 +10,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "allowArbitraryExtensions": true,
     "types": ["google.maps"]
   }
 }

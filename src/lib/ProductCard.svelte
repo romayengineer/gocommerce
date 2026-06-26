@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Link from './Link.svelte';
-	import ProductImageCarousel from './ProductImageCarousel.svelte';
 	import AddToCartButton from './AddToCartButton.svelte';
 	import SizeSelector from './SizeSelector.svelte';
 	import type { DisplayProduct } from './products';
 	import { productFullUrl } from './products';
+	import ProductImage from './ProductImage.svelte';
 
 	interface Props {
 		product: DisplayProduct;
@@ -30,11 +30,10 @@
 
 <Link href={fullUrl} class="group no-underline">
 	<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col" style="height: {height}rem">
-		<div class="group-hover:opacity-80 transition-opacity">
-			<ProductImageCarousel
-				images={product.images}
+		<div class="group-hover:opacity-80 transition-opacity flex-1 min-h-0">
+			<ProductImage
+				src={product.images[0]}
 				alt={product.productName}
-				showNavigation={false}
 				onImageLoaded={handleImageLoaded}
 			/>
 		</div>

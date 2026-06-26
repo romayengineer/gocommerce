@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { logger } from './logger.svelte';
 	import { SplideCarousel } from './splideCarousel.svelte';
+	import ProductImage from './ProductImage.svelte';
 	import type { Options } from '@splidejs/splide';
 	import '@splidejs/splide/dist/css/splide.min.css';
 
@@ -39,19 +39,6 @@
 		}
 	});
 
-	function handleImageLoad() {
-		if (carousel.currentIndex === 0) {
-			onImageLoaded?.(true);
-		}
-	}
-
-	function handleImageError() {
-		logger.log(`Image error at index ${carousel.currentIndex}`);
-		if (carousel.currentIndex === 0) {
-			onImageLoaded?.(false);
-		}
-	}
-
 	$effect(() => {
 		if (splideElement && imageList.length > 0) {
 			carousel.init(splideElement);
@@ -68,14 +55,11 @@
 			<ul class="splide__list">
 				{#each imageList as image, i}
 					<li class="splide__slide">
-						<img
+						<ProductImage
 							src={image}
-							alt="{alt} {i + 1}"
-							loading="lazy"
-							draggable="false"
-							class="w-full h-full object-contain select-none pointer-events-none"
-							onload={handleImageLoad}
-							onerror={handleImageError}
+							{alt}
+							{onImageLoaded}
+							imageIndex={i}
 						/>
 					</li>
 				{/each}
