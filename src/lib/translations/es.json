@@ -40,7 +40,8 @@
     "shipping": "Envío",
     "total": "Total",
     "checkout": "Proceder al Pago",
-    "clearCart": "Vaciar Carrito"
+    "clearCart": "Vaciar Carrito",
+    "orderSummary": "Resumen del Pedido"
   },
   "amenities": {
     "office": "Oficina",
@@ -76,6 +77,15 @@
     "country": "País",
     "locationNotFound": "Ubicación no encontrada. Mostrando ubicación predeterminada.",
     "deliveryLocation": "Lugar de entrega"
+  },
+  "payment": {
+    "title": "Pago",
+    "bankDetails": "Detalles de Cuenta Bancaria",
+    "bankName": "Nombre del Banco",
+    "accountOwnerName": "Nombre del Titular de la Cuenta",
+    "accountAlias": "Alias de Cuenta",
+    "accountNumber": "Número de Cuenta",
+    "backToProducts": "Volver a Productos"
   },
   "footer": {
     "description": "Tu destino de confianza para comprar productos de calidad en línea.",

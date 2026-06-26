@@ -40,7 +40,8 @@
     "shipping": "Shipping",
     "total": "Total",
     "checkout": "Proceed to Checkout",
-    "clearCart": "Clear Cart"
+    "clearCart": "Clear Cart",
+    "orderSummary": "Order Summary"
   },
   "amenities": {
     "office": "Office",
@@ -76,6 +77,15 @@
     "country": "Country",
     "locationNotFound": "Location not found. Showing default location.",
     "deliveryLocation": "Delivery Location"
+  },
+  "payment": {
+    "title": "Payment",
+    "bankDetails": "Bank Account Details",
+    "bankName": "Bank Name",
+    "accountOwnerName": "Account Owner Name",
+    "accountAlias": "Account Alias",
+    "accountNumber": "Account Number",
+    "backToProducts": "Back to Products"
   },
   "footer": {
     "description": "Your trusted online shopping destination for quality products.",

@@ -67,7 +67,7 @@
 			logger.log('Order submitted:', formData);
 			// Simulate submission delay
 			await new Promise(resolve => setTimeout(resolve, 1000));
-			goto('#/');
+			goto('#/payment');
 		} finally {
 			submitting = false;
 		}
@@ -92,7 +92,7 @@
 
 	<div class="flex gap-4 mt-8">
 		<Button type="submit" class="flex-1 py-3" disabled={submitting}>
-			{submitting ? 'Processing...' : 'Complete Order'}
+			{submitting ? 'Processing...' : 'Continue to Payment'}
 		</Button>
 	</div>
 </form>
