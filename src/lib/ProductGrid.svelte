@@ -48,8 +48,8 @@
 	interface GridState {
 		height: number;
 		topPadding: number;
-		columns: number;
 		cardHeight: number;
+		columns: number;
 		products: DisplayProduct[],
 	}
 
@@ -66,10 +66,10 @@
 		const topPadding = Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight);
 		const visibleProducts = sliceProducts(currentPage);
 		const state = {
-			height: maxHeight,
-			topPadding: topPadding,
+			height: Math.round(maxHeight),
+			topPadding: Math.round(topPadding),
+			cardHeight: Math.round(productCardHeight),
 			columns: columns,
-			cardHeight: productCardHeight,
 			products: visibleProducts,
 		} as GridState
 		const stateStr = JSON.stringify({...state, products: []});
