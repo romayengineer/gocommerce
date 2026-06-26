@@ -32,7 +32,7 @@ export const ProductsColumnarSchema = z.object({
 	brand: z.array(z.string()),
 	categories: z.array(z.string()),
 	properties: z.array(z.string()),
-	images: z.array(z.string()),
+	images_count: z.array(z.number()),
 	items: z.array(z.string()),
 });
 
@@ -96,6 +96,8 @@ import productsData from '../data/products.json';
 
 let productsColumnar: ProductsColumnar = productsData;
 
+function range(n: number): number[] { return Array.from({ length: n }, (_, i) => i + 1); }
+
 export const products: DisplayProduct[] = shuffleFisherYates(productsColumnar.productId.map((_, index) => {
 	const productId = productsColumnar.productId[index]
 	const productName = productsColumnar.productName[index];
@@ -115,8 +117,8 @@ export const products: DisplayProduct[] = shuffleFisherYates(productsColumnar.pr
 			}
 		}),
 		allText: `${productName} ${description} ${brand}`,
-		images: productsColumnar.images[index].split(";").map((url, imageIndex) => {
-			return `${import.meta.env.VITE_S3_IMAGES_URL}/${productId}/${imageIndex + 1}.webp`
+		images: range(productsColumnar.images_count[index]).map((imageIndex) => {
+			return `${import.meta.env.VITE_S3_IMAGES_URL}/${productId}/${imageIndex}.webp`
 		}),
 		items: productsColumnar.items[index].split(";").map(item => {
 			const parts = item.split("=");
