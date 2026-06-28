@@ -113,9 +113,12 @@
 
 		<div class="lg:col-span-1">
 			<SidePanel sticky={true}>
-				<h2 class="font-semibold mb-4">{$t('cart.orderSummary')}</h2>
+				<h2 class="font-semibold text-lg mb-4">{$t('cart.orderSummary')}</h2>
 
 				<div class="space-y-2 mb-6">
+					<div class="pt-2 mt-4">
+						<OrderSummaryLine label="Total:" amount={total} isBold={true} />
+					</div>
 					{#each $cartProducts as item (item.product.itemId)}
 						<OrderSummaryLine
 							label={`${item.product.brand} ${item.product.productName}`}
@@ -124,9 +127,6 @@
 							quantity={item.quantity}
 						/>
 					{/each}
-					<div class="pt-2 mt-4">
-						<OrderSummaryLine label="Total:" amount={total} isBold={true} />
-					</div>
 				</div>
 
 				<div class="mt-8 pt-6">
