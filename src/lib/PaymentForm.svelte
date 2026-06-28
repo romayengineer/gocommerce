@@ -108,18 +108,13 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="mt-8 pt-6 border-t">
-					<Button class="w-full py-3" onclick={() => goto('#/products')}>
-						{$t('payment.backToProducts')}
-					</Button>
-				</div>
 			</div>
 		</div>
 
 		<div class="lg:col-span-1">
 			<SidePanel sticky={true}>
-				<h3 class="font-semibold mb-4">{$t('cart.orderSummary')}</h3>
+				<h2 class="font-semibold mb-4">{$t('cart.orderSummary')}</h2>
+
 				<div class="space-y-2 mb-6">
 					{#each $cartProducts as item (item.product.itemId)}
 						<OrderSummaryLine
@@ -129,9 +124,15 @@
 							quantity={item.quantity}
 						/>
 					{/each}
-					<div class="border-t pt-2 mt-4">
+					<div class="pt-2 mt-4">
 						<OrderSummaryLine label="Total:" amount={total} isBold={true} />
 					</div>
+				</div>
+
+				<div class="mt-8 pt-6">
+					<Button class="w-full py-3" onclick={() => goto('#/products')}>
+						{$t('payment.backToProducts')}
+					</Button>
 				</div>
 			</SidePanel>
 		</div>
