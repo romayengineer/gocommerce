@@ -10,8 +10,6 @@
 	}
 
 	const { label, amount, size, quantity, isBold = false }: Props = $props();
-
-	// const newLabel = $derived((quantity) ? `${label} x${quantity}` : label)
 </script>
 
 <div class={`flex justify-between ${isBold ? 'text-2xl font-bold' : ''}`}>
