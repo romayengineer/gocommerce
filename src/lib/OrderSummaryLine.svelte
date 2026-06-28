@@ -4,13 +4,23 @@
 	interface Props {
 		label: string;
 		amount: number;
+		size?: string;
+		quantity?: number;
 		isBold?: boolean;
 	}
 
-	const { label, amount, isBold = false }: Props = $props();
+	const { label, amount, size, quantity, isBold = false }: Props = $props();
+
+	// const newLabel = $derived((quantity) ? `${label} x${quantity}` : label)
 </script>
 
 <div class={`flex justify-between ${isBold ? 'text-2xl font-bold' : ''}`}>
-	<span>{label}</span>
+	<p>
+		{#if quantity}
+			<span>{label}</span> <span class="whitespace-nowrap">{size} ML</span> <span>x{quantity}</span>
+		{:else}
+			<span>{label}</span>
+		{/if}
+	</p>
 	<Price {amount} size={isBold ? 'lg' : 'sm'} />
 </div>

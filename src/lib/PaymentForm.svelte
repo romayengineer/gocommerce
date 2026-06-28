@@ -123,8 +123,10 @@
 				<div class="space-y-2 mb-6">
 					{#each $cartProducts as item (item.product.itemId)}
 						<OrderSummaryLine
-							label={`${item.product.productName} x${item.quantity}`}
+							label={`${item.product.brand} ${item.product.productName}`}
 							amount={item.product.price * item.quantity}
+							size={item.product.size}
+							quantity={item.quantity}
 						/>
 					{/each}
 					<div class="border-t pt-2 mt-4">
