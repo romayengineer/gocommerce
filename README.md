@@ -37,6 +37,11 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
   - Delivery location mapping with Google Maps
   - Order summary with itemized breakdown
   - Support for multiple payment methods
+- 💰 **Payment View** - Wire transfer payment details
+  - Bank account information display (alias, number, name, bank name)
+  - Copy-to-clipboard buttons for easy account details copying
+  - Order summary with product breakdown
+  - Configurable via environment variables
 - 🗺️ **Delivery Map** - Interactive address visualization (choose your provider)
   - **Default:** Leaflet + OpenStreetMap (free, no API key required)
   - **Alternative:** Google Maps integration with geocoding
@@ -82,6 +87,19 @@ A fully static ecommerce website built with Svelte 5 and SvelteKit. Zero backend
 ```bash
 npm install
 ```
+
+### Payment Configuration
+
+Configure your bank account details for the payment view in `.env.local`:
+
+```
+VITE_BANK_NAME=Your Bank Name
+VITE_BANK_ACCOUNT_ALIAS=your.account.alias
+VITE_BANK_ACCOUNT_NUMBER=1234567890123456
+VITE_BANK_ACCOUNT_NAME=Account Owner Name
+```
+
+These values will be displayed on the payment page with copy-to-clipboard functionality.
 
 ### Map Provider Setup
 
@@ -150,8 +168,10 @@ src/
 │   │       └── +page.svelte        # Product detail page with carousel
 │   ├── cart/
 │   │   └── +page.svelte            # Shopping cart
-│   └── checkout/
-│       └── +page.svelte            # Checkout with delivery form
+│   ├── checkout/
+│   │   └── +page.svelte            # Checkout with delivery form
+│   └── payment/
+│       └── +page.svelte            # Payment with bank details
 └── lib/
     ├── translations/               # i18n files
     │   ├── en.json                # English translations
@@ -175,6 +195,7 @@ src/
     ├── ProductFiltersMobile.svelte # Responsive filters (desktop & mobile)
     ├── CartItem.svelte            # Cart item component
     ├── CheckoutForm.svelte        # Checkout form component
+    ├── PaymentForm.svelte         # Payment form component with bank details
     ├── MapDisplay.svelte          # Delivery location map
     ├── ApiKeyMissing.svelte       # API key missing alert
     ├── Button.svelte              # Reusable button
@@ -191,9 +212,10 @@ src/
 ### 🌍 Internationalization (i18n)
 - **svelte-i18n** library for professional translations
 - Dropdown language selector with flag emojis in header
-- All UI strings translated (header, products, cart, footer)
+- All UI strings translated (header, products, cart, checkout, payment, footer)
 - Language preference saved to localStorage
 - Instant switching without page reload
+- 40+ translated strings across all pages and views
 
 ### 🎠 Product Image Carousel & Smart Image Loading
 - Each product has multiple related emoji "images"
@@ -233,6 +255,29 @@ src/
 - **Real-time address validation** with debounced geocoding
 - Order review before completing purchase
 - Graceful error handling when address cannot be geocoded
+
+### 💰 Payment View
+- **Bank Account Details Display** with wire transfer information:
+  - Bank name, account owner name, account alias, and account number
+  - All details configurable via environment variables
+  - Copy-to-clipboard functionality for each field with visual feedback
+- **Order Summary Sidebar:**
+  - Itemized product breakdown with quantities
+  - Total amount calculation
+- **Navigation:**
+  - Back to Products button to continue shopping
+- **Multilingual Support:**
+  - Full translation support for English and Spanish
+  - All labels and button text translated
+
+### Environment Variables for Payment
+Add these to your `.env` or `.env.local` file:
+```
+VITE_BANK_NAME=Your Bank Name
+VITE_BANK_ACCOUNT_ALIAS=account.alias
+VITE_BANK_ACCOUNT_NUMBER=0000003100099422193366
+VITE_BANK_ACCOUNT_NAME=Account Owner Name
+```
 
 ### 🗺️ Delivery Location Map
 - **Provider Selection:** Choose between Leaflet (default) or Google Maps via `VITE_MAP_PROVIDER`
