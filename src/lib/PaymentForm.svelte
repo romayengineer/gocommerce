@@ -26,10 +26,10 @@
 	}
 </script>
 
-<div class="mx-auto max-w-6xl px-2">
+<div class="mx-auto max-w-6xl">
 	<div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-6">
 		<div class="lg:col-span-2">
-			<div class="bg-white rounded-lg shadow p-6">
+			<div class="bg-white rounded-lg shadow px-4 py-6">
 				<h2 class="text-lg font-semibold mb-6">{$t('payment.bankDetails')}</h2>
 
 				<div class="space-y-4">
