@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .outline{
+        fill:none;
+        stroke:#000;
+        stroke-width:4;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+      }
+    </style>
+  </defs>
+
+  <!-- Spray Top -->
+  <rect x="192" y="20" width="126" height="142" rx="14"
+        fill="#F9DCDC" stroke="#000" stroke-width="4"/>
+
+  <!-- Inner Spray -->
+  <rect x="214" y="44" width="84" height="100" rx="8"
+        fill="none" stroke="#000" stroke-width="4"/>
+
+  <!-- Nozzle -->
+  <circle cx="256" cy="81" r="12"
+          fill="#F9DCDC" stroke="#000" stroke-width="4"/>
+
+  <!-- Neck -->
+  <rect x="190" y="160" width="136" height="60" rx="8"
+        fill="#F7B4B4" stroke="#000" stroke-width="4"/>
+
+  <!-- Bottle -->
+  <rect x="52" y="220" width="396" height="280" rx="18"
+        fill="#F7B4B4" stroke="#000" stroke-width="4"/>
+
+  <!-- Left Bow -->
+  <polygon
+      points="66,302 136,256 92,224 226,238 225,284"
+      fill="#FF8EA1"
+      stroke="#000"
+      stroke-width="4"
+      stroke-linejoin="round"/>
+
+  <!-- Right Bow -->
+  <polygon
+      points="287,238 445,223 435,278 387,289 286,284"
+      fill="#FF8EA1"
+      stroke="#000"
+      stroke-width="4"
+      stroke-linejoin="round"/>
+
+  <!-- Bow Center -->
+  <rect x="234" y="236" width="44" height="48" rx="8"
+        fill="#FF8EA1"
+        stroke="#000"
+        stroke-width="4"/>
+
+  <!-- Knot Detail -->
+  <path d="M247 238 L244 282" class="outline"/>
+  <path d="M265 238 L268 282" class="outline"/>
+  <path d="M257 256 L257 262" class="outline"/>
+
+  <!-- Right Bow Fold Lines -->
+  <path d="M289 254 L333 246" class="outline"/>
+  <path d="M289 270 L336 276" class="outline"/>
+
+  <!-- Label -->
+  <rect x="125" y="312" width="262" height="120"
+        fill="#F9DCDC" stroke="#000" stroke-width="4"/>
+</svg>
