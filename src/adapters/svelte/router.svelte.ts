@@ -1,8 +1,9 @@
+import { page } from '$app/state';
 import { goto } from '$app/navigation';
 import { createStore, type WritableStore } from '$core/ports/Store';
 import type { NavigationOptions, Route, RouterPort } from '$core/ports/Router';
 
-function parseRoute(url: URL): Route {
+function toRoute(url: URL): Route {
 	const hash = url.hash.replace(/^#/, '') || '/';
 	const [path, search] = hash.split('?');
 	return {
@@ -16,13 +17,18 @@ function parseRoute(url: URL): Route {
 export class SvelteKitRouter implements RouterPort {
 	readonly route: WritableStore<Route>;
 
-	constructor(initialHref: string) {
-		this.route = createStore<Route>(parseRoute(new URL(initialHref)));
-		if (typeof window !== 'undefined') {
-			window.addEventListener('hashchange', () => {
-				this.route.set(parseRoute(new URL(window.location.href)));
+	constructor() {
+		// `page` from `$app/state` is SvelteKit's canonical reactive URL. It is
+		// updated on every navigation (pushState/replaceState/back-forward),
+		// unlike listening for `hashchange`, which SvelteKit's hash router does
+		// not emit.
+		this.route = createStore<Route>(toRoute(page.url));
+
+		$effect.root(() => {
+			$effect(() => {
+				this.route.set(toRoute(page.url));
 			});
-		}
+		});
 	}
 
 	navigate(href: string, options?: NavigationOptions): void {

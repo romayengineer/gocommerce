@@ -13,7 +13,7 @@ import { LocalStorageAdapter } from '$adapters/storage/localStorage';
 import { logger } from '$adapters/browser/logger';
 import { browserClock } from '$adapters/browser/clock';
 import { NavigatorClipboard } from '$adapters/browser/clipboard';
-import { SvelteKitRouter } from '$adapters/svelte/router';
+import { SvelteKitRouter } from '$adapters/svelte/router.svelte';
 import { ViewportWidthTracker } from '$adapters/svelte/platform';
 import { createMapService } from '$adapters/maps/mapFactory';
 import productsData from '../data/products.json';
@@ -44,9 +44,7 @@ export function createContainer(): AppContainer {
 	const storage = new LocalStorageAdapter();
 	const clock = browserClock;
 	const viewport = new ViewportWidthTracker();
-	const router = new SvelteKitRouter(
-		typeof window !== 'undefined' ? window.location.href : '/'
-	);
+	const router = new SvelteKitRouter();
 	const clipboard = new NavigatorClipboard();
 
 	const catalog = new ProductCatalog(productsData as ProductsColumnar, config);
