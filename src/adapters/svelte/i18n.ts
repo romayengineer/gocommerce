@@ -1,9 +1,14 @@
-import { init, register, locale } from 'svelte-i18n';
+import { addMessages, init, locale } from 'svelte-i18n';
+import en from './i18n/en.json';
+import es from './i18n/es.json';
 
 export const defaultLocale = 'es';
 
-register('en', () => import('./i18n/en.json'));
-register('es', () => import('./i18n/es.json'));
+// Register dictionaries synchronously. Using `register(...)` (lazy loaders)
+// would make `locale.set()` async, leaving `$locale` null until the loader
+// resolves and making any `$t` render throw before then.
+addMessages('en', en);
+addMessages('es', es);
 
 export function getStoredLocale(): string | null {
 	if (typeof window !== 'undefined') {
