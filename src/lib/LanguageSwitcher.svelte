@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { locale } from 'svelte-i18n';
-	import { locales, localeNames, localeFlags, setLocale, defaultLocale } from './i18n';
+	import { locales, localeNames, localeFlags, setLocale, defaultLocale } from '$adapters/svelte/i18n';
 
 	function handleLanguageChange(e: Event) {
 		const target = e.target as HTMLSelectElement;

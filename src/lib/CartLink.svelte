@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Link from './Link.svelte';
 	import { ShoppingCart } from 'lucide-svelte';
-	import { cart } from './cart';
+	import { cartCount } from './view';
 
-	let cartCount = $derived($cart.reduce((sum, item) => sum + item.quantity, 0));
+	let cartCountValue = $derived($cartCount);
 	let isShaking = $state(false);
 
 	$effect(() => {
-		if (cartCount > 0) {
+		if (cartCountValue > 0) {
 			isShaking = true;
 			const timer = setTimeout(() => {
 				isShaking = false;
@@ -38,9 +38,9 @@
 
 <Link href="#/cart" class="relative flex-shrink-0">
 	<span class="text-gray-700 hover:text-blue-600 text-2xl"><ShoppingCart size={30}/></span>
-	{#if cartCount > 0}
+	{#if cartCountValue > 0}
 		<span class="absolute top-0 right-0 bg-red-500 text-white text-base font-bold rounded-full w-5 h-5 p-3 flex items-center justify-center {isShaking ? 'shake' : ''}">
-			{cartCount}
+			{cartCountValue}
 		</span>
 	{/if}
 </Link>

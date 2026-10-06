@@ -1,21 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
 	import ProductView from '$lib/ProductView.svelte';
-	import { products, productFullUrl } from '$lib/products';
+	import { catalog, router } from '$lib/view';
+	import { productFullUrl } from '$core/domain/product';
 
 	let productId: string = page.params.id!;
 
-	let product = $derived(products.find(p => p.productId === productId));
-	let fullUrl = $derived(productFullUrl(product))
+	let fullUrl = $derived(productFullUrl(catalog.findByProductId(productId)));
 
 	$effect(() => {
 		if (fullUrl == '') return;
-		goto(fullUrl, {
+		router.navigate(fullUrl, {
 			replaceState: true
-		})
+		});
 	});
-
 </script>
 
 <ProductView {productId} />

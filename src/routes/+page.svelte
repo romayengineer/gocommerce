@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import ProductGrid from '$lib/ProductGrid.svelte';
-	import { productPageStore } from '$lib/productPageStore.svelte';
-	import { windowWidthManager } from '$lib/windowWidth.svelte';
+	import { productPage, sortedProducts, viewport } from '$lib/view';
 
 	// number of rows for 10 products minimum
-	let gridRows = $derived(Math.ceil(10 / windowWidthManager.columns))
+	let gridRows = $derived(Math.ceil(10 / $viewport.columns));
 
-	const featured = $derived(productPageStore.sorted.slice(0, windowWidthManager.columns * gridRows));
+	const featured = $derived($sortedProducts.slice(0, $viewport.columns * gridRows));
 </script>
 
 <div class="max-w-8xl mx-auto px-4 py-12">
@@ -22,6 +21,6 @@
 	</section>
 
 	<section>
-		<ProductGrid products={featured} onProductImageFailed={(id) => productPageStore.handleProductImageFailed(id)}/>
+		<ProductGrid products={featured} onProductImageFailed={(id) => productPage.handleProductImageFailed(id)}/>
 	</section>
 </div>

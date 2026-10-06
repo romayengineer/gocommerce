@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import { t } from 'svelte-i18n';
 	import ApiKeyMissing from './ApiKeyMissing.svelte';
-	import { createMapService } from './mapFactory';
-	import type { IMapService, MapConfig } from './mapService';
-	import type { ShippingCoordinates } from './schemas'
+	import type { MapConfig } from '$core/ports/MapService';
+	import type { ShippingCoordinates } from '$core/domain/shipping';
+	import { mapService, mapState } from './view';
 
 	interface Props {
 		address?: string;
@@ -18,40 +18,19 @@
 		onUpdateLocation?: (coordinates: ShippingCoordinates | undefined) => void;
 	}
 
-	const { address, amenity, city, county, stateName, zipCode, country, coordinates = $bindable() , onUpdateLocation }: Props = $props();
+	const { address, amenity, city, county, stateName, zipCode, country, coordinates = $bindable(), onUpdateLocation }: Props = $props();
 
 	let mapConfig: MapConfig = $derived({ address, amenity, city, county, stateName, zipCode, country });
 	let mapContainer = $state<HTMLDivElement>();
-	let apiKeyMissing = $state(false);
-	let locationNotFound = $state(false);
-	let mapService: IMapService | null = null;
 
 	onMount(async () => {
-		mapService = createMapService();
-
-		if (!mapService.hasApiKey()) {
-			apiKeyMissing = true;
-			return;
-		}
-
-		try {
-			await mapService.initialize(mapContainer!, mapConfig);
-		} catch (error) {
-			console.error('Failed to initialize map:', error);
-		}
+		await mapService.initialize(mapContainer!, mapConfig);
 	});
 
 	async function updateLocation() {
-		if (!mapService) return;
-		let value = await mapService.updateLocation(mapConfig);
-		if (value) {
-			coordinates.latitude = value.latitude;
-			coordinates.longitude = value.longitude;
-		} else {
-			coordinates.latitude = undefined;
-			coordinates.longitude = undefined;
-		}
-		locationNotFound = !mapService.wasLocationFound();
+		const value = await mapService.updateLocation(mapConfig);
+		coordinates.latitude = value?.latitude;
+		coordinates.longitude = value?.longitude;
 		onUpdateLocation?.(value);
 	}
 
@@ -64,10 +43,10 @@
 
 <div class="mt-8">
 	<h2 class="text-xl font-bold mb-4">{$t('shipping.deliveryLocation')}</h2>
-	{#if apiKeyMissing}
+	{#if $mapState.apiKeyMissing}
 		<ApiKeyMissing />
 	{:else}
-		{#if locationNotFound}
+		{#if $mapState.locationNotFound}
 			<div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
 				<p class="text-yellow-800">{$t('shipping.locationNotFound')}</p>
 			</div>

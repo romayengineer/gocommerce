@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Price from '$lib/Price.svelte';
-	import type { DisplayProduct } from './products';
+	import type { DisplayProduct } from '$core/domain/product';
 	import SizeSelector from './SizeSelector.svelte';
 
 	interface Props {

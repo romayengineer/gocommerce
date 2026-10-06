@@ -3,7 +3,7 @@
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
 	import QuantitySelector from './QuantitySelector.svelte';
-	import type { CartItemFull } from './cart';
+	import type { CartItemFull } from '$core/domain/cart';
 
 	interface Props {
 		item: CartItemFull;

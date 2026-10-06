@@ -1,22 +1,21 @@
 <script lang="ts">
-	import { products } from '$lib/products';
-	import { addToCart } from '$lib/cart';
-	import ProductImageCarousel from '$lib/ProductImageCarousel.svelte';
-	import ProductHeader from '$lib/ProductHeader.svelte';
-	import QuantitySelector from '$lib/QuantitySelector.svelte';
-	import AddToCartAction from '$lib/AddToCartAction.svelte';
-	import ProductDetailsBox from '$lib/ProductDetailsBox.svelte';
-	import ProductNotFound from '$lib/ProductNotFound.svelte';
+	import { catalogProducts, addToCart } from './view';
+	import ProductImageCarousel from './ProductImageCarousel.svelte';
+	import ProductHeader from './ProductHeader.svelte';
+	import QuantitySelector from './QuantitySelector.svelte';
+	import AddToCartAction from './AddToCartAction.svelte';
+	import ProductDetailsBox from './ProductDetailsBox.svelte';
+	import ProductNotFound from './ProductNotFound.svelte';
 
 	let { productId }: { productId: string } = $props();
 
 	let quantity = $state(1);
 
-	let product = $derived(products.find(p => p.productId === productId));
+	let product = $derived($catalogProducts.find((p) => p.productId === productId));
 
-	let itemSelected = $state(0)
+	let itemSelected = $state(0);
 
-	let itemId = $derived(product?.items[itemSelected].itemId)
+	let itemId = $derived(product?.items[itemSelected].itemId);
 
 	function selectSize(e: Event, index: number) {
 		e.preventDefault();

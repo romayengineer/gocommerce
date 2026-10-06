@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Button from './Button.svelte';
 	import Price from './Price.svelte';
-	import { addToCart } from './cart';
 	import { ShoppingCart } from 'lucide-svelte';
+	import { addToCart } from './view';
 
 	interface Props {
 		productId: string;
@@ -18,7 +18,6 @@
 		addToCart(productId, itemId, 1);
 	}
 </script>
-
 
 <Button
 	onclick={handleAddToCart}

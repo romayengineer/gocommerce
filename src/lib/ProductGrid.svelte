@@ -1,11 +1,9 @@
 <script lang="ts">
 	import ProductCard from './ProductCard.svelte';
-	import type { DisplayProduct } from './products';
-	import { logger } from './logger.svelte';
-	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
-	import { updatePageInUrl } from './urlUtils';
-	import { WindowWidthManager } from './windowWidth.svelte';
+	import type { DisplayProduct } from '$core/domain/product';
+	import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from '$core/domain/grid';
+	import { updatePageInUrl } from '$core/domain/url';
+	import { viewport, route, router, logger, viewportTracker } from './view';
 
 	interface Props {
 		products: DisplayProduct[];
@@ -16,64 +14,29 @@
 	const { products, emptyMessage = 'No products found', onProductImageFailed }: Props = $props();
 
 	let gridContainer = $state<HTMLDivElement>();
-	let windowWidthManager = $state(new WindowWidthManager());
 
 	$effect(() => {
 		if (gridContainer) {
-			windowWidthManager.setElement(gridContainer);
+			viewportTracker.setElement(gridContainer);
 		}
 	});
-	const minCardHeight = 600;
-	const maxCardHight = minCardHeight * 1.2;
-	const fixRatio = 2;
-	const gap = 8; // gap-2 = 0.5rem = 8 px
-	const rowsPerPage: number = 1;
-	const pageBuffer = 4;
 
-	let scrollHeight = $state(typeof window !== 'undefined' ? sessionStorage.getItem('productGridScroll') ? parseFloat(sessionStorage.getItem('productGridScroll')!) : window.scrollY : 0);
+	let scrollHeight = $state(
+		typeof window !== 'undefined'
+			? sessionStorage.getItem('productGridScroll')
+				? parseFloat(sessionStorage.getItem('productGridScroll')!)
+				: window.scrollY
+			: 0
+	);
 
 	let currentPage = $state(1);
 
-	function sliceProducts(currentPage: number, itemsPerPage: number): DisplayProduct[] {
-		const startIndex = Math.max(0, (currentPage - 1 - pageBuffer) * itemsPerPage);
-		const endIndex = Math.min(products.length, (currentPage + 2 + pageBuffer) * itemsPerPage);
-		return products.slice(startIndex, endIndex);
-	}
+	const gap = DEFAULT_GRID_CONFIG.gap;
 
-	interface GridState {
-		height: number;
-		topPadding: number;
-		cardHeight: number;
-		columns: number;
-		products: DisplayProduct[],
-	}
-
-	function clamp(value: number, min: number, max: number): number {
-		return Math.min(Math.max(value, min), max);
-	}
-
-	let gridState = $derived.by<GridState>(() => {
-		const itemsPerPage = windowWidthManager.columns * rowsPerPage;
-		const maxPage = Math.ceil(products.length / itemsPerPage);
-		const columns = windowWidthManager.columns;
-		// height of ProductCard in px units
-		const productCardHeight = clamp(fixRatio * (windowWidthManager.width / columns), minCardHeight, maxCardHight)
-		const pageHeight = (productCardHeight + gap) * rowsPerPage;
-		const maxHeight = maxPage * pageHeight;
-		const topPadding = Math.min(maxHeight, Math.max(0, currentPage - 1 - pageBuffer) * pageHeight);
-		const visibleProducts = sliceProducts(currentPage, itemsPerPage);
-		const state = {
-			height: Math.round(maxHeight),
-			topPadding: Math.round(topPadding),
-			cardHeight: Math.round(productCardHeight),
-			columns: columns,
-			products: visibleProducts,
-		} as GridState
-		// const stateStr = JSON.stringify({...state, products: []});
-		// console.log(`state ${stateStr}`);
-		return state;
+	let gridState = $derived.by(() => {
+		const { width, columns } = $viewport;
+		return computeGridLayout(products, width, columns, currentPage, DEFAULT_GRID_CONFIG);
 	});
-
 
 	$effect(() => {
 		const handleScroll = () => {
@@ -91,21 +54,17 @@
 		}
 	});
 
-	function pageFromScrollHeight(): number {
-		return 1 + Math.max(0, Math.floor(scrollHeight / (gridState.cardHeight + gap)));
-	}
-
 	$effect(() => {
 		const _ = scrollHeight;
 		const timer = setTimeout(() => {
-			currentPage = pageFromScrollHeight();
+			currentPage = pageFromScrollHeight(scrollHeight, gridState.cardHeight, gap);
 		}, 100);
 		return () => clearTimeout(timer);
 	});
 
 	function changePage() {
-		const newUrl = updatePageInUrl(page.url.toString(), currentPage);
-		goto(newUrl, { noScroll: true });
+		const newUrl = updatePageInUrl($route.href, currentPage);
+		router.navigate(newUrl, { noScroll: true });
 		logger.log(`Page changed to ${currentPage}`);
 	}
 

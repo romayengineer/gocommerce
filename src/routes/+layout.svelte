@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { logger } from '$lib/logger.svelte';
+	import { logger } from '$adapters/browser/logger';
 	import Navigation from '$lib/Navigation.svelte';
 	import Footer from '$lib/Footer.svelte';
-	import '$lib/i18n';
+	import '$adapters/svelte/i18n';
 	import '../app.css';
 
 	onMount(() => {

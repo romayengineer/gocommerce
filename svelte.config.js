@@ -10,6 +10,11 @@ import adapter from '@sveltejs/adapter-static';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
+    alias: {
+      '$core': 'src/core',
+      '$adapters': 'src/adapters',
+      '$composition': 'src/composition'
+    },
     output: {
       bundleStrategy: 'inline'
     },

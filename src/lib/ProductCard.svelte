@@ -2,8 +2,8 @@
 	import Link from './Link.svelte';
 	import AddToCartButton from './AddToCartButton.svelte';
 	import SizeSelector from './SizeSelector.svelte';
-	import type { DisplayProduct } from './products';
-	import { productFullUrl } from './products';
+	import type { DisplayProduct } from '$core/domain/product';
+	import { productFullUrl } from './view';
 	import ProductImage from './ProductImage.svelte';
 
 	interface Props {
@@ -14,9 +14,9 @@
 
 	const { product, onImageLoaded, height = 40 }: Props = $props();
 
-	let fullUrl = $derived(productFullUrl(product))
+	let fullUrl = $derived(productFullUrl(product));
 
-	let itemSelected = $state(0)
+	let itemSelected = $state(0);
 
 	function selectSize(e: Event, index: number) {
 		e.preventDefault();

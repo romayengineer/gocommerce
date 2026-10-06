@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { SplideCarousel } from './splideCarousel.svelte';
+	import { SplideCarousel } from '$adapters/splide/carousel';
+	import { toSvelte } from '$adapters/svelte/store';
 	import ProductImage from './ProductImage.svelte';
 	import type { Options } from '@splidejs/splide';
 	import '@splidejs/splide/dist/css/splide.min.css';
@@ -38,6 +39,8 @@
 			onImageLoaded?.(true);
 		}
 	});
+
+	const currentIndex = toSvelte(carousel.currentIndex);
 
 	$effect(() => {
 		if (splideElement && imageList.length > 0) {
@@ -84,7 +87,7 @@
 			</button>
 
 			<div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black bg-opacity-60 text-white text-xs px-3 py-1 rounded-full z-10">
-				{carousel.currentIndex + 1} / {imageList.length}
+				{$currentIndex + 1} / {imageList.length}
 			</div>
 		{/if}
 	</div>

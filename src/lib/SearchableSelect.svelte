@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FormField from './FormField.svelte';
+	import { filterOptions, matchesOption } from '$core/domain/search';
 
 	interface Ioption { value: string; label: string }
 
@@ -16,22 +17,18 @@
 	let { id, label, options, value = $bindable(''), required = false, error = false, onchange }: Props = $props();
 
 	let isOpen = $state(false);
-	let filteredOptions: Ioption[] = $derived(
-		options.filter((opt: Ioption) => opt.label.toLowerCase().includes(value.toLowerCase()))
-	);
+	let filteredOptions = $derived(filterOptions(options, value));
+
+	function optionMatches(): boolean {
+		return matchesOption(options, value);
+	}
 
 	function setValue(newValue: string) {
 		value = newValue;
 	}
 
-	function matchesOption(): boolean {
-		return options.some((opt: Ioption) =>
-			opt.label.toLowerCase() === value.toLowerCase()
-		);
-	}
-
 	function setToOpen() {
-		if (!matchesOption()) {
+		if (!optionMatches()) {
 			isOpen = true;
 		}
 	}
@@ -44,24 +41,24 @@
 		onchange?.(selectedValue);
 	}
 
-	function handleInputChange(e: Event) {
-		setToOpen()
+	function handleInputChange() {
+		setToOpen();
 	}
 
 	function handleFocusOut() {
 		isOpen = false;
 		if (value && filteredOptions.length == 1) {
-			setValue(filteredOptions[0].label)
+			setValue(filteredOptions[0].label);
 		}
 	}
 
-	function handleFocusIn(e: Event) {
-		setToOpen()
+	function handleFocusIn() {
+		setToOpen();
 	}
 
 	$effect(() => {
-		if (value) {		
-			setToOpen()
+		if (value) {
+			setToOpen();
 		}
 	});
 </script>

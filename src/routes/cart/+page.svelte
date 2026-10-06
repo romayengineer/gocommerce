@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { ShoppingCart } from 'lucide-svelte';
-	import { goto } from '$app/navigation';
 	import Button from '$lib/Button.svelte';
 	import CartItem from '$lib/CartItem.svelte';
 	import EmptyState from '$lib/EmptyState.svelte';
 	import OrderSummaryLine from '$lib/OrderSummaryLine.svelte';
 	import SidePanel from '$lib/SidePanel.svelte';
-	import { cartProducts, removeFromCart, updateQuantity } from '$lib/cart';
+	import { cartProducts, cartTotal, removeFromCart, updateQuantity, router } from '$lib/view';
 
-	let total = $derived($cartProducts.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
+	let total = $derived($cartTotal);
 </script>
 
 <div class="mx-auto max-w-6xl px-2 py-6 md:py-12">
@@ -38,11 +37,11 @@
 						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total} isBold={true} />
 					</div>
 
-					<Button class="w-full py-3 mb-3 whitespace-nowrap" onclick={() => goto('#/checkout')}>
+					<Button class="w-full py-3 mb-3 whitespace-nowrap" onclick={() => router.navigate('#/checkout')}>
 						{$t('cart.checkout')}
 					</Button>
 
-					<Button class="w-full py-3 whitespace-nowrap" variant="secondary" onclick={() => goto('#/products')}>
+					<Button class="w-full py-3 whitespace-nowrap" variant="secondary" onclick={() => router.navigate('#/products')}>
 						{$t('cart.keepBuying')}
 					</Button>
 				</SidePanel>

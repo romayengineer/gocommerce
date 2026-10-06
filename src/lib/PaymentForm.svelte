@@ -1,23 +1,19 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { goto } from '$app/navigation';
 	import { Copy, Check } from 'lucide-svelte';
 	import Button from './Button.svelte';
 	import OrderSummaryLine from './OrderSummaryLine.svelte';
 	import SidePanel from './SidePanel.svelte';
-	import { cartProducts } from './cart';
+	import { cartProducts, cartTotal, paymentService, clipboard, router } from './view';
 
-	const bankAccountAlias = import.meta.env.VITE_BANK_ACCOUNT_ALIAS;
-	const bankAccountNumber = import.meta.env.VITE_BANK_ACCOUNT_NUMBER;
-	const bankAccountName = import.meta.env.VITE_BANK_ACCOUNT_NAME;
-	const bankName = import.meta.env.VITE_BANK_NAME;
+	const bank = paymentService.bank;
+
+	let total = $derived($cartTotal);
 
 	let copiedField = $state<string | null>(null);
 
-	const total = $derived($cartProducts.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
-
 	function copyToClipboard(text: string, field: string) {
-		navigator.clipboard.writeText(text).then(() => {
+		clipboard.writeText(text).then(() => {
 			copiedField = field;
 			setTimeout(() => {
 				copiedField = null;
@@ -36,11 +32,11 @@
 					<div class="border rounded-lg p-4">
 						<div class="text-sm text-gray-600 block mb-2">{$t('payment.accountAlias')}</div>
 						<div class="flex items-center justify-between">
-							<span class="font-mono text-lg font-semibold">{bankAccountAlias}</span>
+							<span class="font-mono text-lg font-semibold">{bank.alias}</span>
 							<button
 								type="button"
 								class="p-2 hover:bg-gray-100 rounded transition-colors"
-								onclick={() => copyToClipboard(bankAccountAlias, 'alias')}
+								onclick={() => copyToClipboard(bank.alias, 'alias')}
 								title="Copy account alias"
 							>
 								{#if copiedField === 'alias'}
@@ -55,11 +51,11 @@
 					<div class="border rounded-lg p-4">
 						<div class="text-sm text-gray-600 block mb-2">{$t('payment.accountNumber')}</div>
 						<div class="flex items-center justify-between">
-							<span class="font-mono text-lg font-semibold">{bankAccountNumber}</span>
+							<span class="font-mono text-lg font-semibold">{bank.number}</span>
 							<button
 								type="button"
 								class="p-2 hover:bg-gray-100 rounded transition-colors"
-								onclick={() => copyToClipboard(bankAccountNumber, 'number')}
+								onclick={() => copyToClipboard(bank.number, 'number')}
 								title="Copy account number"
 							>
 								{#if copiedField === 'number'}
@@ -73,11 +69,11 @@
 					<div class="border rounded-lg p-4">
 						<div class="text-sm text-gray-600 block mb-2">{$t('payment.accountOwnerName')}</div>
 						<div class="flex items-center justify-between">
-							<span class="font-mono text-lg font-semibold">{bankAccountName}</span>
+							<span class="font-mono text-lg font-semibold">{bank.name}</span>
 							<button
 								type="button"
 								class="p-2 hover:bg-gray-100 rounded transition-colors"
-								onclick={() => copyToClipboard(bankAccountName, 'accountName')}
+								onclick={() => copyToClipboard(bank.name, 'accountName')}
 								title="Copy account owner name"
 							>
 								{#if copiedField === 'accountName'}
@@ -92,11 +88,11 @@
 					<div class="border rounded-lg p-4">
 						<div class="text-sm text-gray-600 block mb-2">{$t('payment.bankName')}</div>
 						<div class="flex items-center justify-between">
-							<span class="font-mono text-lg font-semibold">{bankName}</span>
+							<span class="font-mono text-lg font-semibold">{bank.bankName}</span>
 							<button
 								type="button"
 								class="p-2 hover:bg-gray-100 rounded transition-colors"
-								onclick={() => copyToClipboard(bankName, 'bankName')}
+								onclick={() => copyToClipboard(bank.bankName, 'bankName')}
 								title="Copy bank name"
 							>
 								{#if copiedField === 'bankName'}
@@ -130,7 +126,7 @@
 				</div>
 
 				<div class="mt-8 pt-6">
-					<Button class="w-full py-3" onclick={() => goto('#/products')}>
+					<Button class="w-full py-3" onclick={() => router.navigate('#/products')}>
 						{$t('payment.backToProducts')}
 					</Button>
 				</div>

@@ -1,6 +1,24 @@
 {
 	"compilerOptions": {
 		"paths": {
+			"$core": [
+				"../src/core"
+			],
+			"$core/*": [
+				"../src/core/*"
+			],
+			"$adapters": [
+				"../src/adapters"
+			],
+			"$adapters/*": [
+				"../src/adapters/*"
+			],
+			"$composition": [
+				"../src/composition"
+			],
+			"$composition/*": [
+				"../src/composition/*"
+			],
 			"$lib": [
 				"../src/lib"
 			],

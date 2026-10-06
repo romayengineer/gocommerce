@@ -157,55 +157,55 @@ The built site will be in the `build/index.html` - a single portable HTML file r
 
 ## Project Structure
 
+Layered, framework-agnostic architecture. Business logic lives in `src/core` as
+pure TypeScript with **zero Svelte/SvelteKit dependencies**. A `src/adapters` layer
+implements the framework/infrastructure interfaces (ports) that the core depends on,
+and `src/lib` contains only thin Svelte presentational components.
+
 ```
 src/
-├── routes/
-│   ├── +layout.svelte              # Root layout (Navigation, Footer)
-│   ├── +page.svelte                # Homepage
-│   ├── products/
-│   │   ├── +page.svelte            # Products listing with filters
-│   │   └── [id]/
-│   │       └── +page.svelte        # Product detail page with carousel
-│   ├── cart/
-│   │   └── +page.svelte            # Shopping cart
-│   ├── checkout/
-│   │   └── +page.svelte            # Checkout with delivery form
-│   └── payment/
-│       └── +page.svelte            # Payment with bank details
-└── lib/
-    ├── translations/               # i18n files
-    │   ├── en.json                # English translations
-    │   └── es.json                # Spanish translations
-    ├── i18n.ts                    # i18n configuration
-    ├── logger.svelte.ts           # Custom reactive logger with ?debug support
-    ├── windowWidth.svelte.ts      # WindowWidthManager class for responsive sizing
-    ├── productPageStore.svelte.ts # ProductPageStore class for product page state
-    ├── splideCarousel.svelte.ts   # Splide carousel class with state management
-    ├── products.ts                # Product data & types
-    ├── cart.ts                    # Cart store & logic
-    ├── mapService.ts              # Map service interface & types
-    ├── mapFactory.ts              # Map provider factory
-    ├── googleMapsService.ts       # Google Maps implementation
-    ├── leafletService.ts          # Leaflet + OpenStreetMap implementation
-    ├── urlUtils.ts                # URL pagination utilities (updatePageInUrl, getPageInUrl)
-    ├── LanguageSwitcher.svelte    # Language selector dropdown
-    ├── ProductImage.svelte        # Image carousel component
-    ├── ProductCard.svelte         # Product grid card
-    ├── ProductGrid.svelte         # Product grid layout with pagination
-    ├── ProductFiltersMobile.svelte # Responsive filters (desktop & mobile)
-    ├── CartItem.svelte            # Cart item component
-    ├── CheckoutForm.svelte        # Checkout form component
-    ├── PaymentForm.svelte         # Payment form component with bank details
-    ├── MapDisplay.svelte          # Delivery location map
-    ├── ApiKeyMissing.svelte       # API key missing alert
-    ├── Button.svelte              # Reusable button
-    ├── Link.svelte                # Consistent link styling
-    ├── Price.svelte               # Price display
-    ├── Rating.svelte              # Star rating
-    ├── Navigation.svelte          # Header navigation
-    ├── Footer.svelte              # Footer
-    └── [more atomic components]
+├── core/                          # Framework-agnostic logic (pure TS + zod)
+│   ├── config.ts                 # AppConfig domain type
+│   ├── domain/                   # Entities, schemas, pure functions
+│   │   ├── product.ts            # Product types, zod schemas, columnar mapping
+│   │   ├── cart.ts               # Cart reducers + selectors (immutable)
+│   │   ├── shipping.ts           # ShippingForm schema + validation
+│   │   ├── grid.ts               # Infinite-scroll pagination math
+│   │   ├── viewport.ts           # Responsive column calculation
+│   │   ├── search.ts             # Option filtering helpers
+│   │   ├── url.ts                # URL pagination utilities
+│   │   ├── validation.ts         # createValidator helper
+│   │   ├── locations.ts          # AR provinces (pure data)
+│   │   └── amenities.ts          # Amenity list (pure data)
+│   ├── application/              # Use-cases orchestrating ports + domain
+│   │   ├── ProductCatalog.ts     # Product data + derived lists
+│   │   ├── CartService.ts        # Cart store + selectors + persistence
+│   │   ├── ProductPageService.ts # Filters/sort/search + debounce
+│   │   ├── CheckoutService.ts    # Validation + persistence + submission
+│   │   ├── PaymentService.ts     # Bank details + totals
+│   │   └── MapLocationService.ts # Map orchestration + state
+│   └── ports/                    # Interfaces only (Store, Storage, Router, ...)
+├── adapters/                      # Svelte/infra implementations of the ports
+│   ├── svelte/                   # store bridge, router ($app/*), platform, i18n
+│   ├── storage/localStorage.ts   # localStorage adapter (no-op during SSR)
+│   ├── config/env.ts             # import.meta.env -> AppConfig (only here)
+│   ├── browser/                  # logger, clock, clipboard
+│   ├── maps/                     # IMapService implementations (Leaflet/Google)
+│   └── splide/                   # Splide carousel adapter
+├── composition/container.ts      # Dependency wiring (single DI container)
+├── lib/                          # Svelte components only
+│   ├── view.ts                   # Bridges core stores to Svelte ($-subscription)
+│   └── *.svelte                  # Thin presentational / binding components
+├── data/products.json
+└── routes/                       # SvelteKit shell (hash router, static SPA)
 ```
+
+### Rule of thumb
+`src/core` never imports Svelte, SvelteKit, DOM APIs or `import.meta.env`. All
+side effects (routing, storage, env config, i18n, maps) flow through interfaces
+defined in `src/core/ports` and implemented in `src/adapters`. A boundary check
+(`npm run check`) enforces this so the core can be reused by any UI framework
+(Svelte adapter exists today; a React/Vue adapter would use the same ports).
 
 ## Key Features Explained
 
@@ -474,19 +474,21 @@ Search queries are debounced and split into individual words for flexible, order
 - Cleanup handler clears previous timeout when user types again
 
 ### 💻 Component Architecture
-Instead of inline markup, every UI element is a reusable component:
+UI is presentation-only. All business logic and state live in the framework-agnostic
+core (`src/core`) and are exposed to Svelte through `src/lib/view.ts`, which bridges
+core stores to Svelte's `$`-subscription API via `src/adapters/svelte/store.ts`:
 
-**State Management:**
-- `ProductPageStore` - Centralized product page state (filters, sorting, search, debouncing)
-- `WindowWidthManager` - Responsive sizing and breakpoint tracking
-- `cart.ts` - Shopping cart store & logic
+**State Management (framework-agnostic):**
+- `ProductPageService` - Filters, sorting, search, debouncing
+- `ViewportWidthTracker` - Responsive sizing and breakpoint tracking (adapter)
+- `CartService` - Shopping cart store, selectors & persistence
 
-**Layout Components:**
+**Layout Components (Svelte only):**
 - `SidePanel` - Reusable card container
-- `ProductGrid` - Grid display for products
+- `ProductGrid` - Grid display for products (renders core pagination math)
 - `ProductFiltersMobile` - Responsive filters (desktop & mobile)
 
-**UI Components:**
+**UI Components (Svelte only):**
 - `Button` - Primary/secondary/danger variants
 - `Link` - Consistent link styling
 - `Price` - Flexible price display
@@ -497,6 +499,10 @@ Instead of inline markup, every UI element is a reusable component:
 - `CartItem` - Cart item with controls
 - `LanguageSwitcher` - Language dropdown
 - `ProductImage` - Image carousel
+
+**Testing & checks:**
+- `npm run check` - Type-check Svelte components + enforce core boundaries
+- `npm test` - Vitest unit tests for the framework-agnostic core
 
 ## Customization
 

@@ -2,9 +2,9 @@
 	import FormField from './FormField.svelte';
 	import SearchableSelect from './SearchableSelect.svelte';
 	import { t } from 'svelte-i18n';
-	import { ARGENTINE_PROVINCES } from './argentineProvinces';
-	import { AMENITIES } from './amenities';
-	import type { ShippingFormData, FieldErrors } from './schemas';
+	import { ARGENTINE_PROVINCES } from '$core/domain/locations';
+	import { AMENITIES } from '$core/domain/amenities';
+	import type { ShippingFormData, FieldErrors } from '$core/domain/shipping';
 
 	interface Props {
 		formData: ShippingFormData;
