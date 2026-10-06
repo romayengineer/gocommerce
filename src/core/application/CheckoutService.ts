@@ -66,7 +66,7 @@ export class CheckoutService {
 	}
 
 	clear(): void {
-		this.storage.remove(this.key);
 		this.formData.set(createEmptyShippingFormData());
+		this.storage.remove(this.key);
 	}
 }

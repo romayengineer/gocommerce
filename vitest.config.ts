@@ -1,8 +1,11 @@
 import { defineConfig } from 'vitest/config';
 import { fileURLToPath } from 'node:url';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 export default defineConfig({
+	plugins: [svelte()],
 	resolve: {
+		conditions: ['browser'],
 		alias: {
 			$core: fileURLToPath(new URL('./src/core', import.meta.url)),
 			$adapters: fileURLToPath(new URL('./src/adapters', import.meta.url)),
@@ -10,6 +13,7 @@ export default defineConfig({
 		}
 	},
 	test: {
-		include: ['src/core/**/*.test.ts']
+		include: ['src/**/*.test.ts', 'src/**/*.test.svelte.ts'],
+		environment: 'jsdom'
 	}
 });

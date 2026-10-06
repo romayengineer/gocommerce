@@ -8,7 +8,10 @@
 	let formData = $state(checkoutService.formData.get());
 
 	$effect(() => {
-		checkoutService.formData.set(formData);
+		checkoutService.formData.set({
+			...formData,
+			coordinates: { ...formData.coordinates }
+		});
 	});
 
 	async function handleSubmit() {
