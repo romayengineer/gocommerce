@@ -119,4 +119,34 @@ describe('CheckoutForm persistence', () => {
 
 		unmount(component);
 	});
+
+	it('keeps partially filled fields after a page refresh', async () => {
+		const target = document.createElement('div');
+		document.body.appendChild(target);
+		const component = mount(CheckoutForm, { target });
+		await tick();
+
+		// Only some fields are filled, so the form is not yet schema-valid.
+		const firstName = target.querySelector<HTMLInputElement>('#firstName');
+		expect(firstName).not.toBeNull();
+		firstName!.value = 'Jane';
+		firstName!.dispatchEvent(new Event('input', { bubbles: true }));
+		await tick();
+
+		// The partial value must survive in storage...
+		const stored = JSON.parse(h.storage.get(CHECKOUT_TEST_KEY)!);
+		expect(stored.firstName).toBe('Jane');
+
+		// ...and be restored when the page is refreshed.
+		const reloaded = new CheckoutService(
+			{ submit: async () => {} },
+			h.storage,
+			fakeRouter,
+			noopLogger,
+			CHECKOUT_TEST_KEY
+		);
+		expect(reloaded.formData.get().firstName).toBe('Jane');
+
+		unmount(component);
+	});
 });

@@ -4,7 +4,7 @@ import type { Logger } from '$core/ports/Logger';
 import type { RouterPort } from '$core/ports/Router';
 import {
 	createEmptyShippingFormData,
-	isValidFormData,
+	restoreShippingFormData,
 	validateShippingForm,
 	type FieldErrors,
 	type ShippingFormData
@@ -29,9 +29,8 @@ export class CheckoutService {
 		private logger: Logger,
 		private key: string = CHECKOUT_FORM_STORAGE_KEY
 	) {
-		const stored = readJSON<ShippingFormData>(storage, key);
-		const formData =
-			stored && isValidFormData(stored) ? stored : createEmptyShippingFormData();
+		const stored = readJSON<unknown>(storage, key);
+		const formData = restoreShippingFormData(stored);
 
 		this.formData = createStore(formData);
 		this.errors = createStore({});

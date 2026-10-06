@@ -53,6 +53,39 @@ export function createEmptyShippingFormData(): ShippingFormData {
 	};
 }
 
+const STRING_FIELDS = [
+	'firstName',
+	'lastName',
+	'email',
+	'phone',
+	'address',
+	'amenity',
+	'city',
+	'county',
+	'stateName',
+	'zipCode',
+	'country'
+] as const;
+
+export function restoreShippingFormData(value: unknown): ShippingFormData {
+	const base = createEmptyShippingFormData();
+	if (value === null || typeof value !== 'object' || Array.isArray(value)) return base;
+
+	const source = value as Record<string, unknown>;
+	const restored = { ...base } as Record<string, unknown>;
+	for (const key of STRING_FIELDS) {
+		if (typeof source[key] === 'string') restored[key] = source[key];
+	}
+	const coordinates = source.coordinates;
+	if (coordinates && typeof coordinates === 'object' && !Array.isArray(coordinates)) {
+		const target = restored.coordinates as ShippingCoordinates;
+		const coords = coordinates as ShippingCoordinates;
+		if (typeof coords.latitude === 'number') target.latitude = coords.latitude;
+		if (typeof coords.longitude === 'number') target.longitude = coords.longitude;
+	}
+	return restored as ShippingFormData;
+}
+
 /** Validate shipping form data and produce per-field error messages. */
 export function validateShippingForm(formData: ShippingFormData): FieldErrors {
 	const newErrors: FieldErrors = {};

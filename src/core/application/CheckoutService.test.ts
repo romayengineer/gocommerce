@@ -68,11 +68,24 @@ describe('CheckoutService persistence', () => {
 		expect(checkout.formData.get()).toEqual(validForm);
 	});
 
-	it('falls back to an empty form when stored data is invalid', () => {
+	it('restores a partially filled stored form after a refresh', () => {
+		const { storage } = memoryStorage();
+		storage.set(KEY, JSON.stringify({ firstName: 'Jane' }));
+		const checkout = makeService(storage);
+		expect(checkout.formData.get().firstName).toBe('Jane');
+		expect(checkout.formData.get().email).toBe('');
+		expect(checkout.formData.get().country).toBe('Argentina');
+
+		const persistedAfterLoad = JSON.parse(storage.get(KEY)!);
+		expect(persistedAfterLoad.firstName).toBe('Jane');
+	});
+
+	it('falls back to an empty form when stored data is not an object', () => {
 		const { storage } = memoryStorage();
 		storage.set(KEY, JSON.stringify({ not: 'a shipping form' }));
 		const checkout = makeService(storage);
 		expect(checkout.formData.get().firstName).toBe('');
+		expect(checkout.formData.get()).toEqual(createEmptyShippingFormData());
 	});
 
 	it('clears the form and its persisted value', () => {
