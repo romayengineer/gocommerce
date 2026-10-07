@@ -1,8 +1,12 @@
 {
+  "common": {
+    "noOptions": "No se encontraron opciones"
+  },
   "header": {
     "title": "ShopHub",
     "allProducts": "Todos los Productos",
-    "cart": "Carrito"
+    "cart": "Carrito",
+    "language": "Idioma"
   },
   "home": {
     "featured": "Inicio",
@@ -18,7 +22,21 @@
     "priceAsc": "Precio: Menor a Mayor",
     "priceDesc": "Precio: Mayor a Menor",
     "ratingHigh": "Más Calificados",
-    "add": "Agregar"
+    "add": "Agregar",
+    "empty": "No se encontraron productos"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": "Buscar...",
+    "sort": "Ordenar",
+    "random": "Aleatorio",
+    "nameAsc": "Nombre (A-Z)",
+    "nameDesc": "Nombre (Z-A)",
+    "priceAsc": "Precio (Menor a Mayor)",
+    "priceDesc": "Precio (Mayor a Menor)",
+    "category": "Categoría",
+    "brands": "Marcas",
+    "sizes": "Tamaños"
   },
   "productDetail": {
     "inStock": "En Stock",
@@ -26,8 +44,12 @@
     "addToCart": "Agregar al Carrito",
     "productDetails": "Detalles del Producto",
     "sku": "SKU:",
+    "product": "Producto:",
+    "brand": "Marca:",
     "category": "Categoría:",
-    "rating": "Calificación:"
+    "rating": "Calificación:",
+    "description": "Descripción",
+    "properties": "Propiedades"
   },
   "cart": {
     "keepBuying": "seguir comprando",
@@ -85,6 +107,18 @@
     "accountOwnerName": "Nombre del Titular de la Cuenta",
     "accountAlias": "Alias de Cuenta",
     "accountNumber": "Número de Cuenta",
+    "backToProducts": "Volver a Productos",
+    "copy": "Copiar"
+  },
+  "checkout": {
+    "processing": "Procesando...",
+    "continueToPayment": "Continuar al Pago"
+  },
+  "errors": {
+    "notFoundTitle": "Página no encontrada",
+    "notFoundMessage": "Lo sentimos, la página que buscas no existe o fue movida.",
+    "goHome": "Ir al Inicio",
+    "productNotFound": "Producto no encontrado",
     "backToProducts": "Volver a Productos"
   },
   "footer": {

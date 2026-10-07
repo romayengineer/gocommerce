@@ -1,26 +1,29 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import ProductGrid from '$lib/ProductGrid.svelte';
+	import ProductGrid from '$lib/catalog/ProductGrid.svelte';
+	import PageContainer from '$lib/ui/PageContainer.svelte';
+	import Link from '$lib/ui/Link.svelte';
 	import { productPage, sortedProducts, viewport } from '$lib/view';
 
 	// number of rows for 10 products minimum
-	let gridRows = $derived(Math.ceil(10 / $viewport.columns));
+	const MIN_FEATURED_PRODUCTS = 10;
+	let gridRows = $derived(Math.ceil(MIN_FEATURED_PRODUCTS / $viewport.columns));
 
 	const featured = $derived($sortedProducts.slice(0, $viewport.columns * gridRows));
 </script>
 
-<div class="max-w-8xl mx-auto px-4 py-12">
+<PageContainer>
 	<section class="mb-16">
-		<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg p-12 mb-8">
-			<h1 class="text-5xl font-bold mb-4">{$t('header.title')}</h1>
-			<p class="text-xl mb-6">{$t('home.browse')}</p>
-			<a href="#/products" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">
+		<div class="mb-8 rounded-lg bg-gradient-to-r from-primary-600 to-primary-800 p-12 text-white">
+			<h1 class="mb-4 text-5xl font-bold">{$t('header.title')}</h1>
+			<p class="mb-6 text-xl">{$t('home.browse')}</p>
+			<Link href="#/products" variant="contrast">
 				{$t('products.add')}
-			</a>
+			</Link>
 		</div>
 	</section>
 
 	<section>
 		<ProductGrid products={featured} onProductImageFailed={(id) => productPage.handleProductImageFailed(id)}/>
 	</section>
-</div>
+</PageContainer>

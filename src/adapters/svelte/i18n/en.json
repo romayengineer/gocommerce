@@ -1,8 +1,12 @@
 {
+  "common": {
+    "noOptions": "No options found"
+  },
   "header": {
     "title": "ShopHub",
     "allProducts": "All Products",
-    "cart": "Cart"
+    "cart": "Cart",
+    "language": "Language"
   },
   "home": {
     "featured": "Home",
@@ -18,7 +22,21 @@
     "priceAsc": "Price: Low to High",
     "priceDesc": "Price: High to Low",
     "ratingHigh": "Highest Rated",
-    "add": "Add"
+    "add": "Add",
+    "empty": "No products found"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": "Search...",
+    "sort": "Sort",
+    "random": "Random",
+    "nameAsc": "Name (A-Z)",
+    "nameDesc": "Name (Z-A)",
+    "priceAsc": "Price (Low to High)",
+    "priceDesc": "Price (High to Low)",
+    "category": "Category",
+    "brands": "Brands",
+    "sizes": "Sizes"
   },
   "productDetail": {
     "inStock": "In Stock",
@@ -26,8 +44,12 @@
     "addToCart": "Add to Cart",
     "productDetails": "Product Details",
     "sku": "SKU:",
+    "product": "Product:",
+    "brand": "Brand:",
     "category": "Category:",
-    "rating": "Rating:"
+    "rating": "Rating:",
+    "description": "Description",
+    "properties": "Properties"
   },
   "cart": {
     "keepBuying": "add more products",
@@ -85,6 +107,18 @@
     "accountOwnerName": "Account Owner Name",
     "accountAlias": "Account Alias",
     "accountNumber": "Account Number",
+    "backToProducts": "Back to Products",
+    "copy": "Copy"
+  },
+  "checkout": {
+    "processing": "Processing...",
+    "continueToPayment": "Continue to Payment"
+  },
+  "errors": {
+    "notFoundTitle": "Page Not Found",
+    "notFoundMessage": "Sorry, the page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go Home",
+    "productNotFound": "Product not found",
     "backToProducts": "Back to Products"
   },
   "footer": {

@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { CreditCard } from 'lucide-svelte';
-	import PaymentForm from '$lib/PaymentForm.svelte';
+	import PaymentForm from '$lib/payment/PaymentForm.svelte';
+	import PageContainer from '$lib/ui/PageContainer.svelte';
+	import PageTitle from '$lib/ui/PageTitle.svelte';
 </script>
 
-<div class="mx-auto max-w-6xl px-2 py-6 md:py-12">
-	<div class="flex items-center gap-2 mb-2 md:mb-6">
+<PageContainer>
+	<PageTitle title={$t('payment.title')}>
 		<CreditCard size={30} />
-		<h1 class="capitalize x-text-xl">{$t('payment.title')}</h1>
-	</div>
+	</PageTitle>
 	<PaymentForm />
-</div>
+</PageContainer>

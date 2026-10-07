@@ -11,5 +11,6 @@ export interface AppConfig {
 	imagesBaseUrl: string;
 	mapProvider: MapProvider;
 	googleMapsApiKey: string;
+	currency: string;
 	bank: BankDetails;
 }

@@ -7,6 +7,7 @@ export function readEnvConfig(): AppConfig {
 		mapProvider:
 			(import.meta.env.VITE_MAP_PROVIDER ?? 'leaflet') === 'google' ? 'google' : 'leaflet',
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? '',
+		currency: import.meta.env.VITE_CURRENCY ?? 'ARS',
 		bank: {
 			alias: import.meta.env.VITE_BANK_ACCOUNT_ALIAS ?? '',
 			number: import.meta.env.VITE_BANK_ACCOUNT_NUMBER ?? '',

@@ -9,16 +9,19 @@
 	.x-text-xl {
 		@apply text-xl md:text-3xl;
 	}
-
 	.x-text-2xl {
-		@apply text-2xl md:text-4xl
+		@apply text-2xl md:text-4xl;
 	}
-}
 
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+	/* Shared page shell so every route gets the same rhythm and max width. */
+	.page-container {
+		@apply mx-auto w-full max-w-page px-4 py-8 md:py-12;
+	}
+
+	/* Standard elevated surface used for cards, panels and forms. */
+	.card {
+		@apply rounded-lg bg-white shadow-sm;
+	}
 }
 
 body {
@@ -26,19 +29,4 @@ body {
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-a {
-	color: inherit;
-	text-decoration: none;
-}
-
-button {
-	cursor: pointer;
-	font-family: inherit;
-}
-
-input,
-select {
-	font-family: inherit;
 }

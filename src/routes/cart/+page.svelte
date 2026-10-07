@@ -1,27 +1,28 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { ShoppingCart } from 'lucide-svelte';
-	import Button from '$lib/Button.svelte';
-	import CartItem from '$lib/CartItem.svelte';
-	import EmptyState from '$lib/EmptyState.svelte';
-	import OrderSummaryLine from '$lib/OrderSummaryLine.svelte';
-	import SidePanel from '$lib/SidePanel.svelte';
-	import { cartProducts, cartTotal, removeFromCart, updateQuantity, router } from '$lib/view';
+	import Button from '$lib/ui/Button.svelte';
+	import CartItem from '$lib/cart/CartItem.svelte';
+	import EmptyState from '$lib/ui/EmptyState.svelte';
+	import OrderSummaryLine from '$lib/cart/OrderSummaryLine.svelte';
+	import Card from '$lib/ui/Card.svelte';
+	import PageContainer from '$lib/ui/PageContainer.svelte';
+	import PageTitle from '$lib/ui/PageTitle.svelte';
+	import { cartProducts, cartTotal, removeFromCart, router, updateQuantity } from '$lib/view';
 
 	let total = $derived($cartTotal);
 </script>
 
-<div class="mx-auto max-w-6xl px-2 py-6 md:py-12">
-	<div class="flex items-center gap-2 mb-2 md:mb-6">
+<PageContainer>
+	<PageTitle title={$t('cart.title')}>
 		<ShoppingCart size={30} />
-		<h1 class="capitalize x-text-xl">{$t('cart.title')}</h1>
-	</div>
+	</PageTitle>
 
 	{#if $cartProducts.length === 0}
 		<EmptyState message={$t('cart.empty')} actionHref="#/products" actionLabel={$t('cart.continueShopping')} />
 	{:else}
-		<div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-2">
-			<div class="grid lg:col-span-2 lg:gap-2">
+		<div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
+			<div class="grid gap-2 lg:col-span-2">
 				{#each $cartProducts as item (item.product.itemId)}
 					<CartItem
 						{item}
@@ -32,20 +33,20 @@
 			</div>
 
 			<div class="lg:col-span-1">
-				<SidePanel sticky={true}>
+				<Card sticky={true}>
 					<div class="mb-6">
 						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total} isBold={true} />
 					</div>
 
-					<Button class="w-full py-3 mb-3 whitespace-nowrap" onclick={() => router.navigate('#/checkout')}>
+					<Button class="mb-3 w-full whitespace-nowrap py-3" onclick={() => router.navigate('#/checkout')}>
 						{$t('cart.checkout')}
 					</Button>
 
-					<Button class="w-full py-3 whitespace-nowrap" variant="secondary" onclick={() => router.navigate('#/products')}>
+					<Button class="w-full whitespace-nowrap py-3" variant="secondary" onclick={() => router.navigate('#/products')}>
 						{$t('cart.keepBuying')}
 					</Button>
-				</SidePanel>
+				</Card>
 			</div>
 		</div>
 	{/if}
-</div>
+</PageContainer>

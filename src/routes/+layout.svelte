@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { locale } from 'svelte-i18n';
 	import { logger } from '$adapters/browser/logger';
-	import Navigation from '$lib/Navigation.svelte';
-	import Footer from '$lib/Footer.svelte';
+	import Navigation from '$lib/layout/Navigation.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
 	import '$adapters/svelte/i18n';
 	import '../app.css';
+
+	$effect(() => {
+		if (typeof document !== 'undefined' && $locale) {
+			document.documentElement.lang = $locale;
+		}
+	});
 
 	onMount(() => {
 		if ('serviceWorker' in navigator && isSecureContext()) {
@@ -31,7 +38,7 @@
 	logger.log(`Width: ${window.innerWidth}px, Height: ${window.innerHeight}px`);
 </script>
 
-<div class="min-h-screen flex flex-col bg-gray-50">
+<div class="min-h-screen flex flex-col bg-surface">
 	<Navigation />
 	<main class="flex-1">
 		<!-- svelte-ignore slot_element_deprecated -->
@@ -39,10 +46,3 @@
 	</main>
 	<Footer />
 </div>
-
-<style global>
-	:global(body) {
-		margin: 0;
-		padding: 0;
-	}
-</style>

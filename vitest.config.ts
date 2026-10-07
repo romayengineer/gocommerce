@@ -7,6 +7,7 @@ export default defineConfig({
 	resolve: {
 		conditions: ['browser'],
 		alias: {
+			$lib: fileURLToPath(new URL('./src/lib', import.meta.url)),
 			$core: fileURLToPath(new URL('./src/core', import.meta.url)),
 			$adapters: fileURLToPath(new URL('./src/adapters', import.meta.url)),
 			$composition: fileURLToPath(new URL('./src/composition', import.meta.url))
