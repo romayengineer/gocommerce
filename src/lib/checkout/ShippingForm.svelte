@@ -1,6 +1,6 @@
 <script lang="ts">
-	import FormField from '$lib/ui/FormField.svelte';
-	import SearchableSelect from '$lib/ui/SearchableSelect.svelte';
+	import ArkField from '$lib/ui/ark/ArkField.svelte';
+	import ArkCombobox from '$lib/ui/ark/ArkCombobox.svelte';
 	import { t } from 'svelte-i18n';
 	import { ARGENTINE_PROVINCES } from '$core/domain/locations';
 	import { AMENITIES } from '$core/domain/amenities';
@@ -23,7 +23,7 @@
 </script>
 
 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-	<FormField
+	<ArkField
 		id="firstName"
 		label={$t('shipping.firstName')}
 		autocomplete="given-name"
@@ -33,7 +33,7 @@
 		errorMessages={errors.firstName?.errors}
 	/>
 
-	<FormField
+	<ArkField
 		id="lastName"
 		label={$t('shipping.lastName')}
 		autocomplete="family-name"
@@ -43,7 +43,7 @@
 		errorMessages={errors.lastName?.errors}
 	/>
 
-	<FormField
+	<ArkField
 		id="email"
 		label={$t('shipping.email')}
 		type="email"
@@ -54,7 +54,7 @@
 		errorMessages={errors.email?.errors}
 	/>
 
-	<FormField
+	<ArkField
 		id="phone"
 		label={$t('shipping.phone')}
 		type="tel"
@@ -66,7 +66,7 @@
 	/>
 
 	<div class="md:col-span-2">
-		<FormField
+		<ArkField
 			id="address"
 			label={$t('shipping.address')}
 			autocomplete="street-address"
@@ -78,7 +78,7 @@
 	</div>
 
 	<div class="md:col-span-2">
-		<SearchableSelect
+		<ArkCombobox
 			id="amenity"
 			required={false}
 			label={$t('shipping.amenity')}
@@ -88,7 +88,7 @@
 		/>
 	</div>
 
-	<FormField
+	<ArkField
 		id="city"
 		label={$t('shipping.city')}
 		autocomplete="address-level2"
@@ -98,7 +98,7 @@
 		errorMessages={errors.city?.errors}
 	/>
 
-	<FormField
+	<ArkField
 		id="county"
 		label={$t('shipping.county')}
 		bind:value={formData.county}
@@ -106,7 +106,7 @@
 		errorMessages={errors.county?.errors}
 	/>
 
-	<SearchableSelect
+	<ArkCombobox
 		id="state"
 		label={$t('shipping.state')}
 		options={ARGENTINE_PROVINCES}
@@ -115,7 +115,7 @@
 		error={!!errors.stateName}
 	/>
 
-	<FormField
+	<ArkField
 		id="zipCode"
 		label={$t('shipping.zipCode')}
 		autocomplete="postal-code"
@@ -125,7 +125,7 @@
 		errorMessages={errors.zipCode?.errors}
 	/>
 
-	<FormField
+	<ArkField
 		id="country"
 		label={$t('shipping.country')}
 		autocomplete="country-name"

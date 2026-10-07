@@ -7,8 +7,3 @@ export function filterOptions<T extends SearchOption>(options: T[], query: strin
 	const normalized = query.toLowerCase();
 	return options.filter((option) => option.label.toLowerCase().includes(normalized));
 }
-
-export function matchesOption(options: SearchOption[], value: string | undefined): boolean {
-	if (!value) return false;
-	return options.some((option) => option.label.toLowerCase() === value.toLowerCase());
-}

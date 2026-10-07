@@ -3,7 +3,7 @@
 	import { catalogProducts, addToCart } from '$lib/view';
 	import ProductImageCarousel from '$lib/catalog/ProductImageCarousel.svelte';
 	import ProductHeader from '$lib/catalog/ProductHeader.svelte';
-	import QuantitySelector from '$lib/ui/QuantitySelector.svelte';
+	import ArkNumberInput from '$lib/ui/ark/ArkNumberInput.svelte';
 	import AddToCartAction from '$lib/catalog/AddToCartAction.svelte';
 	import ProductDetailsBox from '$lib/catalog/ProductDetailsBox.svelte';
 	import ProductNotFound from '$lib/catalog/ProductNotFound.svelte';
@@ -19,8 +19,7 @@
 
 	let itemId = $derived(product?.items[itemSelected].itemId);
 
-	function selectSize(e: Event, index: number) {
-		e.preventDefault();
+	function selectSize(index: number) {
 		itemSelected = index;
 	}
 
@@ -40,7 +39,7 @@
 		<ProductHeader {product} {itemSelected} {selectSize}/>
 
 		<div class="mb-8 flex flex-wrap justify-between">
-			<QuantitySelector {quantity} onchange={(q) => (quantity = q)} />
+			<ArkNumberInput {quantity} onchange={(q) => (quantity = q)} />
 			<AddToCartAction onclick={handleAddToCart} />
 		</div>
 

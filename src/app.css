@@ -57,6 +57,53 @@
 	.focus-ring {
 		@apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40;
 	}
+
+	/* Ark UI shared states. Wrappers pass structural Tailwind classes via
+	   `class` props; state-driven styling keys off Ark's data attributes so
+	   every dropdown / radio / collapsible behaves identically. */
+	.ark-dropdown-item[data-highlighted] {
+		@apply bg-primary-100;
+	}
+
+	.ark-dropdown-item[data-state='checked'] {
+		@apply bg-primary-50 font-semibold;
+	}
+
+	.ark-dropdown-item[data-disabled] {
+		@apply cursor-not-allowed opacity-50;
+	}
+
+	.ark-chevron {
+		transition: transform 0.2s ease;
+	}
+
+	[data-state='open'] .ark-chevron {
+		transform: rotate(180deg);
+	}
+
+	.ark-radio-control {
+		@apply flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-white transition-colors;
+	}
+
+	.ark-radio-control[data-state='checked'] {
+		@apply border-primary-600;
+	}
+
+	.ark-radio-control[data-disabled] {
+		@apply cursor-not-allowed opacity-50;
+	}
+
+	.ark-radio-dot {
+		@apply h-2 w-2 rounded-full bg-primary-600 opacity-0 transition-opacity;
+	}
+
+	.ark-radio-control[data-state='checked'] .ark-radio-dot {
+		@apply opacity-100;
+	}
+
+	.ark-size-item[data-state='checked'] {
+		@apply bg-primary-600 text-white hover:bg-primary-600;
+	}
 }
 
 body {

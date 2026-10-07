@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import CollapsibleSectionButton from '$lib/catalog/CollapsibleSectionButton.svelte';
+	import ArkCollapsible from '$lib/ui/ark/ArkCollapsible.svelte';
+	import ArkRadioGroup from '$lib/ui/ark/ArkRadioGroup.svelte';
+	import ArkSelect from '$lib/ui/ark/ArkSelect.svelte';
 	import { Settings2 } from 'lucide-svelte';
 	import {
 		viewport,
@@ -20,12 +22,21 @@
 
 	let isExpanded = $derived(isDesktop || isMobileFiltersOpen);
 
-	function onChange(mutate: (e: any) => void): (e: any) => void {
-		return (e) => {
-			window.scrollTo(0, 0);
-			return mutate(e);
-		};
+	function scrollTop() {
+		window.scrollTo(0, 0);
 	}
+
+	const sortOptions = $derived([
+		{ value: 'random', label: $t('filters.random') },
+		{ value: 'name-asc', label: $t('filters.nameAsc') },
+		{ value: 'name-desc', label: $t('filters.nameDesc') },
+		{ value: 'price-asc', label: $t('filters.priceAsc') },
+		{ value: 'price-desc', label: $t('filters.priceDesc') }
+	]);
+
+	const categoryOptions = $derived($filterCategories.map((cat) => ({ value: cat, label: cat })));
+	const brandOptions = $derived($filterBrands.map((brand) => ({ value: brand, label: brand })));
+	const sizeOptions = $derived($filterSizes.map((size) => ({ value: size, label: `${size} ML` })));
 
 	$effect(() => {
 		if (isDesktop) {
@@ -46,7 +57,10 @@
 			type="text"
 			placeholder={$t('filters.search')}
 			value={$searchQuery}
-			oninput={onChange((e) => (productPage.searchQuery.set(e.currentTarget.value)))}
+			oninput={(e) => {
+				scrollTop();
+				productPage.searchQuery.set(e.currentTarget.value);
+			}}
 			spellcheck="false"
 			aria-label={$t('filters.search')}
 			class="flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 md:text-base"
@@ -64,92 +78,80 @@
 	{#if isExpanded}
 		<!-- Sort Section -->
 		<div>
-			<CollapsibleSectionButton label={$t('filters.sort')} isExpanded={isDesktop}>
+			<ArkCollapsible label={$t('filters.sort')} isExpanded={isDesktop}>
 				<div class="px-3 py-3">
-					<select
+					<ArkSelect
+						options={sortOptions}
 						value={$sortBy}
-						onchange={onChange((e) => (productPage.sortBy.set(e.currentTarget.value)))}
-						aria-label={$t('filters.sort')}
-						class="w-full rounded border p-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500 md:text-base"
-					>
-						<option value="random">{$t('filters.random')}</option>
-						<option value="name-asc">{$t('filters.nameAsc')}</option>
-						<option value="name-desc">{$t('filters.nameDesc')}</option>
-						<option value="price-asc">{$t('filters.priceAsc')}</option>
-						<option value="price-desc">{$t('filters.priceDesc')}</option>
-					</select>
+						ariaLabel={$t('filters.sort')}
+						onchange={(v) => {
+							scrollTop();
+							productPage.sortBy.set(v);
+						}}
+					/>
 				</div>
-			</CollapsibleSectionButton>
+			</ArkCollapsible>
 		</div>
 
 		<!-- Category Section -->
 		<div class="border-b">
-			<CollapsibleSectionButton label={$t('filters.category')} isExpanded={isDesktop}>
-				<div class="space-y-2 px-3 py-3">
+			<ArkCollapsible label={$t('filters.category')} isExpanded={isDesktop}>
+				<div class="px-3 py-3">
 					{#if $filterCategories.length > 0}
-						<div class="space-y-1">
-							{#each $filterCategories as cat}
-								<label class="flex cursor-pointer items-center text-xs md:text-base">
-									<input
-										type="radio"
-										name="category"
-										checked={$filterCategory.endsWith(cat) || $filterCategory === cat}
-										onchange={onChange(() => (productPage.filterCategory.set(cat)))}
-										class="mr-1.5"
-									/>
-									<span class="capitalize">{cat}</span>
-								</label>
-							{/each}
-						</div>
+						<ArkRadioGroup
+							name="category"
+							label={$t('filters.category')}
+							hideLabel
+							options={categoryOptions}
+							value={$filterCategory}
+							onchange={(v) => {
+								scrollTop();
+								productPage.filterCategory.set(v);
+							}}
+						/>
 					{/if}
 				</div>
-			</CollapsibleSectionButton>
+			</ArkCollapsible>
 		</div>
 
 		<div class="border-b">
-			<CollapsibleSectionButton label={$t('filters.brands')} isExpanded={isDesktop}>
-				<div class="space-y-2 px-3 py-3">
+			<ArkCollapsible label={$t('filters.brands')} isExpanded={isDesktop}>
+				<div class="px-3 py-3">
 					{#if $filterBrands.length > 0}
-						<div class="space-y-1">
-							{#each $filterBrands as brand}
-								<label class="flex cursor-pointer items-center text-xs md:text-base">
-									<input
-										type="radio"
-										name="brand"
-										checked={$filterBrand === brand}
-										onchange={onChange(() => (productPage.filterBrand.set(brand)))}
-										class="mr-1.5"
-									/>
-									<span class="capitalize">{brand}</span>
-								</label>
-							{/each}
-						</div>
+						<ArkRadioGroup
+							name="brand"
+							label={$t('filters.brands')}
+							hideLabel
+							options={brandOptions}
+							value={$filterBrand}
+							onchange={(v) => {
+								scrollTop();
+								productPage.filterBrand.set(v);
+							}}
+						/>
 					{/if}
 				</div>
-			</CollapsibleSectionButton>
+			</ArkCollapsible>
 		</div>
 
 		<div class="border-b">
-			<CollapsibleSectionButton label={$t('filters.sizes')} isExpanded={isDesktop}>
-				<div class="space-y-2 px-3 py-3">
+			<ArkCollapsible label={$t('filters.sizes')} isExpanded={isDesktop}>
+				<div class="px-3 py-3">
 					{#if $filterSizes.length > 0}
-						<div class="space-y-1">
-							{#each $filterSizes as size}
-								<label class="flex cursor-pointer items-center text-xs md:text-base">
-									<input
-										type="radio"
-										name="size"
-										checked={$filterSize === size}
-										onchange={onChange(() => (productPage.filterSize.set(size)))}
-										class="mr-1.5"
-									/>
-									<span class="capitalize">{size} ML</span>
-								</label>
-							{/each}
-						</div>
+						<ArkRadioGroup
+							name="size"
+							label={$t('filters.sizes')}
+							hideLabel
+							options={sizeOptions}
+							value={$filterSize}
+							onchange={(v) => {
+								scrollTop();
+								productPage.filterSize.set(v);
+							}}
+						/>
 					{/if}
 				</div>
-			</CollapsibleSectionButton>
+			</ArkCollapsible>
 		</div>
 	{/if}
 </div>

@@ -1,29 +1,27 @@
 <script lang="ts">
 	import { locale, t } from 'svelte-i18n';
+	import ArkSelect from '$lib/ui/ark/ArkSelect.svelte';
 	import { locales, localeNames, localeFlags, setLocale, defaultLocale } from '$adapters/svelte/i18n';
 
-	function handleLanguageChange(e: Event) {
-		const target = e.target as HTMLSelectElement;
-		const newLocale = target.value;
-		locale.set(newLocale);
-		setLocale(newLocale);
-	}
-
 	const current = $derived($locale ?? defaultLocale);
+
+	const languageOptions = $derived(
+		locales.map((lang) => ({ value: lang, label: `${localeFlags[lang]} ${localeNames[lang]}` }))
+	);
+
+	function handleLanguageChange(value: string) {
+		locale.set(value);
+		setLocale(value);
+	}
 </script>
 
 <label class="flex items-center">
 	<span class="sr-only">{$t('header.language')}</span>
-	<select
+	<ArkSelect
+		options={languageOptions}
 		value={current}
+		ariaLabel={localeNames[current]}
 		onchange={handleLanguageChange}
-		class="cursor-pointer rounded border border-gray-300 bg-white px-2 py-1.5 text-base hover:border-primary-400 focus:border-primary-600 focus:outline-none"
-		title={localeNames[current]}
-	>
-		{#each locales as lang}
-			<option value={lang}>
-				{localeFlags[lang]} {localeNames[lang]}
-			</option>
-		{/each}
-	</select>
+		class="w-auto px-2 py-1.5 text-base"
+	/>
 </label>

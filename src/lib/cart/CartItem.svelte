@@ -2,7 +2,7 @@
 	import { t } from 'svelte-i18n';
 	import { Trash2 } from 'lucide-svelte';
 	import Price from '$lib/ui/Price.svelte';
-	import QuantitySelector from '$lib/ui/QuantitySelector.svelte';
+	import ArkNumberInput from '$lib/ui/ark/ArkNumberInput.svelte';
 	import type { CartItemFull } from '$core/domain/cart';
 
 	interface Props {
@@ -38,7 +38,7 @@
 			</div>
 
 			<div class="flex items-center gap-4">
-				<QuantitySelector id={`qty-${item.product.itemId}`} quantity={item.quantity} onchange={onQuantityChange} />
+				<ArkNumberInput id={`qty-${item.product.itemId}`} quantity={item.quantity} onchange={onQuantityChange} />
 				<Price amount={item.product.price * item.quantity} size="md" />
 			</div>
 		</div>

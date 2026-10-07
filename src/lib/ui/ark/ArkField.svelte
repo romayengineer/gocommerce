@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Field } from '@ark-ui/svelte/field';
 	import ErrorMessage from '$lib/ui/ErrorMessage.svelte';
 	import { inputClasses } from '$lib/ui/variants';
 
@@ -13,35 +14,39 @@
 		editable?: boolean;
 		autocomplete?: import('svelte/elements').FullAutoFill;
 		onchange?: (event: Event) => void;
-		onfocusin?: (event: FocusEvent) => void;
-		onfocusout?: (event: FocusEvent) => void;
 	}
 
-	let { id, label, type = 'text', value = $bindable(''), required = false, error = false, errorMessages = ['This field is required'], editable = true, autocomplete, onchange, onfocusin, onfocusout }: Props = $props();
+	let {
+		id,
+		label,
+		type = 'text',
+		value = $bindable(''),
+		required = false,
+		error = false,
+		errorMessages,
+		editable = true,
+		autocomplete,
+		onchange
+	}: Props = $props();
 </script>
 
-
-<div>
-	<label for={id} class="mb-2 block text-sm font-medium text-gray-700">
+<Field.Root {id} {required} invalid={error} disabled={!editable}>
+	<Field.Label class="mb-2 block text-sm font-medium text-gray-700">
 		{label}
 		{#if required}<span class="text-red-500">*</span>{/if}
-	</label>
-	<input
+	</Field.Label>
+	<Field.Input
 		{id}
 		{type}
-		{value}
 		{required}
 		{autocomplete}
-		disabled={!editable}
+		bind:value
 		spellcheck="false"
 		aria-invalid={error}
 		onchange={onchange}
-		onfocusin={onfocusin}
-		onfocusout={onfocusout}
-		oninput={(e) => { if (e.target instanceof HTMLInputElement) value = e.target.value; }}
 		class={inputClasses(error ? 'error' : !editable ? 'disabled' : 'default')}
 	/>
 	{#if error}
-		<ErrorMessage messages={errorMessages}/>
+		<ErrorMessage messages={errorMessages} />
 	{/if}
-</div>
+</Field.Root>

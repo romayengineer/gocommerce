@@ -18,8 +18,7 @@
 
 	let itemSelected = $state(0);
 
-	function selectSize(e: Event, index: number) {
-		e.preventDefault();
+	function selectSize(index: number) {
 		itemSelected = index;
 	}
 

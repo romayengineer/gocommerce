@@ -6,7 +6,7 @@
 	interface Props {
 		product: DisplayProduct
 		itemSelected: number,
-		selectSize: (e: Event, index: number) => void
+		selectSize: (index: number) => void
 	}
 
 	const { product, itemSelected, selectSize }: Props = $props();
