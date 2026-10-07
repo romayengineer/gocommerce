@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "gocommerce",
+  "project_id": "801bd0c0-2ef5-4e5a-b770-03c9981c1010"
+}
