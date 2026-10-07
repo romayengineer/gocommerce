@@ -15,6 +15,7 @@ data/
 dist/
 node_modules
 vite.config.js.timestamp*
+stats.html
 
 # Beads / Dolt files (added by bd init)
 .dolt/
