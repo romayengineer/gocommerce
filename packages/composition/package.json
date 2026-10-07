@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@gocommerce/adapters": "*",
+    "@gocommerce/application": "*",
+    "@gocommerce/config": "*",
+    "@gocommerce/domain": "*",
+    "@gocommerce/ports": "*"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "name": "@gocommerce/composition",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1"
+}

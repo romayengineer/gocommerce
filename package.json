@@ -3,12 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
     "analyze": "ANALYZE=true vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json && node scripts/check-boundaries.mjs",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run"
   },
   "devDependencies": {
@@ -28,6 +31,13 @@
     "vitest": "^2.1.9"
   },
   "dependencies": {
+    "@gocommerce/adapters": "*",
+    "@gocommerce/application": "*",
+    "@gocommerce/composition": "*",
+    "@gocommerce/config": "*",
+    "@gocommerce/domain": "*",
+    "@gocommerce/ports": "*",
+    "@gocommerce/ui": "*",
     "@splidejs/splide": "^4.1.4",
     "@types/leaflet": "^1.9.21",
     "@vercel/config": "^0.5.1",

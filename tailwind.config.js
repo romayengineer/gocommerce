@@ -2,7 +2,10 @@
 const withAlpha = (varName, fallback) => `rgb(var(${varName}, ${fallback}) / <alpha-value>)`;
 
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts,jsx,tsx}'],
+  content: [
+    './src/**/*.{html,js,svelte,ts,jsx,tsx}',
+    './packages/**/*.{html,js,svelte,ts,jsx,tsx}'
+  ],
   theme: {
     extend: {
       colors: {

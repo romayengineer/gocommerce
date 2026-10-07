@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "name": "@gocommerce/domain",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1"
+}

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { locale } from 'svelte-i18n';
-	import { logger } from '$adapters/browser/logger';
+	import { logger } from '@gocommerce/adapters/browser/logger';
 	import { config } from '$lib/view';
 	import Navigation from '$lib/layout/Navigation.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
-	import '$adapters/svelte/i18n';
+	import '@gocommerce/adapters/svelte/i18n';
 	import '../app.css';
 
 	$effect(() => {

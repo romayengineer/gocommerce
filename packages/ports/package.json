@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@gocommerce/domain": "*"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "name": "@gocommerce/ports",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1"
+}

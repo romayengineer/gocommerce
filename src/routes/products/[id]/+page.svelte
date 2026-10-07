@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import ProductView from '$lib/catalog/ProductView.svelte';
 	import { catalog, router } from '$lib/view';
-	import { productFullUrl } from '$core/domain/product';
+	import { productFullUrl } from '@gocommerce/domain/product';
 
 	let productId: string = page.params.id!;
 

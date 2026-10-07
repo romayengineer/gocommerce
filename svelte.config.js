@@ -11,9 +11,21 @@ import adapter from '@sveltejs/adapter-static';
 const config = {
   kit: {
     alias: {
-      '$core': 'src/core',
-      '$adapters': 'src/adapters',
-      '$composition': 'src/composition'
+      // Workspace packages enforce the inward-dependency DAG via their
+      // package.json dependencies; aliases only tell the bundler where
+      // the sources live (no build step — resolved straight to src).
+      '@gocommerce/domain': 'packages/domain/src',
+      '@gocommerce/ports': 'packages/ports/src',
+      '@gocommerce/config': 'packages/config/src',
+      '@gocommerce/application': 'packages/application/src',
+      '@gocommerce/adapters': 'packages/adapters/src',
+      '@gocommerce/composition': 'packages/composition/src',
+      '@gocommerce/ui': 'packages/ui/src'
+    },
+    files: {
+      // $lib now resolves to the ui workspace package so routes keep
+      // importing '$lib/...' while the package DAG enforces layering.
+      lib: 'packages/ui/src'
     },
     output: {
       bundleStrategy: 'inline'

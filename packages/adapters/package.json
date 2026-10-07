@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@gocommerce/config": "*",
+    "@gocommerce/domain": "*",
+    "@gocommerce/ports": "*",
+    "@splidejs/splide": "^4.1.4",
+    "leaflet": "^1.9.4",
+    "svelte-i18n": "^4.0.1"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "name": "@gocommerce/adapters",
+  "peerDependencies": {
+    "svelte": "^5.55.10"
+  },
+  "private": true,
+  "type": "module",
+  "version": "0.0.1"
+}
