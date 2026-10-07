@@ -89,8 +89,10 @@
 					<li>
 						<button
 							type="button"
+							role="option"
+							aria-selected={value === option.label}
 							onclick={() => selectOption(option.label)}
-							class="w-full text-left px-4 py-2 hover:bg-primary-100 focus:bg-primary-100 focus:outline-none {value === option.value ? 'bg-primary-50 font-semibold' : ''}"
+							class="w-full px-4 py-2 text-left transition-colors hover:bg-primary-100 focus:bg-primary-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500/40 {value === option.label ? 'bg-primary-50 font-semibold' : ''}"
 						>
 							{option.label}
 						</button>

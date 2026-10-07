@@ -4,7 +4,7 @@
 </script>
 
 <footer class="mt-16 bg-gray-900 text-white">
-	<div class="mx-auto max-w-page px-4 py-12">
+	<div class="mx-auto w-full max-w-page px-page-x py-12">
 		<div class="mb-8 grid grid-cols-1 gap-8 md:grid-cols-4">
 			<div>
 				<h3 class="mb-4 text-xl font-bold">{$t('header.title')}</h3>

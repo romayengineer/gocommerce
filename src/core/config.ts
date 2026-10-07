@@ -7,10 +7,16 @@ export interface BankDetails {
 	bankName: string;
 }
 
+export interface ViewConfig {
+	pageWidth: string;
+	theme: string;
+}
+
 export interface AppConfig {
 	imagesBaseUrl: string;
 	mapProvider: MapProvider;
 	googleMapsApiKey: string;
 	currency: string;
 	bank: BankDetails;
+	view: ViewConfig;
 }

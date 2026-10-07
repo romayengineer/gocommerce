@@ -1,18 +1,20 @@
 <script lang="ts">
 	import Link from '$lib/ui/Link.svelte';
+	import Card from '$lib/ui/Card.svelte';
 
 	interface Props {
 		message: string;
 		actionHref?: string;
 		actionLabel?: string;
+		class?: string;
 	}
 
-	const { message, actionHref, actionLabel }: Props = $props();
+	const { message, actionHref, actionLabel, class: className }: Props = $props();
 </script>
 
-<div class="card p-12 text-center">
-	<p class="mb-6 text-xl text-gray-600">{message}</p>
+<Card padding="lg" class="text-center {className || ''}">
+	<p class="mb-6 text-lg text-gray-600">{message}</p>
 	{#if actionHref && actionLabel}
-		<Link href={actionHref} variant="button">{actionLabel}</Link>
+		<Link href={actionHref} variant="button" size="md">{actionLabel}</Link>
 	{/if}
-</div>
+</Card>

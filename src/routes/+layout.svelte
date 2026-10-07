@@ -2,14 +2,16 @@
 	import { onMount } from 'svelte';
 	import { locale } from 'svelte-i18n';
 	import { logger } from '$adapters/browser/logger';
+	import { config } from '$lib/view';
 	import Navigation from '$lib/layout/Navigation.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import '$adapters/svelte/i18n';
 	import '../app.css';
 
 	$effect(() => {
-		if (typeof document !== 'undefined' && $locale) {
-			document.documentElement.lang = $locale;
+		if (typeof document !== 'undefined') {
+			if ($locale) document.documentElement.lang = $locale;
+			if (config.view?.theme) document.documentElement.dataset.theme = config.view.theme;
 		}
 	});
 

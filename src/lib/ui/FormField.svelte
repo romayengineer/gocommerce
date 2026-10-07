@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ErrorMessage from '$lib/ui/ErrorMessage.svelte';
+	import { inputClasses } from '$lib/ui/variants';
 
 	interface Props {
 		id: string;
@@ -38,7 +39,7 @@
 		onfocusin={onfocusin}
 		onfocusout={onfocusout}
 		oninput={(e) => { if (e.target instanceof HTMLInputElement) value = e.target.value; }}
-		class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 {!editable ? 'cursor-not-allowed bg-gray-100 text-gray-600' : ''}"
+		class={inputClasses(error ? 'error' : !editable ? 'disabled' : 'default')}
 	/>
 	{#if error}
 		<ErrorMessage messages={errorMessages}/>

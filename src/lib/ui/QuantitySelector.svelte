@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Minus, Plus } from 'lucide-svelte';
+	import { iconButtonClasses, quantityInputClasses } from '$lib/ui/variants';
 
 	interface Props {
 		id?: string;
@@ -31,7 +32,7 @@
 		onclick={decrement}
 		disabled={quantity <= 1}
 		aria-label="Decrease quantity"
-		class="flex h-8 w-8 items-center justify-center border border-gray-300 bg-white transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+		class={iconButtonClasses('rounded-r-none border-r-0')}
 	>
 		<Minus size={16} />
 	</button>
@@ -42,13 +43,13 @@
 		onchange={handleChange}
 		min="1"
 		aria-label="Quantity"
-		class="h-8 w-10 border border-gray-300 text-center outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+		class={quantityInputClasses()}
 	/>
 	<button
 		type="button"
 		onclick={increment}
 		aria-label="Increase quantity"
-		class="flex h-8 w-8 items-center justify-center border border-gray-300 bg-white transition hover:bg-gray-100"
+		class={iconButtonClasses('rounded-l-none border-l-0')}
 	>
 		<Plus size={16} />
 	</button>

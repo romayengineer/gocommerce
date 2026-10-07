@@ -13,6 +13,10 @@ export function readEnvConfig(): AppConfig {
 			number: import.meta.env.VITE_BANK_ACCOUNT_NUMBER ?? '',
 			name: import.meta.env.VITE_BANK_ACCOUNT_NAME ?? '',
 			bankName: import.meta.env.VITE_BANK_NAME ?? ''
+		},
+		view: {
+			pageWidth: import.meta.env.VITE_PAGE_WIDTH ?? '80rem',
+			theme: import.meta.env.VITE_THEME ?? 'default'
 		}
 	};
 }

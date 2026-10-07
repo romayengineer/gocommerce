@@ -1,8 +1,9 @@
 <script lang="ts">
-	type Variant = 'primary' | 'secondary' | 'danger';
+	import { buttonClasses, type ButtonSize, type ButtonVariant } from '$lib/ui/variants';
 
 	interface Props {
-		variant?: Variant;
+		variant?: ButtonVariant;
+		size?: ButtonSize;
 		class?: string;
 		onclick?: (e: MouseEvent) => void;
 		disabled?: boolean;
@@ -10,20 +11,22 @@
 		children?: import('svelte').Snippet;
 	}
 
-	const { variant = 'primary', class: className, onclick, disabled = false, type = 'button', children }: Props = $props();
-
-	const variantClasses = {
-		primary: 'bg-primary-600 text-white hover:bg-primary-700',
-		secondary: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
-		danger: 'bg-red-600 text-white hover:bg-red-700'
-	};
+	const {
+		variant = 'primary',
+		size = 'md',
+		class: className,
+		onclick,
+		disabled = false,
+		type = 'button',
+		children
+	}: Props = $props();
 </script>
 
 <button
 	{type}
 	{onclick}
 	{disabled}
-	class="inline-flex items-center justify-center gap-2 rounded px-4 py-2 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/40 {variantClasses[variant as Variant]} {disabled ? 'opacity-50 cursor-not-allowed' : ''} {className || ''}"
+	class={buttonClasses(variant, size, className || '')}
 >
 	{#if children}
 		{@render children()}

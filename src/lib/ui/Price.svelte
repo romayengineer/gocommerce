@@ -15,14 +15,14 @@
 	const { amount, size = 'md', class: className, currency = config.currency }: Props = $props();
 
 	const sizeClasses = {
-		sm: 'text-sm',
-		md: 'text-lg',
+		sm: 'text-sm font-semibold',
+		md: 'text-lg font-bold',
 		lg: 'text-2xl font-bold text-primary-600'
 	};
 
 	let formattedPrice = $derived(formatPrice(amount, $locale, currency));
 </script>
 
-<span class="font-bold pl-2 {sizeClasses[size as Size]} {className || ''}">
+<span class="font-bold tabular-nums {sizeClasses[size as Size]} {className || ''}">
 	{formattedPrice}
 </span>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { chipClasses } from '$lib/ui/variants';
+
 	interface Props {
 		items: Array<{ size: string }>;
 		selected?: number;
@@ -18,9 +20,8 @@
 		<button
 			type="button"
 			onclick={(e) => handleSelectSize(e, index)}
-			class="rounded-lg px-3 py-1 text-sm font-medium transition-colors {selected === index
-				? 'bg-primary-600 text-white'
-				: 'bg-gray-200 text-gray-800 hover:bg-gray-300'}"
+			aria-pressed={selected === index}
+			class={chipClasses(selected === index)}
 		>
 			{item.size} ML
 		</button>

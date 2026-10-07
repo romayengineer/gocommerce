@@ -6,7 +6,7 @@
 </script>
 
 <nav class="sticky top-0 z-50 bg-white shadow-md">
-	<div class="mx-auto max-w-page px-4">
+	<div class="mx-auto w-full max-w-page px-page-x">
 		<div class="flex h-16 items-center justify-between">
 			<Link href="#/" class="truncate text-xl font-bold text-primary-600 hover:text-primary-700 md:text-2xl">{$t('header.title')}</Link>
 

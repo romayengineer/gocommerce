@@ -1,10 +1,11 @@
 <script lang="ts">
 	import ProductGrid from '$lib/catalog/ProductGrid.svelte';
 	import ProductFiltersMobile from '$lib/catalog/ProductFiltersMobile.svelte';
+	import PageContainer from '$lib/ui/PageContainer.svelte';
 	import { productPage, sortedProducts } from '$lib/view';
 </script>
 
-<div class="mx-auto max-w-page py-1">
+<PageContainer class="py-1">
 
 	<div class="flex flex-col gap-2 lg:flex-row">
 		<ProductFiltersMobile />
@@ -13,4 +14,4 @@
 			<ProductGrid products={$sortedProducts} onProductImageFailed={(id) => productPage.handleProductImageFailed(id)} />
 		</div>
 	</div>
-</div>
+</PageContainer>

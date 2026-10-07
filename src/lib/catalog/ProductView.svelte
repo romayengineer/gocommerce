@@ -7,6 +7,7 @@
 	import AddToCartAction from '$lib/catalog/AddToCartAction.svelte';
 	import ProductDetailsBox from '$lib/catalog/ProductDetailsBox.svelte';
 	import ProductNotFound from '$lib/catalog/ProductNotFound.svelte';
+	import PageContainer from '$lib/ui/PageContainer.svelte';
 
 	let { productId }: { productId: string } = $props();
 
@@ -31,7 +32,7 @@
 </script>
 
 {#if product}
-	<div class="mx-auto max-w-page px-4 py-6 md:pt-5">
+	<PageContainer class="py-6 md:py-5">
 		<div class="mb-2 md:float-left md:mr-4 md:mb-0 md:w-1/2">
 			<ProductImageCarousel images={product.images} alt={product.productName} />
 		</div>
@@ -63,7 +64,7 @@
 		{/if}
 
 		<ProductDetailsBox productId={product.productId} productName={product.productName} brand={product.brand} />
-	</div>
+	</PageContainer>
 {:else}
 	<ProductNotFound />
 {/if}
