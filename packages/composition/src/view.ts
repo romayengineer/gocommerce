@@ -35,6 +35,8 @@ export const config = container.config;
 export const logger = container.logger;
 export const router = container.router;
 export const clipboard = container.clipboard;
+export const getProductSeed = (): string => container.seed;
+export const ensureProductSeed = (): string => container.ensureProductSeed();
 export const platform = container.platform;
 export const viewportTracker = container.viewport;
 export const catalog = container.catalog;

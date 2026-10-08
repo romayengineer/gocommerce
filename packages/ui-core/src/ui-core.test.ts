@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { columnsForWidth, DEFAULT_COLUMN_WIDTH, MIN_COLUMNS, MAX_COLUMNS } from './viewport';
 import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from './grid';
-import { updatePageInUrl, getPageInUrl } from './url';
+import { updatePageInUrl, getPageInUrl, getSeedInUrl, setSeedInUrl } from './url';
 import { formatPrice } from './format';
 import { filterOptions, matchesOption } from './search';
 import { AMENITIES, ARGENTINE_PROVINCES } from './options-data';
@@ -35,6 +35,25 @@ describe('url page helpers', () => {
 		const url = updatePageInUrl('https://shop.example/#/', 3);
 		expect(getPageInUrl(url)).toBe(3);
 		expect(getPageInUrl('https://shop.example/#/')).toBe(1);
+	});
+});
+
+describe('url seed helpers', () => {
+	it('returns null when the seed param is missing or empty', () => {
+		expect(getSeedInUrl('https://shop.example/#/products')).toBeNull();
+		expect(getSeedInUrl('https://shop.example/#/products?seed=')).toBeNull();
+		expect(getSeedInUrl('https://shop.example/#/products?seed=482917')).toBe('482917');
+	});
+
+	it('round-trips the seed param while preserving other params', () => {
+		const url = setSeedInUrl('https://shop.example/#/products?page=3', '482917');
+		expect(getSeedInUrl(url)).toBe('482917');
+		expect(getPageInUrl(url)).toBe(3);
+	});
+
+	it('overwrites an existing seed', () => {
+		const url = setSeedInUrl('https://shop.example/#/products?seed=1', '482917');
+		expect(getSeedInUrl(url)).toBe('482917');
 	});
 });
 

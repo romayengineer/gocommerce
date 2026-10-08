@@ -2,6 +2,7 @@ export { readEnvConfig } from './config/env';
 export { LocalStorageAdapter } from './storage/localStorage';
 export { logger } from './browser/logger';
 export { browserClock } from './browser/clock';
+export { generateSeed } from './browser/random';
 export { NavigatorClipboard } from './browser/clipboard';
 export { SvelteKitRouter } from './svelte/router.svelte';
 export { ViewportWidthTracker } from './svelte/platform';

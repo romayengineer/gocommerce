@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { locale } from 'svelte-i18n';
-	import { logger, config, viewportTracker } from '@gocommerce/composition/view';
+	import { logger, config, viewportTracker, ensureProductSeed } from '@gocommerce/composition/view';
 	import Navigation from '$lib/layout/Navigation.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import '../app.css';
@@ -18,6 +18,9 @@
 		// with their container via `viewportTracker.setElement(...)`; the
 		// container itself mounts nothing so it stays side-effect free.
 		viewportTracker.setElement(window);
+		// Persist the startup product-order seed to `?seed=` (replaceState)
+		// so reloads and shared links reproduce the same shuffle.
+		ensureProductSeed();
 		return () => viewportTracker.dispose();
 	});
 

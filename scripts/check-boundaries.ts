@@ -260,7 +260,10 @@ for (const f of collect('ui')) {
 }
 
 // 6. composition: wires everything; no third-party runtime imports.
+// Tests are exempt (like every other layer): suites build fakes and import
+// the test runner without shipping it.
 for (const f of collect('composition')) {
+	if (allowTests(f)) continue;
 	const { found }: FileImports = importsOf(f);
 	for (const b of bareImports(f, found)) {
 		if (b.endsWith('.json')) continue;

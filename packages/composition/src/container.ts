@@ -13,6 +13,7 @@ import { CheckoutService, type CheckoutGateway } from '@gocommerce/application/C
 import { PaymentService } from '@gocommerce/application/PaymentService';
 import { MapLocationService } from '@gocommerce/application/MapLocationService';
 import { readEnvConfig } from '@gocommerce/adapters/config/env';
+import { generateSeed } from '@gocommerce/adapters/browser/random';
 import { LocalStorageAdapter } from '@gocommerce/adapters/storage/localStorage';
 import { logger } from '@gocommerce/adapters/browser/logger';
 import { browserClock } from '@gocommerce/adapters/browser/clock';
@@ -27,6 +28,8 @@ import {
 	MAX_COLUMNS,
 	MIN_COLUMNS
 } from '@gocommerce/ui-core/viewport';
+import { getSeedInUrl, setSeedInUrl } from '@gocommerce/ui-core/url';
+import { hashSeedString, mulberry32 } from '@gocommerce/domain/random';
 import { createMapService } from '@gocommerce/adapters-maps/mapFactory';
 import productsData from './data/products.json';
 
@@ -43,6 +46,8 @@ export interface ContainerInit {
 	clock?: Clock;
 	/** Clipboard. Defaults to NavigatorClipboard. */
 	clipboard?: Clipboard;
+	/** Order seed. Defaults to `?seed=` from the startup URL, else a fresh generated seed. */
+	seed?: string;
 	/** Viewport tracker. Defaults to a new ViewportWidthTracker. */
 	viewport?: ViewportWidthTracker;
 	/** Order submission. Defaults to SimulatedCheckoutGateway. */
@@ -57,10 +62,36 @@ class SimulatedCheckoutGateway implements CheckoutGateway {
 	}
 }
 
+/**
+ * Seed precedence: explicit init override (tests/tools) wins, else `?seed=`
+ * from the given href reproduces a shared order, else `generate()` picks a
+ * fresh one. Empty URL values count as missing.
+ */
+export function resolveProductSeed(
+	initSeed: string | undefined,
+	href: string,
+	generate: () => string
+): string {
+	return initSeed || getSeedInUrl(href) || generate();
+}
+
+/**
+ * Ground-truth startup href. `window.location` (client only) always carries
+ * the hash; the router store is the SSR/prerender/test fallback.
+ */
+function bootHref(router: RouterPort): string {
+	if (typeof window !== 'undefined') return window.location.href;
+	return router.route.get().href;
+}
+
 export interface AppContainer {
 	config: AppConfig;
 	logger: Logger;
 	platform: { isBrowser: boolean };
+	/** Resolved product-order seed (explicit init, `?seed=`, or freshly generated). */
+	seed: string;
+	/** Write the resolved seed back to `?seed=` when missing (replaceState, no history spam). Client shells call this onMount; construction stays side-effect free. */
+	ensureProductSeed(): string;
 	viewport: ViewportWidthTracker;
 	router: RouterPort;
 	clipboard: Clipboard;
@@ -94,12 +125,21 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 	const gateway = init.gateway ?? new SimulatedCheckoutGateway();
 	const createMap = init.createMap ?? createMapService;
 
+	// Product order is random by design: an explicit init seed wins (tests,
+	// tools), else `?seed=` from the startup URL reproduces a shared order,
+	// else a fresh seed is picked so the first paint already shuffles.
+	// NOTE: the router store may not carry the hash yet at construction (the
+	// page store boots from server data, and hashes never reach the server),
+	// so `ensureProductSeed()` re-converges once the client shell mounts.
+	let seed = resolveProductSeed(init.seed, bootHref(router), generateSeed);
+
 	const catalog = new ProductCatalog(
 		(init.productsData ?? productsData) as ProductsColumnar,
 		{
 			imagesBaseUrl: config.imagesBaseUrl
 		},
-		memoryStoreFactory
+		memoryStoreFactory,
+		mulberry32(hashSeedString(seed))
 	);
 	const cart = new CartService(storage, catalog, logger, memoryStoreFactory, jsonStorageCodec);
 	const products = new ProductPageService(catalog, clock, memoryStoreFactory);
@@ -118,6 +158,27 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 		config,
 		logger,
 		platform: { isBrowser: typeof window !== 'undefined' },
+		get seed(): string {
+			return seed;
+		},
+		ensureProductSeed: () => {
+			// Ground truth is live here (client shell calls this onMount):
+			// adopt a URL seed that arrived after construction and reshuffle
+			// to it, else write the resolved seed back when missing. Either
+			// way the displayed order and `?seed=` converge; repeat calls
+			// are idempotent.
+			const href = bootHref(router);
+			const urlSeed = getSeedInUrl(href);
+			if (urlSeed && urlSeed !== seed) {
+				seed = urlSeed;
+				catalog.reshuffle(mulberry32(hashSeedString(seed)));
+				return seed;
+			}
+			if (!urlSeed) {
+				router.navigate(setSeedInUrl(href, seed), { replaceState: true });
+			}
+			return seed;
+		},
 		viewport,
 		router,
 		clipboard,
