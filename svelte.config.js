@@ -19,6 +19,7 @@ const config = {
       '@gocommerce/config': 'packages/config/src',
       '@gocommerce/application': 'packages/application/src',
       '@gocommerce/adapters': 'packages/adapters/src',
+      '@gocommerce/adapters-maps': 'packages/adapters-maps/src',
       '@gocommerce/composition': 'packages/composition/src',
       '@gocommerce/ui': 'packages/ui/src'
     },

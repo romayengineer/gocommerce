@@ -6,4 +6,3 @@ export { NavigatorClipboard } from './browser/clipboard';
 export { SvelteKitRouter } from './svelte/router.svelte';
 export { ViewportWidthTracker } from './svelte/platform';
 export { toSvelte } from './svelte/store';
-export { createMapService } from './maps/mapFactory';

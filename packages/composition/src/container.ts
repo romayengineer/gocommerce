@@ -19,7 +19,7 @@ import { browserClock } from '@gocommerce/adapters/browser/clock';
 import { NavigatorClipboard } from '@gocommerce/adapters/browser/clipboard';
 import { SvelteKitRouter } from '@gocommerce/adapters/svelte/router.svelte';
 import { ViewportWidthTracker } from '@gocommerce/adapters/svelte/platform';
-import { createMapService } from '@gocommerce/adapters/maps/mapFactory';
+import { createMapService } from '@gocommerce/adapters-maps/mapFactory';
 import productsData from './data/products.json';
 
 export interface ContainerInit {
@@ -40,7 +40,7 @@ export interface ContainerInit {
 	/** Order submission. Defaults to SimulatedCheckoutGateway. */
 	gateway?: CheckoutGateway;
 	/** Map backend factory. Defaults to createMapService. */
-	createMap?: (config: AppConfig) => IMapService;
+	createMap?: (config: AppConfig, logger?: Logger) => IMapService;
 }
 
 class SimulatedCheckoutGateway implements CheckoutGateway {
@@ -81,7 +81,7 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 	const products = new ProductPageService(catalog, clock);
 	const checkout = new CheckoutService(gateway, storage, router, logger);
 	const payment = new PaymentService({ bank: config.bank }, cart);
-	const maps = new MapLocationService(() => createMap(config), logger);
+	const maps = new MapLocationService(() => createMap(config, logger), logger);
 
 	if (typeof window !== 'undefined') {
 		viewport.setElement(window);

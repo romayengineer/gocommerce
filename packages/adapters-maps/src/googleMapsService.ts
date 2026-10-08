@@ -1,18 +1,21 @@
-import { logger } from '@gocommerce/adapters/browser/logger';
+import type { Logger } from '@gocommerce/ports/Logger';
+import { noopLogger } from '@gocommerce/ports/Logger';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
 import type { IMapService, MapConfig } from '@gocommerce/ports/MapService';
 import { DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from '@gocommerce/ports/MapService';
 
 export class GoogleMapsService implements IMapService {
 	private apiKey: string;
+	private logger: Logger;
 	private map: google.maps.Map | null = null;
 	private geocoder: google.maps.Geocoder | null = null;
 	private marker: google.maps.marker.AdvancedMarkerElement | null = null;
 	private mapContainer: HTMLDivElement | null = null;
 	private lastLocationFound = true;
 
-	constructor(apiKey: string) {
+	constructor(apiKey: string, logger: Logger = noopLogger) {
 		this.apiKey = apiKey;
+		this.logger = logger;
 	}
 
 	async initialize(container: HTMLDivElement): Promise<void> {
@@ -112,7 +115,7 @@ export class GoogleMapsService implements IMapService {
 		} catch (error) {
 			this.lastLocationFound = false;
 			this.resetToDefault();
-			logger.log('Address not found, showing default location');
+			this.logger.log('Address not found, showing default location');
 		}
 	}
 

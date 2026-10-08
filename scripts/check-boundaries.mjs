@@ -4,7 +4,9 @@
  * Enforces the package dependency DAG of the layered architecture:
  *
  *   domain (innermost, zod only) <- ports <- application (domain+ports only;
- *   owns narrow *Options, no config) <- adapters
+ *   owns narrow *Options, no config) <- adapters + adapters-maps (siblings,
+ *   never import each other; maps owns leaflet/google SDKs, SDK payloads
+ *   load lazily inside each service)
  *   composition (root: wires everything incl. AppConfig -> options mapping)
  *   config (standalone, no imports) | ui (presentation)
  *
@@ -112,14 +114,23 @@ for (const f of collect('application')) {
 	}
 }
 
-// 4. adapters: no application/ui/composition; $app/* only in svelte/router.
+// 4. adapters + adapters-maps: no application/ui/composition (siblings must
+// not import each other); $app/* only in adapters svelte/router.
 for (const f of collect('adapters')) {
 	const { found } = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(application|ui|composition)/.test(i.spec))
+		if (/^@gocommerce\/(application|ui|composition|adapters-maps)/.test(i.spec))
 			violation(f, `adapters must not import ${i.spec}`);
 		if (i.spec.startsWith('$app/') && !f.endsWith('svelte/router.svelte.ts'))
 			violation(f, `$app/* coupling must live in svelte/router.svelte.ts (found in ${rel(f)})`);
+	}
+}
+for (const f of collect('adapters-maps')) {
+	const { found } = importsOf(f);
+	for (const i of found) {
+		if (/^@gocommerce\/(application|ui|composition)/.test(i.spec) || /^@gocommerce\/adapters\//.test(i.spec))
+			violation(f, `adapters-maps must not import ${i.spec}`);
+		if (i.spec.startsWith('$app/')) violation(f, `adapters-maps must not import ${i.spec}`);
 	}
 }
 
@@ -199,7 +210,7 @@ function specToPackage(spec) {
 }
 
 const warnings = [];
-for (const pkg of ['domain', 'ports', 'application', 'adapters', 'composition', 'ui', 'config']) {
+for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'composition', 'ui', 'config']) {
 	const manifest = pkgManifest(pkg);
 	const allowed = new Set([
 		...Object.keys(manifest.dependencies ?? {}),
@@ -229,4 +240,4 @@ if (failures.length > 0) {
 	process.exit(1);
 }
 for (const w of warnings) console.warn(`warning: ${w}`);
-console.log('Boundaries OK: domain/ports/application/adapters/composition/config/ui/src-routes conform to the DAG.');
+console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/composition/config/ui/src-routes conform to the DAG.');
