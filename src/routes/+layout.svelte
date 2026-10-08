@@ -13,6 +13,18 @@
 		if (typeof document !== 'undefined') {
 			if ($locale) document.documentElement.lang = $locale;
 			if (config.view?.theme) document.documentElement.dataset.theme = config.view.theme;
+			// Shop brand stays configurable: mirror seo config into the
+			// document head so per-build brands get correct title/meta.
+			if (config.seo?.title) document.title = config.seo.title;
+			const description = document.querySelector('meta[name="description"]');
+			if (description) description.setAttribute('content', config.seo.description);
+			let themeColor = document.querySelector('meta[name="theme-color"]');
+			if (!themeColor) {
+				themeColor = document.createElement('meta');
+				themeColor.setAttribute('name', 'theme-color');
+				document.head.appendChild(themeColor);
+			}
+			themeColor.setAttribute('content', config.seo.themeColor);
 		}
 	});
 
@@ -58,10 +70,14 @@
 </script>
 
 <div class="min-h-screen flex flex-col bg-surface">
-	<Navigation />
+	{#if config.layout.showHeader}
+		<Navigation />
+	{/if}
 	<main class="flex-1">
 		<!-- svelte-ignore slot_element_deprecated -->
 		<slot />
 	</main>
-	<Footer />
+	{#if config.layout.showFooter}
+		<Footer />
+	{/if}
 </div>

@@ -3,26 +3,33 @@
 	import ProductGrid from '@gocommerce/ui-catalog/ProductGrid.svelte';
 	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
 	import Link from '@gocommerce/ui-primitives/Link.svelte';
+	import { config } from '@gocommerce/composition/view/app';
 	import { productPage, sortedProducts } from '@gocommerce/composition/view/products';
 	import { viewport } from '@gocommerce/composition/view/viewport';
 
-	// number of rows for 10 products minimum
-	const MIN_FEATURED_PRODUCTS = 10;
-	let gridRows = $derived(Math.ceil(MIN_FEATURED_PRODUCTS / $viewport.columns));
+	let gridRows = $derived(Math.ceil(config.home.featuredCount / $viewport.columns));
 
 	const featured = $derived($sortedProducts.slice(0, $viewport.columns * gridRows));
+
+	// Gradient tokens resolve through theme CSS vars so configured shades
+	// follow [data-theme] overrides; fallbacks match the default palette.
+	const heroStyle = $derived(
+		`background-image: linear-gradient(to right, rgb(var(--color-${config.hero.gradientFrom}, 37 99 235)), rgb(var(--color-${config.hero.gradientTo}, 30 64 175)))`
+	);
 </script>
 
 <PageContainer>
-	<section class="mb-16">
-		<div class="mb-8 rounded-lg bg-gradient-to-r from-primary-600 to-primary-800 p-12 text-white">
-			<h1 class="mb-4 text-5xl font-bold">{$t('header.title')}</h1>
-			<p class="mb-6 text-xl">{$t('home.browse')}</p>
-			<Link href="#/products" variant="contrast">
-				{$t('products.add')}
-			</Link>
-		</div>
-	</section>
+	{#if config.hero.enabled}
+		<section class="mb-16">
+			<div class="mb-8 rounded-lg p-12 text-white" style={heroStyle}>
+				<h1 class="mb-4 text-5xl font-bold">{config.shop.name}</h1>
+				<p class="mb-6 text-xl">{$t('home.browse')}</p>
+				<Link href={config.hero.ctaHref} variant="contrast">
+					{$t('products.add')}
+				</Link>
+			</div>
+		</section>
+	{/if}
 
 	<section>
 		<ProductGrid products={featured} onProductImageFailed={(id) => productPage.handleProductImageFailed(id)}/>

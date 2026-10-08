@@ -3,7 +3,6 @@
     "noOptions": "No se encontraron opciones"
   },
   "header": {
-    "title": "ShopHub",
     "allProducts": "Todos los Productos",
     "cart": "Carrito",
     "language": "Idioma"
@@ -58,7 +57,7 @@
     "continueShopping": "Continuar Comprando",
     "remove": "Eliminar",
     "subtotal": "Subtotal",
-    "tax": "Impuestos (10%)",
+    "tax": "Impuestos ({rate}%)",
     "shipping": "Envío",
     "total": "Total",
     "checkout": "Proceder al Pago",
@@ -135,6 +134,7 @@
     "privacy": "Política de Privacidad",
     "terms": "Términos de Servicio",
     "shipping": "Información de Envío",
-    "copyright": "© 2024 ShopHub. Todos los derechos reservados. | Construido con Svelte"
+    "copyright": "© {year} {shopName}. Todos los derechos reservados.",
+    "builtWith": "Construido con Svelte"
   }
 }

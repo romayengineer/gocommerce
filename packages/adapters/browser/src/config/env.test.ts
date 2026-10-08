@@ -8,6 +8,12 @@ describe('readEnvConfig', () => {
 		expect(config.googleMapsApiKey).toBe('');
 		expect(config.currency).toBe('ARS');
 		expect(config.view).toEqual({ pageWidth: '80rem', theme: 'default' });
+		expect(config.shop.name).toBe('ShopHub');
+		expect(config.seo.title).toBe('ShopHub');
+		expect(config.hero.enabled).toBe(true);
+		expect(config.home.featuredCount).toBe(10);
+		expect(config.layout).toEqual({ showHeader: true, showFooter: true, stickyNav: true });
+		expect(config.cart.taxRate).toBe(10);
 	});
 
 	it('warns and falls back on an unknown provider instead of throwing', () => {
@@ -42,5 +48,42 @@ describe('readEnvConfig', () => {
 		expect(config.currency).toBe('USD');
 		expect(config.imagesBaseUrl).toBe('https://cdn.test/images');
 		expect(config.bank).toEqual({ alias: 'alias', number: '123', name: 'Name', bankName: 'Bank' });
+	});
+
+	it('reads shop-facing view config from env, defaulting seo/pwa titles to shop name', () => {
+		const config = readEnvConfig(
+			{
+				VITE_SHOP_NAME: 'Acme',
+				VITE_SHOP_LOGO_URL: 'https://cdn.test/logo.svg',
+				VITE_HERO_ENABLED: 'false',
+				VITE_HERO_CTA_HREF: '#/sale',
+				VITE_FEATURED_COUNT: '6',
+				VITE_TAX_RATE: '21',
+				VITE_SHOW_FOOTER: 'false',
+				VITE_FOOTER_SHOW_LEGAL: '0',
+				VITE_COPYRIGHT_YEAR: '2026'
+			},
+			false
+		);
+		expect(config.shop).toEqual({ name: 'Acme', logoUrl: 'https://cdn.test/logo.svg', supportEmail: '' });
+		expect(config.seo.title).toBe('Acme');
+		expect(config.pwa).toEqual({ name: 'Acme', shortName: 'Acme' });
+		expect(config.hero.enabled).toBe(false);
+		expect(config.hero.ctaHref).toBe('#/sale');
+		expect(config.home.featuredCount).toBe(6);
+		expect(config.cart.taxRate).toBe(21);
+		expect(config.layout.showFooter).toBe(false);
+		expect(config.footer.showLegal).toBe(false);
+		expect(config.footer.copyrightYear).toBe('2026');
+	});
+
+	it('falls back on invalid numbers/flags instead of throwing', () => {
+		const config = readEnvConfig(
+			{ VITE_FEATURED_COUNT: 'bogus', VITE_TAX_RATE: 'NaN', VITE_HERO_ENABLED: 'maybe' },
+			false
+		);
+		expect(config.home.featuredCount).toBe(10);
+		expect(config.cart.taxRate).toBe(10);
+		expect(config.hero.enabled).toBe(true);
 	});
 });

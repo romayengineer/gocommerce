@@ -3,7 +3,6 @@
     "noOptions": "No options found"
   },
   "header": {
-    "title": "ShopHub",
     "allProducts": "All Products",
     "cart": "Cart",
     "language": "Language"
@@ -58,7 +57,7 @@
     "continueShopping": "Continue Shopping",
     "remove": "Remove",
     "subtotal": "Subtotal",
-    "tax": "Tax (10%)",
+    "tax": "Tax ({rate}%)",
     "shipping": "Shipping",
     "total": "Total",
     "checkout": "Proceed to Checkout",
@@ -135,6 +134,7 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "shipping": "Shipping Info",
-    "copyright": "© 2024 ShopHub. All rights reserved. | Built with Svelte"
+    "copyright": "© {year} {shopName}. All rights reserved.",
+    "builtWith": "Built with Svelte"
   }
 }

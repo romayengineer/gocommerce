@@ -24,12 +24,93 @@ export const viewConfigSchema = z.object({
 });
 export type ViewConfig = z.infer<typeof viewConfigSchema>;
 
+export const shopConfigSchema = z.object({
+	name: z.string().min(1).catch('ShopHub'),
+	logoUrl: z.string().catch(''),
+	supportEmail: z.string().catch('')
+});
+export type ShopConfig = z.infer<typeof shopConfigSchema>;
+const defaultShop = { name: 'ShopHub', logoUrl: '', supportEmail: '' };
+
+export const seoConfigSchema = z.object({
+	title: z.string().min(1).catch('ShopHub'),
+	description: z.string().catch('An ecommerce store'),
+	themeColor: z.string().min(1).catch('#2563eb')
+});
+export type SeoConfig = z.infer<typeof seoConfigSchema>;
+const defaultSeo = { title: 'ShopHub', description: 'An ecommerce store', themeColor: '#2563eb' };
+
+export const heroConfigSchema = z.object({
+	enabled: z.boolean().catch(true),
+	ctaHref: z.string().min(1).catch('#/products'),
+	gradientFrom: z.string().min(1).catch('primary-600'),
+	gradientTo: z.string().min(1).catch('primary-800')
+});
+export type HeroConfig = z.infer<typeof heroConfigSchema>;
+const defaultHero = {
+	enabled: true,
+	ctaHref: '#/products',
+	gradientFrom: 'primary-600',
+	gradientTo: 'primary-800'
+};
+
+export const homeConfigSchema = z.object({
+	featuredCount: z.number().int().positive().catch(10)
+});
+export type HomeConfig = z.infer<typeof homeConfigSchema>;
+const defaultHome = { featuredCount: 10 };
+
+export const layoutConfigSchema = z.object({
+	showHeader: z.boolean().catch(true),
+	showFooter: z.boolean().catch(true),
+	stickyNav: z.boolean().catch(true)
+});
+export type LayoutConfig = z.infer<typeof layoutConfigSchema>;
+const defaultLayout = { showHeader: true, showFooter: true, stickyNav: true };
+
+export const footerConfigSchema = z.object({
+	showShop: z.boolean().catch(true),
+	showCompany: z.boolean().catch(true),
+	showLegal: z.boolean().catch(true),
+	copyrightYear: z.string().min(1).catch('2024'),
+	showBuiltBy: z.boolean().catch(true)
+});
+export type FooterConfig = z.infer<typeof footerConfigSchema>;
+const defaultFooter = {
+	showShop: true,
+	showCompany: true,
+	showLegal: true,
+	copyrightYear: '2024',
+	showBuiltBy: true
+};
+
+export const cartConfigSchema = z.object({
+	taxRate: z.number().min(0).catch(10)
+});
+export type CartConfig = z.infer<typeof cartConfigSchema>;
+const defaultCart = { taxRate: 10 };
+
+export const pwaConfigSchema = z.object({
+	name: z.string().min(1).catch('ShopHub'),
+	shortName: z.string().min(1).catch('ShopHub')
+});
+export type PwaConfig = z.infer<typeof pwaConfigSchema>;
+const defaultPwa = { name: 'ShopHub', shortName: 'ShopHub' };
+
 export const configSchema = z.object({
 	imagesBaseUrl: z.string(),
 	mapProvider: mapProviderSchema.catch('leaflet'),
 	googleMapsApiKey: z.string(),
 	currency: z.string().min(1).catch('ARS'),
 	bank: bankDetailsSchema,
-	view: viewConfigSchema
+	view: viewConfigSchema,
+	shop: shopConfigSchema.catch(defaultShop),
+	seo: seoConfigSchema.catch(defaultSeo),
+	hero: heroConfigSchema.catch(defaultHero),
+	home: homeConfigSchema.catch(defaultHome),
+	layout: layoutConfigSchema.catch(defaultLayout),
+	footer: footerConfigSchema.catch(defaultFooter),
+	cart: cartConfigSchema.catch(defaultCart),
+	pwa: pwaConfigSchema.catch(defaultPwa)
 });
 export type AppConfig = z.infer<typeof configSchema>;
