@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Link from '$lib/ui/Link.svelte';
 	import { ShoppingCart } from 'lucide-svelte';
-	import { cartCount } from '@gocommerce/composition/view';
+	import { cartCount } from '@gocommerce/composition/view/cart';
 
 	let cartCountValue = $derived($cartCount);
 	let isShaking = $state(false);

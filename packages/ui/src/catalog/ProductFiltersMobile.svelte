@@ -3,7 +3,6 @@
 	import CollapsibleSectionButton from '$lib/catalog/CollapsibleSectionButton.svelte';
 	import { Settings2 } from 'lucide-svelte';
 	import {
-		viewport,
 		productPage,
 		filterCategories,
 		filterSizes,
@@ -13,8 +12,9 @@
 		filterSize,
 		filterBrand,
 		searchQuery
-	} from '@gocommerce/composition/view';
-	import type { SortOption } from '@gocommerce/composition/view';
+	} from '@gocommerce/composition/view/products';
+	import { viewport } from '@gocommerce/composition/view/viewport';
+	import type { SortOption } from '@gocommerce/composition/view/products';
 
 	const SORT_OPTIONS: SortOption[] = ['random', 'name-asc', 'name-desc', 'price-asc', 'price-desc'];
 

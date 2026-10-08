@@ -157,55 +157,50 @@ The built site will be in the `build/index.html` - a single portable HTML file r
 
 ## Project Structure
 
-Layered, framework-agnostic architecture. Business logic lives in `src/core` as
-pure TypeScript with **zero Svelte/SvelteKit dependencies**. A `src/adapters` layer
-implements the framework/infrastructure interfaces (ports) that the core depends on,
-and `src/lib` contains only thin Svelte presentational components.
+Layered, framework-agnostic architecture in `packages/*` (npm workspaces).
+Business logic is pure TypeScript with **zero Svelte/SvelteKit dependencies**;
+a ports/adapters split keeps all side effects behind interfaces.
 
 ```
-src/
-├── core/                          # Framework-agnostic logic (pure TS + zod)
-│   ├── config.ts                 # AppConfig domain type
-│   ├── domain/                   # Entities, schemas, pure functions
-│   │   ├── product.ts            # Product types, zod schemas, columnar mapping
-│   │   ├── cart.ts               # Cart reducers + selectors (immutable)
-│   │   ├── shipping.ts           # ShippingForm schema + validation
-│   │   ├── grid.ts               # Infinite-scroll pagination math
-│   │   ├── viewport.ts           # Responsive column calculation
-│   │   ├── search.ts             # Option filtering helpers
-│   │   ├── url.ts                # URL pagination utilities
-│   │   ├── validation.ts         # createValidator helper
-│   │   ├── locations.ts          # AR provinces (pure data)
-│   │   └── amenities.ts          # Amenity list (pure data)
-│   ├── application/              # Use-cases orchestrating ports + domain
-│   │   ├── ProductCatalog.ts     # Product data + derived lists
-│   │   ├── CartService.ts        # Cart store + selectors + persistence
-│   │   ├── ProductPageService.ts # Filters/sort/search + debounce
-│   │   ├── CheckoutService.ts    # Validation + persistence + submission
-│   │   ├── PaymentService.ts     # Bank details + totals
-│   │   └── MapLocationService.ts # Map orchestration + state
-│   └── ports/                    # Interfaces only (Store, Storage, Router, ...)
-├── adapters/                      # Svelte/infra implementations of the ports
-│   ├── svelte/                   # store bridge, router ($app/*), platform, i18n
-│   ├── storage/localStorage.ts   # localStorage adapter (no-op during SSR)
-│   ├── config/env.ts             # import.meta.env -> AppConfig (only here)
-│   ├── browser/                  # logger, clock, clipboard
-│   ├── maps/                     # IMapService implementations (Leaflet/Google)
-│   └── splide/                   # Splide carousel adapter
-├── composition/container.ts      # Dependency wiring (single DI container)
-├── lib/                          # Svelte components only
-│   ├── view.ts                   # Bridges core stores to Svelte ($-subscription)
-│   └── *.svelte                  # Thin presentational / binding components
-├── data/products.json
-└── routes/                       # SvelteKit shell (hash router, static SPA)
+packages/
+├── domain/            # Innermost: entities, zod schemas, pure functions (zod only)
+│                      # cart, product, shipping, geo, random, validation
+├── ports/             # Interfaces only, type-only exports (Store, Storage,
+│                      # Router, Platform, Clipboard, MapService, Logger, Clock)
+├── application/       # Use-cases orchestrating domain + ports (injected stores)
+│                      # ProductCatalog, CartService, ProductPageService,
+│                      # CheckoutService, PaymentService, MapLocationService
+├── foundation/        # Ports' dependency-free runtime kernel (stores, storage
+│                      # codec, logger, clock defaults supplied by composition)
+├── ui-core/           # Dependency-free presentation helpers (grid, viewport,
+│                      # url, format, search, options-data)
+├── adapters/          # Browser/SvelteKit implementations of the ports
+│                      # svelte/ (store bridge, router [$app/* lives only here],
+│                      # platform, i18n), storage/localStorage, config/env
+│                      # (only import.meta.env reader), browser/ (logger/clock/…)
+├── adapters-maps/     # Map backends (Leaflet/Google IMapService, lazy SDKs)
+├── config/            # Runtime config schemas + zod (no workspace imports)
+├── composition/       # Root DI: container.ts (pure createContainer) +
+│                      # singleton.ts (lazy getContainer) + view/*.slices
+│                      # (cart, catalog, products, checkout, payment, maps,
+│                      # router, viewport, app, i18n) + data/products.json
+└── ui/                # Svelte components only (consumed via $lib deep paths)
+src/routes/            # SvelteKit app shell (hash router, static SPA)
 ```
+
+Import per-domain slices (`@gocommerce/composition/view/cart`, `/catalog`,
+`/products`, `/checkout`, `/payment`, `/maps`, `/router`, `/viewport`,
+`/app`, `/i18n`) — never the `view` barrel in new code. Deep imports only
+(`@gocommerce/<pkg>/<module>`, never bare barrels) so bundlers tree-shake.
 
 ### Rule of thumb
-`src/core` never imports Svelte, SvelteKit, DOM APIs or `import.meta.env`. All
-side effects (routing, storage, env config, i18n, maps) flow through interfaces
-defined in `src/core/ports` and implemented in `src/adapters`. A boundary check
-(`npm run check`) enforces this so the core can be reused by any UI framework
-(Svelte adapter exists today; a React/Vue adapter would use the same ports).
+`domain`/`ports`/`application`/`foundation`/`ui-core`/`config` never import
+Svelte, SvelteKit, DOM APIs or `import.meta.env`. All side effects (routing,
+storage, env config, i18n, maps) flow through interfaces defined in
+`packages/ports` and implemented in `packages/adapters(-maps)`. The boundary
+guard (`npm run check:boundaries`, mirrored in eslint) enforces the DAG, so
+the core can be reused by any UI framework (Svelte adapter exists today; a
+React/Vue adapter would use the same ports).
 
 ## Key Features Explained
 
@@ -475,8 +470,9 @@ Search queries are debounced and split into individual words for flexible, order
 
 ### 💻 Component Architecture
 UI is presentation-only. All business logic and state live in the framework-agnostic
-core (`src/core`) and are exposed to Svelte through `src/lib/view.ts`, which bridges
-core stores to Svelte's `$`-subscription API via `src/adapters/svelte/store.ts`:
+packages (`packages/domain`, `packages/application`) and are exposed to Svelte through
+`packages/composition/src/view/*.ts` slices, which bridge
+core stores to Svelte's `$`-subscription API via `packages/adapters/src/svelte/store.ts`:
 
 **State Management (framework-agnostic):**
 - `ProductPageService` - Filters, sorting, search, debouncing
@@ -507,7 +503,7 @@ core stores to Svelte's `$`-subscription API via `src/adapters/svelte/store.ts`:
 ## Customization
 
 ### Add Your Products
-Edit `src/data/products.json` and add products to the array. Each product has:
+Edit `packages/composition/src/data/products.json` and add products to the array. Each product has:
 ```typescript
 {
   itemId: string,          // Unique product ID
@@ -519,12 +515,12 @@ Edit `src/data/products.json` and add products to the array. Each product has:
 }
 ```
 
-Products are loaded from `src/data/products.json` and typed in `src/lib/products.ts`.
+Products are loaded from `packages/composition/src/data/products.json` and typed in `packages/domain/product.ts`.
 
 ### Change Languages
-Add new language to `src/lib/translations/`:
+Add new language to `packages/adapters/src/svelte/i18n/`:
 1. Create `fr.json` with French translations
-2. Update `src/lib/i18n.ts` to register the language
+2. Update `packages/adapters/src/svelte/i18n.ts` to register the language
 3. Add to `locales` array
 
 ### Change Colors

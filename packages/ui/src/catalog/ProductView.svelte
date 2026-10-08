@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { catalogProducts, addToCart } from '@gocommerce/composition/view';
+	import { catalogProducts } from '@gocommerce/composition/view/catalog';
+	import { addToCart } from '@gocommerce/composition/view/cart';
 	import ProductImageCarousel from '$lib/catalog/ProductImageCarousel.svelte';
 	import ProductHeader from '$lib/catalog/ProductHeader.svelte';
 	import QuantitySelector from '$lib/ui/QuantitySelector.svelte';

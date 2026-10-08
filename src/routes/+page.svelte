@@ -3,7 +3,8 @@
 	import ProductGrid from '$lib/catalog/ProductGrid.svelte';
 	import PageContainer from '$lib/ui/PageContainer.svelte';
 	import Link from '$lib/ui/Link.svelte';
-	import { productPage, sortedProducts, viewport } from '@gocommerce/composition/view';
+	import { productPage, sortedProducts } from '@gocommerce/composition/view/products';
+	import { viewport } from '@gocommerce/composition/view/viewport';
 
 	// number of rows for 10 products minimum
 	const MIN_FEATURED_PRODUCTS = 10;

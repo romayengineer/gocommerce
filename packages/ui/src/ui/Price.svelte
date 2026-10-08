@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { locale } from 'svelte-i18n';
 	import { formatPrice } from '@gocommerce/ui-core/format';
-	import { config } from '@gocommerce/composition/view';
+	import { config } from '@gocommerce/composition/view/app';
 
 	type Size = 'sm' | 'md' | 'lg';
 

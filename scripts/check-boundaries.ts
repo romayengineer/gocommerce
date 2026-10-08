@@ -25,10 +25,10 @@
  *   coupling. Declared as peer+dev, not runtime deps.
  * - ui-core implements ColumnsForWidthFn by structural match (no workspace
  *   import; rule 4c forbids it). The port owns the signature.
- * - ui -> @gocommerce/composition/view (services/stores) + @gocommerce/ui-core/*
+ * - ui -> @gocommerce/composition/view slices (services/stores) + @gocommerce/ui-core/*
  *   (presentation values) + @gocommerce/domain/* + @gocommerce/ports/*
  *   (types via `import type` only; value imports from domain fail); never
- *   /container, /domain via view proxy, /ports via view proxy, /application,
+ *   /container, /singleton, /domain via view proxy, /ports via view proxy, /application,
  *   /config, /adapters, or /foundation. Wiring lives in composition,
  *   presentation values in ui-core, pure logic in domain.
  * - src/routes (app shell) -> @gocommerce/composition/view + $lib +
@@ -245,15 +245,15 @@ for (const pkg of CHECKED_PACKAGES) {
 }
 
 // 5. ui (non-test): no application/config/adapters/foundation; composition
-// only via /view; domain + ports types imported directly (import type only)
-// — value helpers come via composition/view or @gocommerce/ui-core/*.
+// only via /view or /view/* slices; domain + ports types imported directly (import type only)
+// — value helpers come via composition/view slices or @gocommerce/ui-core/*.
 for (const f of collect('ui')) {
 	if (allowTests(f)) continue;
 	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (/^@gocommerce\/(application|config|foundation|adapters)/.test(i.spec)) violation(f, `ui must not import ${i.spec}`);
-		if (i.spec.startsWith('@gocommerce/composition/') && !i.spec.endsWith('/view'))
-			violation(f, `ui must only consume @gocommerce/composition/view (found ${i.spec})`);
+		if (i.spec.startsWith('@gocommerce/composition/') && !isViewPath(i.spec))
+			violation(f, `ui must only consume @gocommerce/composition/view slices (found ${i.spec})`);
 		if (i.spec.startsWith('@gocommerce/domain/') && !i.typeOnly)
 			violation(f, `ui->domain must be import type (found value import of ${i.spec})`);
 	}
@@ -307,7 +307,7 @@ for (const f of collectRoutes()) {
 	for (const i of found) {
 		if (/^@gocommerce\/(domain|ports|application|adapters|foundation|config)/.test(i.spec))
 			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
-		if (i.spec.startsWith('@gocommerce/composition/') && i.spec !== '@gocommerce/composition/view')
+		if (i.spec.startsWith('@gocommerce/composition/') && !isViewPath(i.spec))
 			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
 		if (i.spec.startsWith('@gocommerce/ui/'))
 			violation(f, `routes must import UI via $lib, not ${i.spec}`);
@@ -332,6 +332,11 @@ function pkgManifest(pkg: CheckedPackage): PackageManifest {
 /** First `/`-separated segment (`String.split` always yields ≥1 element). */
 function firstSegment(spec: string): string {
 	return spec.split('/')[0] ?? spec;
+}
+
+/** Composition view barrel or one of its per-domain slices. */
+function isViewPath(spec: string): boolean {
+	return spec === '@gocommerce/composition/view' || spec.startsWith('@gocommerce/composition/view/');
 }
 
 /** Map an import specifier to the package name that must declare it. */

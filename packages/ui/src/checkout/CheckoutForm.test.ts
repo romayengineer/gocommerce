@@ -120,29 +120,9 @@ const h = vi.hoisted(() => {
 	return { storage, deps };
 });
 
-vi.mock('@gocommerce/composition/view', () => {
-	// Fully stubbed view: wired services from hoisted fakes + minimal pure
-	// helpers inlined so this test has zero @gocommerce imports.
-	// (Full importOriginal would pull container -> $app/state, unavailable in vitest.)
-	const ARGENTINE_PROVINCES = [
-		{ value: 'Buenos Aires', label: 'Buenos Aires' },
-		{ value: 'CABA', label: 'Ciudad Autónoma de Buenos Aires' }
-	];
-	const AMENITIES: { value: string; label: string }[] = [];
-	const filterOptions = <T extends { value: string; label: string }>(options: T[], query: string): T[] => {
-		const q = query.trim().toLowerCase();
-		if (!q) return options;
-		return options.filter(
-			(o) => o.label.toLowerCase().includes(q) || o.value.toLowerCase().includes(q)
-		);
-	};
-	const matchesOption = (options: { value: string }[], value: string | undefined): boolean =>
-		typeof value === 'string' && options.some((o) => o.value === value);
+vi.mock('@gocommerce/composition/view/checkout', () => {
+	// Stubbed checkout slice: wired services from hoisted fakes.
 	return {
-		filterOptions,
-		matchesOption,
-		ARGENTINE_PROVINCES,
-		AMENITIES,
 		get checkoutService() {
 			return h.deps.checkout as FakeCheckoutService;
 		},
@@ -151,7 +131,13 @@ vi.mock('@gocommerce/composition/view', () => {
 		},
 		get checkoutSubmitting() {
 			return h.deps.submitting as Writable<boolean>;
-		},
+		}
+	};
+});
+
+vi.mock('@gocommerce/composition/view/maps', () => {
+	// Stubbed maps slice so MapDisplay never touches real map backends.
+	return {
 		get mapService() {
 			return h.deps.maps as NonNullable<typeof h.deps.maps>;
 		},

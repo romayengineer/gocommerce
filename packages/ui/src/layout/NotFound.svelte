@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { router } from '@gocommerce/composition/view';
+	import { router } from '@gocommerce/composition/view/router';
 	import Link from '$lib/ui/Link.svelte';
 
 	setTimeout(() => {

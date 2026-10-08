@@ -4,6 +4,7 @@ import type { Clock } from '@gocommerce/ports/Clock';
 import type { Logger } from '@gocommerce/ports/Logger';
 import type { IMapService } from '@gocommerce/ports/MapService';
 import type { RouterPort } from '@gocommerce/ports/Router';
+import type { ViewportTracker } from '@gocommerce/ports/Platform';
 import type { KeyValueStorage } from '@gocommerce/ports/Storage';
 import type { ProductsColumnar } from '@gocommerce/domain/product';
 import { ProductCatalog } from '@gocommerce/application/ProductCatalog';
@@ -48,8 +49,8 @@ export interface ContainerInit {
 	clipboard?: Clipboard;
 	/** Order seed. Defaults to `?seed=` from the startup URL, else a fresh generated seed. */
 	seed?: string;
-	/** Viewport tracker. Defaults to a new ViewportWidthTracker. */
-	viewport?: ViewportWidthTracker;
+	/** Viewport tracker. Defaults to a new ViewportWidthTracker (adapters). */
+	viewport?: ViewportTracker;
 	/** Order submission. Defaults to SimulatedCheckoutGateway. */
 	gateway?: CheckoutGateway;
 	/** Map backend factory. Defaults to createMapService. */
@@ -92,7 +93,7 @@ export interface AppContainer {
 	seed: string;
 	/** Write the resolved seed back to `?seed=` when missing (replaceState, no history spam). Client shells call this onMount; construction stays side-effect free. */
 	ensureProductSeed(): string;
-	viewport: ViewportWidthTracker;
+	viewport: ViewportTracker;
 	router: RouterPort;
 	clipboard: Clipboard;
 	catalog: ProductCatalog;

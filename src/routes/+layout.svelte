@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { locale } from 'svelte-i18n';
-	import { logger, config, viewportTracker, ensureProductSeed, router } from '@gocommerce/composition/view';
+	import { logger, config } from '@gocommerce/composition/view/app';
+	import { viewportTracker } from '@gocommerce/composition/view/viewport';
+	import { ensureProductSeed } from '@gocommerce/composition/view/catalog';
+	import { router } from '@gocommerce/composition/view/router';
 	import Navigation from '$lib/layout/Navigation.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import '../app.css';
