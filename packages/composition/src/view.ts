@@ -1,6 +1,12 @@
 import { toSvelte } from '@gocommerce/adapters/svelte/store';
-import { container } from '@gocommerce/composition/container';
+import { createContainer } from '@gocommerce/composition/container';
 import type { DisplayProduct } from '@gocommerce/domain/product';
+
+// view.ts is the app's composition root: importing it wires the default
+// container (browser adapters + bundled data). Tests and tools should use
+// createContainer(init) from @gocommerce/composition/container with injected
+// fakes instead of importing this module.
+const container = createContainer();
 
 // NOTE: the Svelte bridge (toSvelte) is intentionally NOT re-exported.
 // view.ts is the sole place that bridges core stores to Svelte; consumers

@@ -1,6 +1,10 @@
 import type { AppConfig } from '@gocommerce/config';
 import type { Clipboard } from '@gocommerce/ports/Clipboard';
+import type { Clock } from '@gocommerce/ports/Clock';
 import type { Logger } from '@gocommerce/ports/Logger';
+import type { IMapService } from '@gocommerce/ports/MapService';
+import type { RouterPort } from '@gocommerce/ports/Router';
+import type { KeyValueStorage } from '@gocommerce/ports/Storage';
 import type { ProductsColumnar } from '@gocommerce/domain/product';
 import { ProductCatalog } from '@gocommerce/application/ProductCatalog';
 import { CartService } from '@gocommerce/application/CartService';
@@ -19,11 +23,26 @@ import { createMapService } from '@gocommerce/adapters/maps/mapFactory';
 import productsData from './data/products.json';
 
 export interface ContainerInit {
-	/** Override the bundled catalog data (tests/fixtures). Defaults to ./data/products.json. */
+	/** Catalog data. Defaults to the bundled ./data/products.json. */
 	productsData?: ProductsColumnar;
-	/** Override the runtime config. Defaults to readEnvConfig(). */
+	/** Runtime config. Defaults to readEnvConfig(). */
 	config?: AppConfig;
+	/** Persistence. Defaults to LocalStorageAdapter (no-op when unavailable). */
+	storage?: KeyValueStorage;
+	/** Navigation. Defaults to SvelteKitRouter. */
+	router?: RouterPort;
+	/** Time source. Defaults to browserClock. */
+	clock?: Clock;
+	/** Clipboard. Defaults to NavigatorClipboard. */
+	clipboard?: Clipboard;
+	/** Viewport tracker. Defaults to a new ViewportWidthTracker. */
+	viewport?: ViewportWidthTracker;
+	/** Order submission. Defaults to SimulatedCheckoutGateway. */
+	gateway?: CheckoutGateway;
+	/** Map backend factory. Defaults to createMapService. */
+	createMap?: (config: AppConfig) => IMapService;
 }
+
 class SimulatedCheckoutGateway implements CheckoutGateway {
 	async submit(): Promise<void> {
 		await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -35,7 +54,7 @@ export interface AppContainer {
 	logger: Logger;
 	platform: { isBrowser: boolean };
 	viewport: ViewportWidthTracker;
-	router: SvelteKitRouter;
+	router: RouterPort;
 	clipboard: Clipboard;
 	catalog: ProductCatalog;
 	cart: CartService;
@@ -47,18 +66,20 @@ export interface AppContainer {
 
 export function createContainer(init: ContainerInit = {}): AppContainer {
 	const config = init.config ?? readEnvConfig();
-	const storage = new LocalStorageAdapter();
-	const clock = browserClock;
-	const viewport = new ViewportWidthTracker();
-	const router = new SvelteKitRouter();
-	const clipboard = new NavigatorClipboard();
+	const storage = init.storage ?? new LocalStorageAdapter();
+	const clock = init.clock ?? browserClock;
+	const viewport = init.viewport ?? new ViewportWidthTracker();
+	const router = init.router ?? new SvelteKitRouter();
+	const clipboard = init.clipboard ?? new NavigatorClipboard();
+	const gateway = init.gateway ?? new SimulatedCheckoutGateway();
+	const createMap = init.createMap ?? createMapService;
 
 	const catalog = new ProductCatalog((init.productsData ?? productsData) as ProductsColumnar, config);
 	const cart = new CartService(storage, catalog, logger);
 	const products = new ProductPageService(catalog, clock);
-	const checkout = new CheckoutService(new SimulatedCheckoutGateway(), storage, router, logger);
+	const checkout = new CheckoutService(gateway, storage, router, logger);
 	const payment = new PaymentService(config, cart);
-	const maps = new MapLocationService(() => createMapService(config), logger);
+	const maps = new MapLocationService(() => createMap(config), logger);
 
 	if (typeof window !== 'undefined') {
 		viewport.setElement(window);
@@ -79,10 +100,3 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 		maps
 	};
 }
-
-// Default shared instance for the app shell (view.ts). Prefer
-// createContainer(init) with injected productsData/config in tests.
-// TODO(gocommerce-436): remove this module-load singleton once all
-// consumers accept an injected container; importing this module currently
-// still wires default dependencies on first use.
-export const container = createContainer();

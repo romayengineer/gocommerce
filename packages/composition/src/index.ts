@@ -1,2 +1,2 @@
-export { createContainer, container, type AppContainer } from './container';
+export { createContainer, type AppContainer, type ContainerInit } from './container';
 export * from './view';
