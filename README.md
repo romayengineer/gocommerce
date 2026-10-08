@@ -470,9 +470,9 @@ Search queries are debounced and split into individual words for flexible, order
 
 ### 💻 Component Architecture
 UI is presentation-only. All business logic and state live in the framework-agnostic
-packages (`packages/domain`, `packages/application`) and are exposed to Svelte through
-`packages/composition/src/view/*.ts` slices, which bridge
-core stores to Svelte's `$`-subscription API via `packages/adapters/src/svelte/store.ts`:
+packages (`packages/core/domain`, `packages/core/application`) and are exposed to Svelte through
+`packages/app/composition/src/view/*.ts` slices, which bridge
+core stores to Svelte's `$`-subscription API via `packages/adapters/browser/src/svelte/store.ts`:
 
 **State Management (framework-agnostic):**
 - `ProductPageService` - Filters, sorting, search, debouncing
@@ -503,7 +503,7 @@ core stores to Svelte's `$`-subscription API via `packages/adapters/src/svelte/s
 ## Customization
 
 ### Add Your Products
-Edit `packages/composition/src/data/products.json` and add products to the array. Each product has:
+Edit `packages/app/composition/src/data/products.json` and add products to the array. Each product has:
 ```typescript
 {
   itemId: string,          // Unique product ID
@@ -515,12 +515,12 @@ Edit `packages/composition/src/data/products.json` and add products to the array
 }
 ```
 
-Products are loaded from `packages/composition/src/data/products.json` and typed in `packages/domain/product.ts`.
+Products are loaded from `packages/app/composition/src/data/products.json` and typed in `packages/core/domain/product.ts`.
 
 ### Change Languages
-Add new language to `packages/adapters/src/svelte/i18n/`:
+Add new language to `packages/adapters/browser/src/svelte/i18n/`:
 1. Create `fr.json` with French translations
-2. Update `packages/adapters/src/svelte/i18n.ts` to register the language
+2. Update `packages/adapters/browser/src/svelte/i18n.ts` to register the language
 3. Add to `locales` array
 
 ### Change Colors

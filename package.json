@@ -8,7 +8,7 @@
     "npm": ">=11.0.0"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*/*"
   ],
   "scripts": {
     "dev": "vite dev",

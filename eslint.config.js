@@ -54,14 +54,14 @@ const boundary = (files, patterns) => ({
 
 const layerBoundaries = [
 	// 1. domain: zod only (+ relative); no outward workspace imports.
-	boundary(['packages/domain/src/**'], [
+	boundary(['packages/core/domain/src/**'], [
 		{
 			group: [...ws('ports', 'application', 'config', 'composition', 'foundation', 'ui-core'), ...ADAPTERS_ANY, ...UI_ANY],
 			message: 'domain must not import workspace packages (zod + relative only). See check-boundaries.ts rule 1.'
 		}
 	]),
 	// 2. ports: type-only; domain imports must be `import type`.
-	boundary(['packages/ports/src/**'], [
+	boundary(['packages/core/ports/src/**'], [
 		{
 			group: [...ws('application', 'composition', 'config', 'foundation'), ...ADAPTERS_ANY, ...UI_ANY],
 			message: 'ports must not import outer layers (type-only interfaces). See check-boundaries.ts rule 2.'
@@ -73,21 +73,21 @@ const layerBoundaries = [
 		}
 	]),
 	// 3. application: domain + ports types only; never adapters/ui/composition/config.
-	boundary([`packages/application/src/${TS}`, `packages/application/src/${SVELTE}`], [
+	boundary([`packages/core/application/src/${TS}`, `packages/core/application/src/${SVELTE}`], [
 		{
 			group: [...ws('composition', 'config', 'foundation'), ...ADAPTERS_ANY, ...UI_ANY],
 			message: 'application must not import adapters/ui/composition/config (inject via ports instead). See check-boundaries.ts rule 3.'
 		}
 	]),
 	// 4. adapters: siblings must not import each other; $app/* only in the router.
-	boundary([`packages/adapters/src/${TS}`, `packages/adapters/src/${SVELTE}`], [
+	boundary([`packages/adapters/browser/src/${TS}`, `packages/adapters/browser/src/${SVELTE}`], [
 		{
 			group: [...ws('application', 'composition'), ...UI_ANY, '@gocommerce/adapters-maps', '@gocommerce/adapters-maps/**', '$app/**'],
 			message: 'adapters must not import application/ui/composition/adapters-maps; $app/* lives only in svelte/router.svelte.ts. See check-boundaries.ts rule 4.'
 		}
 	]),
 	{
-		files: ['packages/adapters/src/svelte/router.svelte.ts'],
+		files: ['packages/adapters/browser/src/svelte/router.svelte.ts'],
 		rules: {
 			'no-restricted-imports': [
 				'error',
@@ -103,21 +103,21 @@ const layerBoundaries = [
 		}
 	},
 	// 4. adapters-maps: never adapters/application/ui/composition or $app/*.
-	boundary([`packages/adapters-maps/src/${TS}`], [
+	boundary([`packages/adapters/maps/src/${TS}`], [
 		{
 			group: [...ws('application', 'composition'), ...UI_ANY, '@gocommerce/adapters', '@gocommerce/adapters/**', '$app/**'],
 			message: 'adapters-maps must not import adapters/application/ui/composition/$app/*. See check-boundaries.ts rule 4.'
 		}
 	]),
 	// 4b. foundation: ports types only.
-	boundary([`packages/foundation/src/${TS}`], [
+	boundary([`packages/core/foundation/src/${TS}`], [
 		{
 			group: [...ws('application', 'composition', 'config', 'domain', 'foundation', 'ui-core'), ...ADAPTERS_ANY, ...UI_ANY],
 			message: 'foundation must only import @gocommerce/ports/* (import type). See check-boundaries.ts rule 4b.'
 		}
 	]),
 	// 4c. ui-core: dependency-free presentation helpers.
-	boundary([`packages/ui-core/src/${TS}`], [
+	boundary([`packages/ui/core/src/${TS}`], [
 		{
 			group: ['@gocommerce/**'],
 			message: 'ui-core must not import workspace packages (dependency-free). See check-boundaries.ts rule 4c.'
@@ -126,7 +126,7 @@ const layerBoundaries = [
 	// 5. ui-*: composition only via /view; domain + ports types only.
 	// ui-primitives is the leaf (no sibling imports); feature packages may
 	// value-import ui-primitives but never each other.
-	boundary([`packages/ui-primitives/src/${TS}`, `packages/ui-primitives/src/${SVELTE}`], [
+	boundary([`packages/ui/primitives/src/${TS}`, `packages/ui/primitives/src/${SVELTE}`], [
 		{
 			group: [...ws('application', 'config', 'foundation'), ...ADAPTERS_ANY, ...COMPOSITION_INTERNALS, ...ws('ui-catalog', 'ui-purchase', 'ui-shell')],
 			message: 'ui-primitives must only consume @gocommerce/composition/view (+ ui-core values). See check-boundaries.ts rule 5.'
@@ -137,7 +137,7 @@ const layerBoundaries = [
 			message: 'ui-primitives->domain/ports must be `import type` (values via composition/view or ui-core). See check-boundaries.ts rule 5.'
 		}
 	]),
-	boundary([`packages/ui-catalog/src/${TS}`, `packages/ui-catalog/src/${SVELTE}`], [
+	boundary([`packages/ui/catalog/src/${TS}`, `packages/ui/catalog/src/${SVELTE}`], [
 		{
 			group: [...ws('application', 'config', 'foundation'), ...ADAPTERS_ANY, ...COMPOSITION_INTERNALS, ...ws('ui-purchase', 'ui-shell')],
 			message: 'ui-catalog may only value-import @gocommerce/ui-primitives (never sibling ui-*). See check-boundaries.ts rule 5.'
@@ -148,7 +148,7 @@ const layerBoundaries = [
 			message: 'ui-catalog->domain/ports must be `import type` (values via composition/view or ui-core). See check-boundaries.ts rule 5.'
 		}
 	]),
-	boundary([`packages/ui-purchase/src/${TS}`, `packages/ui-purchase/src/${SVELTE}`], [
+	boundary([`packages/ui/purchase/src/${TS}`, `packages/ui/purchase/src/${SVELTE}`], [
 		{
 			group: [...ws('application', 'config', 'foundation'), ...ADAPTERS_ANY, ...COMPOSITION_INTERNALS, ...ws('ui-catalog', 'ui-shell')],
 			message: 'ui-purchase may only value-import @gocommerce/ui-primitives (never sibling ui-*). See check-boundaries.ts rule 5.'
@@ -159,7 +159,7 @@ const layerBoundaries = [
 			message: 'ui-purchase->domain/ports must be `import type` (values via composition/view or ui-core). See check-boundaries.ts rule 5.'
 		}
 	]),
-	boundary([`packages/ui-shell/src/${TS}`, `packages/ui-shell/src/${SVELTE}`], [
+	boundary([`packages/ui/shell/src/${TS}`, `packages/ui/shell/src/${SVELTE}`], [
 		{
 			group: [...ws('application', 'config', 'foundation'), ...ADAPTERS_ANY, ...COMPOSITION_INTERNALS, ...ws('ui-catalog', 'ui-purchase')],
 			message: 'ui-shell may only value-import @gocommerce/ui-primitives (never sibling ui-*). See check-boundaries.ts rule 5.'
@@ -171,7 +171,7 @@ const layerBoundaries = [
 		}
 	]),
 	// 7. config: standalone except zod.
-	boundary([`packages/config/src/${TS}`], [
+	boundary([`packages/core/config/src/${TS}`], [
 		{
 			group: [...ws('application', 'composition', 'domain', 'foundation', 'ports', 'ui-core'), ...ADAPTERS_ANY, ...UI_ANY],
 			message: 'config must not import workspace packages (zod schemas only). See check-boundaries.ts rule 7.'

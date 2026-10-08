@@ -97,7 +97,24 @@ const CHECKED_PACKAGES: readonly CheckedPackage[] = [
 ];
 
 const ROOT: string = new URL('..', import.meta.url).pathname;
-const SRC = (pkg: CheckedPackage): string => join(ROOT, 'packages', pkg, 'src');
+// Nested layout: packages/<group>/<pkg>/src (names in CheckedPackage stay
+// the logical @gocommerce/* names so rules read unchanged).
+const PKG_DIR: Record<CheckedPackage, string> = {
+	domain: 'core/domain',
+	ports: 'core/ports',
+	application: 'core/application',
+	adapters: 'adapters/browser',
+	'adapters-maps': 'adapters/maps',
+	foundation: 'core/foundation',
+	'ui-core': 'ui/core',
+	composition: 'app/composition',
+	'ui-primitives': 'ui/primitives',
+	'ui-catalog': 'ui/catalog',
+	'ui-purchase': 'ui/purchase',
+	'ui-shell': 'ui/shell',
+	config: 'core/config'
+};
+const SRC = (pkg: CheckedPackage): string => join(ROOT, 'packages', PKG_DIR[pkg], 'src');
 
 function collect(pkg: CheckedPackage): string[] {
 	const out: string[] = [];
@@ -346,7 +363,7 @@ for (const f of collectRoutes()) {
 // (devDependencies are only visible to *.test.* files.)
 function pkgManifest(pkg: CheckedPackage): PackageManifest {
 	try {
-		return JSON.parse(readFileSync(join(ROOT, 'packages', pkg, 'package.json'), 'utf8')) as PackageManifest;
+		return JSON.parse(readFileSync(join(ROOT, 'packages', PKG_DIR[pkg], 'package.json'), 'utf8')) as PackageManifest;
 	} catch {
 		return {};
 	}
@@ -398,7 +415,7 @@ for (const pkg of CHECKED_PACKAGES) {
 			warnings.push(`${pkg}: declared dependency ${name} is never imported in non-test sources`);
 		else if (name.startsWith('@gocommerce/') && !usedAsValue.has(name))
 			violation(
-				collect(pkg)[0] ?? `packages/${pkg}/package.json`,
+				collect(pkg)[0] ?? `packages/${PKG_DIR[pkg]}/package.json`,
 				`${pkg} declares runtime dependency ${name} but only ever uses import type (move to peerDependencies)`
 			);
 	}

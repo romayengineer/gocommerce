@@ -7,10 +7,10 @@
       "ignoreBinaries": ["tsc"],
       "ignoreDependencies": ["leaflet", "@types/google.maps", "@types/leaflet"]
     },
-    "packages/*": {
+    "packages/*/*": {
       "project": ["src/**/*"]
     },
-    "packages/adapters-maps": {
+    "packages/adapters/maps": {
       "project": ["src/**/*"],
       "ignoreDependencies": ["@types/google.maps"]
     }

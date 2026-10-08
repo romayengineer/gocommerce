@@ -10,22 +10,22 @@ export default defineConfig({
 	resolve: {
 		conditions: ['browser'],
 		alias: {
-			$lib: fileURLToPath(new URL('./packages/ui/src', import.meta.url)),
+			$lib: fileURLToPath(new URL('./packages/ui/primitives/src', import.meta.url)),
 			// SvelteKit runtime modules have no server in unit tests; the
 			// doubles under test/mocks stand in (page.url is mutable so tests
 			// can simulate navigations).
 			'$app/state': mock('app-state'),
 			'$app/navigation': mock('app-navigation'),
-			'@gocommerce/domain': pkg('domain'),
-			'@gocommerce/ports': pkg('ports'),
-			'@gocommerce/config': pkg('config'),
-			'@gocommerce/application': pkg('application'),
-			'@gocommerce/adapters': pkg('adapters'),
-			'@gocommerce/adapters-maps': pkg('adapters-maps'),
-			'@gocommerce/foundation': pkg('foundation'),
-			'@gocommerce/ui-core': pkg('ui-core'),
-			'@gocommerce/composition': pkg('composition'),
-			'@gocommerce/ui': pkg('ui')
+			'@gocommerce/domain': pkg('core/domain'),
+			'@gocommerce/ports': pkg('core/ports'),
+			'@gocommerce/config': pkg('core/config'),
+			'@gocommerce/application': pkg('core/application'),
+			'@gocommerce/adapters': pkg('adapters/browser'),
+			'@gocommerce/adapters-maps': pkg('adapters/maps'),
+			'@gocommerce/foundation': pkg('core/foundation'),
+			'@gocommerce/ui-core': pkg('ui/core'),
+			'@gocommerce/composition': pkg('app/composition'),
+			'@gocommerce/ui': pkg('ui/primitives')
 		}
 	},
 	test: {

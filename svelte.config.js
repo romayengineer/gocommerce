@@ -14,25 +14,25 @@ const config = {
       // Workspace packages enforce the inward-dependency DAG via their
       // package.json dependencies; aliases only tell the bundler where
       // the sources live (no build step — resolved straight to src).
-      '@gocommerce/domain': 'packages/domain/src',
-      '@gocommerce/ports': 'packages/ports/src',
-      '@gocommerce/config': 'packages/config/src',
-      '@gocommerce/application': 'packages/application/src',
-      '@gocommerce/adapters': 'packages/adapters/src',
-      '@gocommerce/adapters-maps': 'packages/adapters-maps/src',
-      '@gocommerce/foundation': 'packages/foundation/src',
-      '@gocommerce/ui-core': 'packages/ui-core/src',
-      '@gocommerce/composition': 'packages/composition/src',
-      '@gocommerce/ui-primitives': 'packages/ui-primitives/src',
-      '@gocommerce/ui-catalog': 'packages/ui-catalog/src',
-      '@gocommerce/ui-purchase': 'packages/ui-purchase/src',
-      '@gocommerce/ui-shell': 'packages/ui-shell/src'
+      '@gocommerce/domain': 'packages/core/domain/src',
+      '@gocommerce/ports': 'packages/core/ports/src',
+      '@gocommerce/config': 'packages/core/config/src',
+      '@gocommerce/application': 'packages/core/application/src',
+      '@gocommerce/adapters': 'packages/adapters/browser/src',
+      '@gocommerce/adapters-maps': 'packages/adapters/maps/src',
+      '@gocommerce/foundation': 'packages/core/foundation/src',
+      '@gocommerce/ui-core': 'packages/ui/core/src',
+      '@gocommerce/composition': 'packages/app/composition/src',
+      '@gocommerce/ui-primitives': 'packages/ui/primitives/src',
+      '@gocommerce/ui-catalog': 'packages/ui/catalog/src',
+      '@gocommerce/ui-purchase': 'packages/ui/purchase/src',
+      '@gocommerce/ui-shell': 'packages/ui/shell/src'
     },
     files: {
       // $lib resolves to the primitives package (leaf UI components).
       // Feature packages and routes import each other via the scoped
       // `@gocommerce/ui-*` aliases above so the package DAG stays explicit.
-      lib: 'packages/ui-primitives/src'
+      lib: 'packages/ui/primitives/src'
     },
     output: {
       bundleStrategy: 'inline'
