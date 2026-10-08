@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { config } from '$lib/view';
+	import { config } from '@gocommerce/composition/view';
 
 	interface Props {
 		class?: string;

@@ -4,7 +4,7 @@
 	import type { DisplayProduct } from '@gocommerce/domain/product';
 	import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from '@gocommerce/domain/grid';
 	import { updatePageInUrl } from '@gocommerce/domain/url';
-	import { viewport, route, router, logger, viewportTracker } from '$lib/view';
+	import { viewport, route, router, logger, viewportTracker } from '@gocommerce/composition/view';
 
 	interface Props {
 		products: DisplayProduct[];

@@ -2,7 +2,7 @@
 	import Button from '$lib/ui/Button.svelte';
 	import Price from '$lib/ui/Price.svelte';
 	import { ShoppingCart } from 'lucide-svelte';
-	import { addToCart } from '$lib/view';
+	import { addToCart } from '@gocommerce/composition/view';
 
 	interface Props {
 		productId: string;

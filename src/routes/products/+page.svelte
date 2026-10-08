@@ -2,7 +2,7 @@
 	import ProductGrid from '$lib/catalog/ProductGrid.svelte';
 	import ProductFiltersMobile from '$lib/catalog/ProductFiltersMobile.svelte';
 	import PageContainer from '$lib/ui/PageContainer.svelte';
-	import { productPage, sortedProducts } from '$lib/view';
+	import { productPage, sortedProducts } from '@gocommerce/composition/view';
 </script>
 
 <PageContainer class="py-1">

@@ -4,7 +4,7 @@
 	import Button from '$lib/ui/Button.svelte';
 	import OrderSummaryLine from '$lib/cart/OrderSummaryLine.svelte';
 	import Card from '$lib/ui/Card.svelte';
-	import { cartProducts, cartTotal, paymentService, clipboard, router } from '$lib/view';
+	import { cartProducts, cartTotal, paymentService, clipboard, router } from '@gocommerce/composition/view';
 
 	const bank = paymentService.bank;
 

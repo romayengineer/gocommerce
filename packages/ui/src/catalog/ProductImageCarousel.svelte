@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SplideCarousel } from '@gocommerce/adapters/splide/carousel';
+	import { SplideCarousel } from '$lib/catalog/carousel';
 	import { toSvelte } from '@gocommerce/adapters/svelte/store';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import ProductImage from '$lib/catalog/ProductImage.svelte';

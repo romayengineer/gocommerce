@@ -12,6 +12,7 @@
     "analyze": "ANALYZE=true vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
     "test": "vitest run"
   },
   "devDependencies": {
@@ -41,11 +42,8 @@
     "@splidejs/splide": "^4.1.4",
     "@types/leaflet": "^1.9.21",
     "@vercel/config": "^0.5.1",
-    "formsnap": "^2.0.1",
     "leaflet": "^1.9.4",
     "lucide-svelte": "^1.0.1",
-    "superforms": "^0.0.1",
-    "svelte-i18n": "^4.0.1",
-    "zod": "^4.4.3"
+    "svelte-i18n": "^4.0.1"
   }
 }

@@ -13,7 +13,7 @@
 		filterSize,
 		filterBrand,
 		searchQuery
-	} from '$lib/view';
+	} from '@gocommerce/composition/view';
 
 	let isDesktop = $derived($viewport.width >= 1024);
 	let isMobileFiltersOpen = $state(false);

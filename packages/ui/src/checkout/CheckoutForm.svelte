@@ -4,7 +4,7 @@
 	import ShippingForm from '$lib/checkout/ShippingForm.svelte';
 	import MapDisplay from '$lib/checkout/MapDisplay.svelte';
 	import ErrorMessage from '$lib/ui/ErrorMessage.svelte';
-	import { checkoutService, checkoutErrors, checkoutSubmitting } from '$lib/view';
+	import { checkoutService, checkoutErrors, checkoutSubmitting } from '@gocommerce/composition/view';
 
 	let formData = $state(checkoutService.formData.get());
 

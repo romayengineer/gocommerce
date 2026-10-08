@@ -4,7 +4,7 @@
 	import ApiKeyMissing from '$lib/checkout/ApiKeyMissing.svelte';
 	import type { MapConfig } from '@gocommerce/ports/MapService';
 	import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
-	import { mapService, mapState } from '$lib/view';
+	import { mapService, mapState } from '@gocommerce/composition/view';
 
 	interface Props {
 		address?: string;

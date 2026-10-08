@@ -27,7 +27,7 @@ const h = vi.hoisted(() => {
 	return { storage, deps };
 });
 
-vi.mock('$lib/view', () => ({
+vi.mock('@gocommerce/composition/view', () => ({
 	get checkoutService() {
 		return h.deps.checkout as CheckoutService;
 	},

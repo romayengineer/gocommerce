@@ -1,13 +1,15 @@
 {
   "dependencies": {
     "@gocommerce/adapters": "*",
-    "@gocommerce/application": "*",
     "@gocommerce/composition": "*",
-    "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*",
+    "@splidejs/splide": "^4.1.4",
     "lucide-svelte": "^1.0.1",
     "svelte-i18n": "^4.0.1"
+  },
+  "devDependencies": {
+    "@gocommerce/application": "*"
   },
   "exports": {
     ".": "./src/index.ts",

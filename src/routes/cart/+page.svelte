@@ -8,7 +8,7 @@
 	import Card from '$lib/ui/Card.svelte';
 	import PageContainer from '$lib/ui/PageContainer.svelte';
 	import PageTitle from '$lib/ui/PageTitle.svelte';
-	import { cartProducts, cartTotal, removeFromCart, router, updateQuantity } from '$lib/view';
+	import { cartProducts, cartTotal, removeFromCart, router, updateQuantity } from '@gocommerce/composition/view';
 
 	let total = $derived($cartTotal);
 </script>

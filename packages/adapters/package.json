@@ -3,7 +3,6 @@
     "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*",
-    "@splidejs/splide": "^4.1.4",
     "leaflet": "^1.9.4",
     "svelte-i18n": "^4.0.1"
   },
@@ -13,6 +12,7 @@
   },
   "name": "@gocommerce/adapters",
   "peerDependencies": {
+    "@sveltejs/kit": "^2.61.1",
     "svelte": "^5.55.10"
   },
   "private": true,

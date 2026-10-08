@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { router } from '$lib/view';
+	import { router } from '@gocommerce/composition/view';
 	import Link from '$lib/ui/Link.svelte';
 	import PageContainer from '$lib/ui/PageContainer.svelte';
 

@@ -3,7 +3,7 @@
 	import AddToCartButton from '$lib/catalog/AddToCartButton.svelte';
 	import SizeSelector from '$lib/catalog/SizeSelector.svelte';
 	import type { DisplayProduct } from '@gocommerce/domain/product';
-	import { productFullUrl } from '$lib/view';
+	import { productFullUrl } from '@gocommerce/composition/view';
 	import ProductImage from '$lib/catalog/ProductImage.svelte';
 
 	interface Props {
