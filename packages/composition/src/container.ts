@@ -18,6 +18,12 @@ import { ViewportWidthTracker } from '@gocommerce/adapters/svelte/platform';
 import { createMapService } from '@gocommerce/adapters/maps/mapFactory';
 import productsData from './data/products.json';
 
+export interface ContainerInit {
+	/** Override the bundled catalog data (tests/fixtures). Defaults to ./data/products.json. */
+	productsData?: ProductsColumnar;
+	/** Override the runtime config. Defaults to readEnvConfig(). */
+	config?: AppConfig;
+}
 class SimulatedCheckoutGateway implements CheckoutGateway {
 	async submit(): Promise<void> {
 		await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -39,15 +45,15 @@ export interface AppContainer {
 	maps: MapLocationService;
 }
 
-export function createContainer(): AppContainer {
-	const config = readEnvConfig();
+export function createContainer(init: ContainerInit = {}): AppContainer {
+	const config = init.config ?? readEnvConfig();
 	const storage = new LocalStorageAdapter();
 	const clock = browserClock;
 	const viewport = new ViewportWidthTracker();
 	const router = new SvelteKitRouter();
 	const clipboard = new NavigatorClipboard();
 
-	const catalog = new ProductCatalog(productsData as ProductsColumnar, config);
+	const catalog = new ProductCatalog((init.productsData ?? productsData) as ProductsColumnar, config);
 	const cart = new CartService(storage, catalog, logger);
 	const products = new ProductPageService(catalog, clock);
 	const checkout = new CheckoutService(new SimulatedCheckoutGateway(), storage, router, logger);
@@ -74,4 +80,9 @@ export function createContainer(): AppContainer {
 	};
 }
 
+// Default shared instance for the app shell (view.ts). Prefer
+// createContainer(init) with injected productsData/config in tests.
+// TODO(gocommerce-436): remove this module-load singleton once all
+// consumers accept an injected container; importing this module currently
+// still wires default dependencies on first use.
 export const container = createContainer();
