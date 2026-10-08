@@ -2,11 +2,8 @@ import { toSvelte } from '@gocommerce/adapters/svelte/store';
 import { container } from '@gocommerce/composition/container';
 import type { DisplayProduct } from '@gocommerce/domain/product';
 
-// Re-export the Svelte bridge + framework-agnostic store factory so UI
-// consumes them via composition/view only (never ports/adapters directly).
+// Re-export the Svelte bridge so UI consumes it via composition/view only.
 export { toSvelte } from '@gocommerce/adapters/svelte/store';
-export { createStore } from '@gocommerce/ports/Store';
-export type { WritableStore, ReadableStore } from '@gocommerce/ports/Store';
 
 // Re-export i18n locale helpers (owned by adapters/svelte/i18n) via view.
 export {

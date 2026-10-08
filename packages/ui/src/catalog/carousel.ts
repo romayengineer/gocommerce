@@ -1,17 +1,17 @@
 import Splide from '@splidejs/splide';
 import type { Options } from '@splidejs/splide';
-import { createStore, type WritableStore } from '@gocommerce/composition/view';
+import { writable, type Writable } from 'svelte/store';
 
 export class SplideCarousel {
 	private splide: Splide | null = null;
 	private element: HTMLElement | null = null;
-	readonly currentIndex: WritableStore<number>;
+	readonly currentIndex: Writable<number>;
 
 	constructor(
 		private options: Options,
 		private onMove?: (index: number) => void
 	) {
-		this.currentIndex = createStore(0);
+		this.currentIndex = writable(0);
 	}
 
 	init(element: HTMLElement): void {

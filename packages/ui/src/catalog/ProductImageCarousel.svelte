@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { SplideCarousel } from '$lib/catalog/carousel';
-	import { toSvelte } from '@gocommerce/composition/view';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import ProductImage from '$lib/catalog/ProductImage.svelte';
 	import type { Options } from '@splidejs/splide';
@@ -41,7 +40,7 @@
 		}
 	});
 
-	const currentIndex = toSvelte(carousel.currentIndex);
+	const currentIndex = carousel.currentIndex;
 
 	$effect(() => {
 		if (splideElement && imageList.length > 0) {
