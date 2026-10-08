@@ -21,24 +21,9 @@ export {
 	defaultLocale
 } from '@gocommerce/adapters/svelte/i18n';
 
-// Re-export pure domain helpers/types consumed by presentation components.
-// UI must import these from composition/view, not from @gocommerce/domain/*.
-export { formatPrice } from '@gocommerce/domain/money';
-export { ARGENTINE_PROVINCES } from '@gocommerce/domain/locations';
-export { AMENITIES } from '@gocommerce/domain/amenities';
-export { filterOptions, matchesOption } from '@gocommerce/domain/search';
-export type { SearchOption } from '@gocommerce/domain/search';
-export {
-	computeGridLayout,
-	pageFromScrollHeight,
-	DEFAULT_GRID_CONFIG
-} from '@gocommerce/domain/grid';
-export type { GridConfig, GridLayout } from '@gocommerce/domain/grid';
-export { updatePageInUrl, getPageInUrl } from '@gocommerce/domain/url';
-export type { CartItemFull } from '@gocommerce/domain/cart';
-export type { DisplayProduct } from '@gocommerce/domain/product';
-export type { ShippingFormData, FieldErrors, ShippingCoordinates } from '@gocommerce/domain/shipping';
-export type { MapConfig } from '@gocommerce/ports/MapService';
+// Pure domain helpers/types are imported directly from @gocommerce/domain/*
+// (and MapConfig from @gocommerce/ports/MapService) by presentation
+// components — view.ts only exposes wired services and Svelte stores.
 
 export const config = container.config;
 export const logger = container.logger;

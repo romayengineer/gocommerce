@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import { t } from 'svelte-i18n';
 	import ApiKeyMissing from '$lib/checkout/ApiKeyMissing.svelte';
-	import type { MapConfig, ShippingCoordinates } from '@gocommerce/composition/view';
+	import type { MapConfig } from '@gocommerce/ports/MapService';
+	import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
 	import { mapService, mapState } from '@gocommerce/composition/view';
 
 	interface Props {

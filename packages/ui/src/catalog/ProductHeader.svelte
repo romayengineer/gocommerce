@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Price from '$lib/ui/Price.svelte';
-	import type { DisplayProduct } from '@gocommerce/composition/view';
+	import type { DisplayProduct } from '@gocommerce/domain/product';
 	import SizeSelector from '$lib/catalog/SizeSelector.svelte';
 
 	interface Props {

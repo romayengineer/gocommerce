@@ -2,8 +2,9 @@
 	import FormField from '$lib/ui/FormField.svelte';
 	import SearchableSelect from '$lib/ui/SearchableSelect.svelte';
 	import { t } from 'svelte-i18n';
-	import { ARGENTINE_PROVINCES, AMENITIES } from '@gocommerce/composition/view';
-	import type { ShippingFormData, FieldErrors } from '@gocommerce/composition/view';
+	import { ARGENTINE_PROVINCES } from '@gocommerce/domain/locations';
+	import { AMENITIES } from '@gocommerce/domain/amenities';
+	import type { ShippingFormData, FieldErrors } from '@gocommerce/domain/shipping';
 
 	interface Props {
 		formData: ShippingFormData;

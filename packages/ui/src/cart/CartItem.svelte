@@ -3,7 +3,7 @@
 	import { Trash2 } from 'lucide-svelte';
 	import Price from '$lib/ui/Price.svelte';
 	import QuantitySelector from '$lib/ui/QuantitySelector.svelte';
-	import type { CartItemFull } from '@gocommerce/composition/view';
+	import type { CartItemFull } from '@gocommerce/domain/cart';
 
 	interface Props {
 		item: CartItemFull;

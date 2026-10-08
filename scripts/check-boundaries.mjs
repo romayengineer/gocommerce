@@ -12,10 +12,10 @@
  * - ports -> domain is TYPE-ONLY (e.g. MapService uses ShippingCoordinates).
  *   Value objects are shared by reference to avoid type drift; `import type`
  *   emits no runtime coupling. Declared as peer+dev, not runtime deps.
- * - ui -> @gocommerce/composition/view ONLY (never /container, /domain,
- *   /ports, or /adapters): components consume the already-wired view-model
- *   plus pure helpers re-exported through view; the wiring itself lives in
- *   composition, which owns those dependencies.
+ * - ui -> @gocommerce/composition/view (services/stores) + @gocommerce/domain/*
+ *   (pure helpers) + @gocommerce/ports/* (types) directly; never
+ *   /container, /domain via view proxy, /ports via view proxy, /application,
+ *   /config, or /adapters. Wiring lives in composition, pure logic in domain.
  * - src/routes (app shell) -> @gocommerce/composition/view + $lib +
  *   presentation libs only (rule 8).
  * - *.test.* files may cross layers to build fixtures/mocks, and may use
@@ -123,12 +123,13 @@ for (const f of collect('adapters')) {
 	}
 }
 
-// 5. ui (non-test): no application/config; composition only via /view.
+// 5. ui (non-test): no application/config/adapters; composition only via
+// /view; pure domain helpers + ports types imported directly.
 for (const f of collect('ui')) {
 	if (allowTests(f)) continue;
 	const { found } = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(application|config)/.test(i.spec)) violation(f, `ui must not import ${i.spec}`);
+		if (/^@gocommerce\/(application|config|adapters)/.test(i.spec)) violation(f, `ui must not import ${i.spec}`);
 		if (i.spec.startsWith('@gocommerce/composition/') && !i.spec.endsWith('/view'))
 			violation(f, `ui must only consume @gocommerce/composition/view (found ${i.spec})`);
 	}
