@@ -15,6 +15,8 @@ export default defineConfig({
 			'@gocommerce/config': pkg('config'),
 			'@gocommerce/application': pkg('application'),
 			'@gocommerce/adapters': pkg('adapters'),
+			'@gocommerce/adapters-maps': pkg('adapters-maps'),
+			'@gocommerce/adapters-memory': pkg('adapters-memory'),
 			'@gocommerce/composition': pkg('composition'),
 			'@gocommerce/ui': pkg('ui')
 		}

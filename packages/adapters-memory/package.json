@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "@gocommerce/adapters-memory": "*",
-    "@gocommerce/domain": "*",
     "@gocommerce/ports": "*"
   },
   "devDependencies": {
@@ -11,7 +9,7 @@
     ".": "./src/index.ts",
     "./*": "./src/*"
   },
-  "name": "@gocommerce/application",
+  "name": "@gocommerce/adapters-memory",
   "private": true,
   "type": "module",
   "version": "0.0.1"

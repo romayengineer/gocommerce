@@ -1,4 +1,5 @@
-import { createStore, type WritableStore } from '@gocommerce/ports/Store';
+import type { WritableStore } from '@gocommerce/ports/Store';
+import { createStore } from '@gocommerce/adapters-memory/store';
 import type { Logger } from '@gocommerce/ports/Logger';
 import type { IMapService, MapConfig } from '@gocommerce/ports/MapService';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';

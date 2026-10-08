@@ -20,6 +20,7 @@ const config = {
       '@gocommerce/application': 'packages/application/src',
       '@gocommerce/adapters': 'packages/adapters/src',
       '@gocommerce/adapters-maps': 'packages/adapters-maps/src',
+      '@gocommerce/adapters-memory': 'packages/adapters-memory/src',
       '@gocommerce/composition': 'packages/composition/src',
       '@gocommerce/ui': 'packages/ui/src'
     },

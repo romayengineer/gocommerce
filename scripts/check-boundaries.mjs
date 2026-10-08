@@ -3,10 +3,11 @@
  *
  * Enforces the package dependency DAG of the layered architecture:
  *
- *   domain (innermost, zod only) <- ports <- application (domain+ports only;
- *   owns narrow *Options, no config) <- adapters + adapters-maps (siblings,
- *   never import each other; maps owns leaflet/google SDKs, SDK payloads
- *   load lazily inside each service)
+ *   domain (innermost, zod only) <- ports (type-only) <- application
+ *   (domain+ports+adapters-memory defaults; owns narrow *Options, no config)
+ *   <- adapters + adapters-maps (siblings, never import each other; maps owns
+ *   leaflet/google SDKs, SDK payloads load lazily inside each service)
+ *   adapters-memory (ports' in-memory defaults, ports types only)
  *   composition (root: wires everything incl. AppConfig -> options mapping)
  *   config (standalone, no imports) | ui (presentation)
  *
@@ -88,9 +89,10 @@ for (const f of collect('domain')) {
 	}
 }
 
-// 2. ports: framework-free; domain imports must be type-only.
+// 2. ports: type-only; no value imports, no runtime of its own (defaults
+// live in adapters-memory). Domain imports must be type-only.
 for (const f of collect('ports')) {
-	const { found } = importsOf(f);
+	const { content, found } = importsOf(f);
 	for (const i of found) {
 		if (/^@gocommerce\/(application|adapters|ui|composition|config)/.test(i.spec))
 			violation(f, `ports must not import ${i.spec}`);
@@ -99,14 +101,25 @@ for (const f of collect('ports')) {
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) violation(f, `ports must be dependency-free (found ${b})`);
+		// No runtime exports: interfaces and `export type` only.
+		const hasValueExport = content
+			.split('\n')
+			.some(
+				(line) =>
+					/^\s*export\s+(const|let|var|function|async\s+function|class|default|=\s*)/.test(line) ||
+					(/^\s*export\s*\{/.test(line) && !/^\s*export\s+type\b/.test(line))
+			);
+		if (hasValueExport) violation(f, `ports must be type-only (found value export)`);
 	}
 }
 
 // 3. application: no adapters/ui/composition/config (narrow options owned here,
-// composition maps AppConfig -> options).
+// composition maps AppConfig -> options). Documented exception: the in-memory
+// store defaults in adapters-memory (ports' sibling impl, dependency-free).
 for (const f of collect('application')) {
 	const { found } = importsOf(f);
 	for (const i of found) {
+		if (i.spec.startsWith('@gocommerce/adapters-memory/')) continue;
 		if (/^@gocommerce\/(adapters|ui|composition|config)/.test(i.spec)) violation(f, `application must not import ${i.spec}`);
 	}
 	if (!allowTests(f)) {
@@ -131,6 +144,20 @@ for (const f of collect('adapters-maps')) {
 		if (/^@gocommerce\/(application|ui|composition)/.test(i.spec) || /^@gocommerce\/adapters\//.test(i.spec))
 			violation(f, `adapters-maps must not import ${i.spec}`);
 		if (i.spec.startsWith('$app/')) violation(f, `adapters-maps must not import ${i.spec}`);
+	}
+}
+
+// 4b. adapters-memory: ports types only; the dependency-free in-memory
+// defaults. Must not import anything else in the workspace.
+for (const f of collect('adapters-memory')) {
+	const { found } = importsOf(f);
+	for (const i of found) {
+		if (i.spec.startsWith('@gocommerce/ports/')) continue;
+		if (i.spec.startsWith('@gocommerce/'))
+			violation(f, `adapters-memory must only import @gocommerce/ports/* (found ${i.spec})`);
+	}
+	if (!allowTests(f)) {
+		for (const b of bareImports(f, found)) violation(f, `adapters-memory must be dependency-free (found ${b})`);
 	}
 }
 
@@ -210,7 +237,7 @@ function specToPackage(spec) {
 }
 
 const warnings = [];
-for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'composition', 'ui', 'config']) {
+for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'adapters-memory', 'composition', 'ui', 'config']) {
 	const manifest = pkgManifest(pkg);
 	const allowed = new Set([
 		...Object.keys(manifest.dependencies ?? {}),
@@ -240,4 +267,4 @@ if (failures.length > 0) {
 	process.exit(1);
 }
 for (const w of warnings) console.warn(`warning: ${w}`);
-console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/composition/config/ui/src-routes conform to the DAG.');
+console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/adapters-memory/composition/config/ui/src-routes conform to the DAG.');

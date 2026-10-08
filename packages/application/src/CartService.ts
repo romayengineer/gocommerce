@@ -1,5 +1,7 @@
-import { combine, createStore, derived, type ReadableStore, type WritableStore } from '@gocommerce/ports/Store';
-import { readJSON, writeJSON, type KeyValueStorage } from '@gocommerce/ports/Storage';
+import type { ReadableStore, WritableStore } from '@gocommerce/ports/Store';
+import { combine, createStore, derived } from '@gocommerce/adapters-memory/store';
+import type { KeyValueStorage } from '@gocommerce/ports/Storage';
+import { readJSON, writeJSON } from '@gocommerce/adapters-memory/storage';
 import type { Logger } from '@gocommerce/ports/Logger';
 import {
 	addItem,

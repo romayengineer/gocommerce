@@ -1,4 +1,5 @@
-import { createStore, derived, type ReadableStore, type WritableStore } from '@gocommerce/ports/Store';
+import type { ReadableStore, WritableStore } from '@gocommerce/ports/Store';
+import { createStore, derived } from '@gocommerce/adapters-memory/store';
 import {
 	cleanCategories,
 	deleteProduct as removeProduct,

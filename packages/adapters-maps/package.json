@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@gocommerce/adapters-memory": "*",
     "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*"

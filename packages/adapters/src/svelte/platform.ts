@@ -1,4 +1,5 @@
-import { createStore, type WritableStore } from '@gocommerce/ports/Store';
+import type { WritableStore } from '@gocommerce/ports/Store';
+import { createStore } from '@gocommerce/adapters-memory/store';
 import type { Platform, Viewport, ViewportTracker } from '@gocommerce/ports/Platform';
 import {
 	columnsForWidth,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createStore, derived, combine } from '@gocommerce/ports/Store';
+import { createStore, derived, combine } from './store';
 
 describe('createStore', () => {
 	it('holds and updates a value', () => {

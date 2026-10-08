@@ -3,9 +3,3 @@ export interface Logger {
 	warn(message: string, ...args: unknown[]): void;
 	error(message: string, ...args: unknown[]): void;
 }
-
-export const noopLogger: Logger = {
-	log: () => {},
-	warn: () => {},
-	error: () => {}
-};

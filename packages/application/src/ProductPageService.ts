@@ -1,4 +1,5 @@
-import { combine, createStore, derived, type ReadableStore, type WritableStore } from '@gocommerce/ports/Store';
+import { combine, createStore, derived } from '@gocommerce/adapters-memory/store';
+import type { ReadableStore, WritableStore } from '@gocommerce/ports/Store';
 import type { Clock, TimerHandle } from '@gocommerce/ports/Clock';
 import type { DisplayProduct } from '@gocommerce/domain/product';
 import type { ProductCatalog } from './ProductCatalog';

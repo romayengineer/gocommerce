@@ -7,7 +7,7 @@ import {
 	DEFAULT_CENTER,
 	DEFAULT_ZOOM,
 	FOUND_LOCATION_ZOOM
-} from '@gocommerce/ports/MapService';
+} from '@gocommerce/adapters-memory/maps';
 
 // KEEP THIS DOCUMENTATION
 /*
