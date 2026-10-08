@@ -8,14 +8,14 @@ const valid = {
 	currency: 'ARS',
 	bank: { alias: '', number: '', name: '', bankName: '' },
 	view: { pageWidth: '80rem', theme: 'default' },
-	shop: { name: 'ShopHub', logoUrl: '', supportEmail: '' },
-	seo: { title: 'ShopHub', description: 'An ecommerce store', themeColor: '#2563eb' },
+	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '' },
+	seo: { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' },
 	hero: { enabled: true, ctaHref: '#/products', gradientFrom: 'primary-600', gradientTo: 'primary-800' },
 	home: { featuredCount: 10 },
 	layout: { showHeader: true, showFooter: true, stickyNav: true },
 	footer: { showShop: true, showCompany: true, showLegal: true, copyrightYear: '2024', showBuiltBy: true },
 	cart: { taxRate: 10 },
-	pwa: { name: 'ShopHub', shortName: 'ShopHub' }
+	pwa: { name: 'GoCommerce', shortName: 'GoCommerce' }
 };
 
 describe('configSchema', () => {
@@ -46,9 +46,9 @@ describe('configSchema', () => {
 			view: { pageWidth: '80rem', theme: 'default' }
 		};
 		const parsed = configSchema.parse(minimal);
-		expect(parsed.shop).toEqual({ name: 'ShopHub', logoUrl: '', supportEmail: '' });
+		expect(parsed.shop).toEqual({ name: 'GoCommerce', logoUrl: '', supportEmail: '' });
 		expect(parsed.seo).toEqual({
-			title: 'ShopHub',
+			title: 'GoCommerce',
 			description: 'An ecommerce store',
 			themeColor: '#2563eb'
 		});
@@ -68,7 +68,7 @@ describe('configSchema', () => {
 			showBuiltBy: true
 		});
 		expect(parsed.cart).toEqual({ taxRate: 10 });
-		expect(parsed.pwa).toEqual({ name: 'ShopHub', shortName: 'ShopHub' });
+		expect(parsed.pwa).toEqual({ name: 'GoCommerce', shortName: 'GoCommerce' });
 	});
 
 	it('coerces empty/invalid shop-facing values to safe defaults', () => {
@@ -86,9 +86,9 @@ describe('configSchema', () => {
 				showBuiltBy: true
 			}
 		});
-		expect(parsed.shop.name).toBe('ShopHub');
+		expect(parsed.shop.name).toBe('GoCommerce');
 		expect(parsed.shop.logoUrl).toBe('https://cdn.test/logo.svg');
-		expect(parsed.seo.title).toBe('ShopHub');
+		expect(parsed.seo.title).toBe('GoCommerce');
 		expect(parsed.seo.themeColor).toBe('#2563eb');
 		expect(parsed.home.featuredCount).toBe(10);
 		expect(parsed.cart.taxRate).toBe(10);

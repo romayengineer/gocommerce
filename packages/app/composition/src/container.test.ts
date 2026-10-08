@@ -26,14 +26,14 @@ const testConfig: AppConfig = {
 	currency: 'ARS',
 	bank: { alias: 'a', number: 'n', name: 'n', bankName: 'b' },
 	view: { pageWidth: '80rem', theme: 'default' },
-	shop: { name: 'ShopHub', logoUrl: '', supportEmail: '' },
-	seo: { title: 'ShopHub', description: 'An ecommerce store', themeColor: '#2563eb' },
+	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '' },
+	seo: { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' },
 	hero: { enabled: true, ctaHref: '#/products', gradientFrom: 'primary-600', gradientTo: 'primary-800' },
 	home: { featuredCount: 10 },
 	layout: { showHeader: true, showFooter: true, stickyNav: true },
 	footer: { showShop: true, showCompany: true, showLegal: true, copyrightYear: '2024', showBuiltBy: true },
 	cart: { taxRate: 10 },
-	pwa: { name: 'ShopHub', shortName: 'ShopHub' }
+	pwa: { name: 'GoCommerce', shortName: 'GoCommerce' }
 };
 
 function directOrder(seed: string): string[] {

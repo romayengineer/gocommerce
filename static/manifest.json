@@ -1,6 +1,6 @@
 {
-	"name": "ShopHub",
-	"short_name": "ShopHub",
+	"name": "GoCommerce",
+	"short_name": "GoCommerce",
 	"description": "An ecommerce store",
 	"start_url": "/",
 	"scope": "/",

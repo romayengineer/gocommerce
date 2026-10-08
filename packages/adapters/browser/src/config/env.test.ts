@@ -8,8 +8,8 @@ describe('readEnvConfig', () => {
 		expect(config.googleMapsApiKey).toBe('');
 		expect(config.currency).toBe('ARS');
 		expect(config.view).toEqual({ pageWidth: '80rem', theme: 'default' });
-		expect(config.shop.name).toBe('ShopHub');
-		expect(config.seo.title).toBe('ShopHub');
+		expect(config.shop.name).toBe('GoCommerce');
+		expect(config.seo.title).toBe('GoCommerce');
 		expect(config.hero.enabled).toBe(true);
 		expect(config.home.featuredCount).toBe(10);
 		expect(config.layout).toEqual({ showHeader: true, showFooter: true, stickyNav: true });

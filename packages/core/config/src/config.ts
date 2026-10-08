@@ -25,20 +25,20 @@ export const viewConfigSchema = z.object({
 export type ViewConfig = z.infer<typeof viewConfigSchema>;
 
 export const shopConfigSchema = z.object({
-	name: z.string().min(1).catch('ShopHub'),
+	name: z.string().min(1).catch('GoCommerce'),
 	logoUrl: z.string().catch(''),
 	supportEmail: z.string().catch('')
 });
 export type ShopConfig = z.infer<typeof shopConfigSchema>;
-const defaultShop = { name: 'ShopHub', logoUrl: '', supportEmail: '' };
+const defaultShop = { name: 'GoCommerce', logoUrl: '', supportEmail: '' };
 
 export const seoConfigSchema = z.object({
-	title: z.string().min(1).catch('ShopHub'),
+	title: z.string().min(1).catch('GoCommerce'),
 	description: z.string().catch('An ecommerce store'),
 	themeColor: z.string().min(1).catch('#2563eb')
 });
 export type SeoConfig = z.infer<typeof seoConfigSchema>;
-const defaultSeo = { title: 'ShopHub', description: 'An ecommerce store', themeColor: '#2563eb' };
+const defaultSeo = { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' };
 
 export const heroConfigSchema = z.object({
 	enabled: z.boolean().catch(true),
@@ -91,11 +91,11 @@ export type CartConfig = z.infer<typeof cartConfigSchema>;
 const defaultCart = { taxRate: 10 };
 
 export const pwaConfigSchema = z.object({
-	name: z.string().min(1).catch('ShopHub'),
-	shortName: z.string().min(1).catch('ShopHub')
+	name: z.string().min(1).catch('GoCommerce'),
+	shortName: z.string().min(1).catch('GoCommerce')
 });
 export type PwaConfig = z.infer<typeof pwaConfigSchema>;
-const defaultPwa = { name: 'ShopHub', shortName: 'ShopHub' };
+const defaultPwa = { name: 'GoCommerce', shortName: 'GoCommerce' };
 
 export const configSchema = z.object({
 	imagesBaseUrl: z.string(),

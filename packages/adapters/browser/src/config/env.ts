@@ -34,7 +34,7 @@ export function readEnvConfig(
 		);
 	}
 
-	const shopName = env.VITE_SHOP_NAME ?? 'ShopHub';
+	const shopName = env.VITE_SHOP_NAME ?? 'GoCommerce';
 
 	const config = configSchema.parse({
 		imagesBaseUrl: env.VITE_S3_IMAGES_URL ?? '',
@@ -93,7 +93,7 @@ export function readEnvConfig(
 
 	if (dev) {
 		if (!config.imagesBaseUrl) console.warn('VITE_S3_IMAGES_URL is empty; product images will not resolve.');
-		if (env.VITE_SHOP_NAME === '') console.warn('VITE_SHOP_NAME is empty; falling back to "ShopHub".');
+		if (env.VITE_SHOP_NAME === '') console.warn('VITE_SHOP_NAME is empty; falling back to "GoCommerce".');
 		for (const [key, value] of Object.entries(config.bank)) {
 			if (!value) console.warn(`VITE_BANK_* is empty (${key}); the payment view will render blank details.`);
 		}
