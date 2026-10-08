@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { ShoppingCart } from 'lucide-svelte';
-	import Button from '$lib/ui/Button.svelte';
-	import CartItem from '$lib/cart/CartItem.svelte';
-	import EmptyState from '$lib/ui/EmptyState.svelte';
-	import OrderSummaryLine from '$lib/cart/OrderSummaryLine.svelte';
-	import Card from '$lib/ui/Card.svelte';
-	import PageContainer from '$lib/ui/PageContainer.svelte';
-	import PageTitle from '$lib/ui/PageTitle.svelte';
+	import Button from '@gocommerce/ui-primitives/Button.svelte';
+	import CartItem from '@gocommerce/ui-purchase/cart/CartItem.svelte';
+	import EmptyState from '@gocommerce/ui-primitives/EmptyState.svelte';
+	import OrderSummaryLine from '@gocommerce/ui-purchase/cart/OrderSummaryLine.svelte';
+	import Card from '@gocommerce/ui-primitives/Card.svelte';
+	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
+	import PageTitle from '@gocommerce/ui-primitives/PageTitle.svelte';
 	import { cartProducts, cartTotal, removeFromCart, updateQuantity } from '@gocommerce/composition/view/cart';
 	import { router } from '@gocommerce/composition/view/router';
 

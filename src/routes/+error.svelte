@@ -1,5 +1,5 @@
 <script>
-	import NotFound from '$lib/layout/NotFound.svelte';
+	import NotFound from '@gocommerce/ui-shell/NotFound.svelte';
 </script>
 
 <NotFound />

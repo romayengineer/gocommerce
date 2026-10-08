@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import ProductGrid from '$lib/catalog/ProductGrid.svelte';
-	import PageContainer from '$lib/ui/PageContainer.svelte';
-	import Link from '$lib/ui/Link.svelte';
+	import ProductGrid from '@gocommerce/ui-catalog/ProductGrid.svelte';
+	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
+	import Link from '@gocommerce/ui-primitives/Link.svelte';
 	import { productPage, sortedProducts } from '@gocommerce/composition/view/products';
 	import { viewport } from '@gocommerce/composition/view/viewport';
 

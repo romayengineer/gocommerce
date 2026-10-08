@@ -5,8 +5,8 @@
 	import { viewportTracker } from '@gocommerce/composition/view/viewport';
 	import { ensureProductSeed } from '@gocommerce/composition/view/catalog';
 	import { router } from '@gocommerce/composition/view/router';
-	import Navigation from '$lib/layout/Navigation.svelte';
-	import Footer from '$lib/layout/Footer.svelte';
+	import Navigation from '@gocommerce/ui-shell/Navigation.svelte';
+	import Footer from '@gocommerce/ui-shell/Footer.svelte';
 	import '../app.css';
 
 	$effect(() => {

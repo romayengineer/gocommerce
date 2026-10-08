@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@gocommerce/composition": "*",
+    "@gocommerce/ui-primitives": "*",
+    "lucide-svelte": "^1.0.1",
+    "svelte-i18n": "^4.0.1"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "name": "@gocommerce/ui-shell",
+  "peerDependencies": {
+    "svelte": "^5.55.10"
+  },
+  "private": true,
+  "type": "module",
+  "version": "0.0.1"
+}

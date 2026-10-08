@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { CreditCard } from 'lucide-svelte';
-	import PaymentForm from '$lib/payment/PaymentForm.svelte';
-	import PageContainer from '$lib/ui/PageContainer.svelte';
-	import PageTitle from '$lib/ui/PageTitle.svelte';
+	import PaymentForm from '@gocommerce/ui-purchase/payment/PaymentForm.svelte';
+	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
+	import PageTitle from '@gocommerce/ui-primitives/PageTitle.svelte';
 </script>
 
 <PageContainer>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ProductGrid from '$lib/catalog/ProductGrid.svelte';
-	import ProductFiltersMobile from '$lib/catalog/ProductFiltersMobile.svelte';
-	import PageContainer from '$lib/ui/PageContainer.svelte';
+	import ProductGrid from '@gocommerce/ui-catalog/ProductGrid.svelte';
+	import ProductFiltersMobile from '@gocommerce/ui-catalog/ProductFiltersMobile.svelte';
+	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
 	import { productPage, sortedProducts } from '@gocommerce/composition/view/products';
 </script>
 

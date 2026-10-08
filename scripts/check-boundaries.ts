@@ -16,7 +16,9 @@
  *   composition (root: wires everything incl. AppConfig -> options mapping;
  *   the barrel exposes createContainer only — the wired singleton + Svelte
  *   bridges live behind the @gocommerce/composition/view deep path)
- *   config (schemas + zod, no workspace imports) | ui (presentation)
+ *   config (schemas + zod, no workspace imports) | ui-* (presentation:
+ *   ui-primitives leaf <- ui-catalog + ui-purchase + ui-shell siblings,
+ *   never importing each other)
  *
  * Documented exceptions:
  * - ports -> domain is TYPE-ONLY (e.g. MapService re-exports domain/geo;
@@ -25,14 +27,16 @@
  *   coupling. Declared as peer+dev, not runtime deps.
  * - ui-core implements ColumnsForWidthFn by structural match (no workspace
  *   import; rule 4c forbids it). The port owns the signature.
- * - ui -> @gocommerce/composition/view slices (services/stores) + @gocommerce/ui-core/*
- *   (presentation values) + @gocommerce/domain/* + @gocommerce/ports/*
+ * - ui-* -> @gocommerce/composition/view slices (services/stores) + @gocommerce/ui-core/*
+ *   (presentation values) + @gocommerce/ui-primitives/* (feature packages only)
+ *   + @gocommerce/domain/* + @gocommerce/ports/*
  *   (types via `import type` only; value imports from domain fail); never
  *   /container, /singleton, /domain via view proxy, /ports via view proxy, /application,
- *   /config, /adapters, or /foundation. Wiring lives in composition,
+ *   /config, /adapters, or /foundation, and never a sibling ui-* package
+ *   (catalog/purchase/shell import primitives only). Wiring lives in composition,
  *   presentation values in ui-core, pure logic in domain.
- * - src/routes (app shell) -> @gocommerce/composition/view + $lib +
- *   presentation libs only (rule 8).
+ * - src/routes (app shell) -> @gocommerce/composition/view + @gocommerce/ui-* scoped
+ *   paths + presentation libs only (rule 8).
  * - *.test.* files may cross layers to build fixtures/mocks, and may use
  *   devDependencies.
  * - Every non-relative import in non-test sources (static or dynamic
@@ -70,7 +74,10 @@ type CheckedPackage =
 	| 'foundation'
 	| 'ui-core'
 	| 'composition'
-	| 'ui'
+	| 'ui-primitives'
+	| 'ui-catalog'
+	| 'ui-purchase'
+	| 'ui-shell'
 	| 'config';
 
 const CHECKED_PACKAGES: readonly CheckedPackage[] = [
@@ -82,7 +89,10 @@ const CHECKED_PACKAGES: readonly CheckedPackage[] = [
 	'foundation',
 	'ui-core',
 	'composition',
-	'ui',
+	'ui-primitives',
+	'ui-catalog',
+	'ui-purchase',
+	'ui-shell',
 	'config'
 ];
 
@@ -151,7 +161,7 @@ for (const f of collect('domain')) {
 for (const f of collect('ports')) {
 	const { content, found }: FileImports = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(application|adapters|ui|composition|config)/.test(i.spec))
+		if (/^@gocommerce\/(application|adapters|ui(-|\/)|composition|config)/.test(i.spec))
 			violation(f, `ports must not import ${i.spec}`);
 		if (i.spec.startsWith('@gocommerce/domain/') && !i.typeOnly)
 			violation(f, `ports->domain must be import type (found value import of ${i.spec})`);
@@ -170,7 +180,7 @@ for (const f of collect('ports')) {
 	}
 }
 
-// 3. application: no adapters (incl. foundation)/ui/composition/config.
+// 3. application: no adapters (incl. foundation)/ui-*/composition/config.
 // Stores and JSON codec arrive via ports/StoreFactory + ports/StorageCodec
 // (type-only) and are injected by composition — never value-imported here.
 // Tests may import foundation fakes via devDependencies (documented exception).
@@ -178,7 +188,7 @@ for (const f of collect('application')) {
 	if (allowTests(f)) continue;
 	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(adapters|foundation|ui\/|composition|config)/.test(i.spec))
+		if (/^@gocommerce\/(adapters|foundation|ui(-|\/)|composition|config)/.test(i.spec))
 			violation(f, `application must not import ${i.spec} (inject StoreFactory/StorageCodec via ports instead)`);
 	}
 	for (const b of bareImports(f, found)) violation(f, `application must have no third-party deps (found ${b})`);
@@ -189,8 +199,8 @@ for (const f of collect('application')) {
 for (const f of collect('adapters')) {
 	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
-		// NOTE: `ui/` (with slash) so @gocommerce/ui-core stays allowed.
-		if (/^@gocommerce\/(application|ui\/|composition|adapters-maps)/.test(i.spec))
+		// NOTE: `ui(-|/)` covers @gocommerce/ui-*/ siblings but never @gocommerce/ui-core.
+		if (/^@gocommerce\/(application|ui(-|\/)|composition|adapters-maps)/.test(i.spec))
 			violation(f, `adapters must not import ${i.spec}`);
 		if (i.spec.startsWith('$app/') && !f.endsWith('svelte/router.svelte.ts'))
 			violation(f, `$app/* coupling must live in svelte/router.svelte.ts (found in ${rel(f)})`);
@@ -199,7 +209,7 @@ for (const f of collect('adapters')) {
 for (const f of collect('adapters-maps')) {
 	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(application|ui|composition)/.test(i.spec) || /^@gocommerce\/adapters\//.test(i.spec))
+		if (/^@gocommerce\/(application|ui(-|\/)|composition)/.test(i.spec) || /^@gocommerce\/adapters\//.test(i.spec))
 			violation(f, `adapters-maps must not import ${i.spec}`);
 		if (i.spec.startsWith('$app/')) violation(f, `adapters-maps must not import ${i.spec}`);
 	}
@@ -244,20 +254,33 @@ for (const pkg of CHECKED_PACKAGES) {
 	}
 }
 
-// 5. ui (non-test): no application/config/adapters/foundation; composition
+// 5. ui-* (non-test): no application/config/adapters/foundation; composition
 // only via /view or /view/* slices; domain + ports types imported directly (import type only)
 // — value helpers come via composition/view slices or @gocommerce/ui-core/*.
-for (const f of collect('ui')) {
-	if (allowTests(f)) continue;
-	const { found }: FileImports = importsOf(f);
-	for (const i of found) {
-		if (/^@gocommerce\/(application|config|foundation|adapters)/.test(i.spec)) violation(f, `ui must not import ${i.spec}`);
-		if (i.spec.startsWith('@gocommerce/composition/') && !isViewPath(i.spec))
-			violation(f, `ui must only consume @gocommerce/composition/view slices (found ${i.spec})`);
-		if (i.spec.startsWith('@gocommerce/domain/') && !i.typeOnly)
-			violation(f, `ui->domain must be import type (found value import of ${i.spec})`);
+// Feature packages (catalog/purchase/shell) may value-import ui-primitives;
+// siblings must never import each other; primitives imports no ui-* sibling.
+function checkUiPackage(pkg: CheckedPackage, siblings: readonly string[]): void {
+	for (const f of collect(pkg)) {
+		if (allowTests(f)) continue;
+		const { found }: FileImports = importsOf(f);
+		for (const i of found) {
+			if (/^@gocommerce\/(application|config|foundation|adapters)/.test(i.spec))
+				violation(f, `${pkg} must not import ${i.spec}`);
+			if (i.spec.startsWith('@gocommerce/composition/') && !isViewPath(i.spec))
+				violation(f, `${pkg} must only consume @gocommerce/composition/view slices (found ${i.spec})`);
+			if (i.spec.startsWith('@gocommerce/domain/') && !i.typeOnly)
+				violation(f, `${pkg}->domain must be import type (found value import of ${i.spec})`);
+			for (const sib of siblings) {
+				if (i.spec === `@gocommerce/${sib}` || i.spec.startsWith(`@gocommerce/${sib}/`))
+					violation(f, `${pkg} must not import sibling ${i.spec} (share via ui-primitives instead)`);
+			}
+		}
 	}
 }
+checkUiPackage('ui-primitives', ['ui-catalog', 'ui-purchase', 'ui-shell']);
+checkUiPackage('ui-catalog', ['ui-purchase', 'ui-shell']);
+checkUiPackage('ui-purchase', ['ui-catalog', 'ui-shell']);
+checkUiPackage('ui-shell', ['ui-catalog', 'ui-purchase']);
 
 // 6. composition: wires everything; no third-party runtime imports.
 // Tests are exempt (like every other layer): suites build fakes and import
@@ -287,8 +310,8 @@ for (const f of collect('config')) {
 	}
 }
 
-// 8. src/routes (app shell): consume composition/view + $lib + presentation
-// libs only; never reach past the view into domain/ports/application/adapters.
+// 8. src/routes (app shell): consume composition/view + @gocommerce/ui-* scoped
+// paths + presentation libs only; never reach past the view into domain/ports/application/adapters.
 const ROUTES_DIR: string = join(ROOT, 'src', 'routes');
 function collectRoutes(): string[] {
 	const out: string[] = [];
@@ -309,8 +332,8 @@ for (const f of collectRoutes()) {
 			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
 		if (i.spec.startsWith('@gocommerce/composition/') && !isViewPath(i.spec))
 			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
-		if (i.spec.startsWith('@gocommerce/ui/'))
-			violation(f, `routes must import UI via $lib, not ${i.spec}`);
+		if (i.spec === '@gocommerce/ui' || i.spec.startsWith('@gocommerce/ui/'))
+			violation(f, `routes must import UI via @gocommerce/ui-* scoped paths, not ${i.spec}`);
 		// $app/* outside adapters is Phase 2 work (route via RouterPort
 		// instead): warn, don't fail.
 		if (i.spec.startsWith('$app/'))
@@ -401,4 +424,4 @@ if (failures.length > 0) {
 	process.exit(1);
 }
 for (const w of warnings) console.warn(`warning: ${w}`);
-console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/foundation/ui-core/composition/config/ui/src-routes conform to the DAG.');
+console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/foundation/ui-core/composition/config/ui-*/src-routes conform to the DAG.');

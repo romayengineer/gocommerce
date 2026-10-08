@@ -23,12 +23,16 @@ const config = {
       '@gocommerce/foundation': 'packages/foundation/src',
       '@gocommerce/ui-core': 'packages/ui-core/src',
       '@gocommerce/composition': 'packages/composition/src',
-      '@gocommerce/ui': 'packages/ui/src'
+      '@gocommerce/ui-primitives': 'packages/ui-primitives/src',
+      '@gocommerce/ui-catalog': 'packages/ui-catalog/src',
+      '@gocommerce/ui-purchase': 'packages/ui-purchase/src',
+      '@gocommerce/ui-shell': 'packages/ui-shell/src'
     },
     files: {
-      // $lib now resolves to the ui workspace package so routes keep
-      // importing '$lib/...' while the package DAG enforces layering.
-      lib: 'packages/ui/src'
+      // $lib resolves to the primitives package (leaf UI components).
+      // Feature packages and routes import each other via the scoped
+      // `@gocommerce/ui-*` aliases above so the package DAG stays explicit.
+      lib: 'packages/ui-primitives/src'
     },
     output: {
       bundleStrategy: 'inline'
