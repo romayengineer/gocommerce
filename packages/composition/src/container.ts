@@ -19,6 +19,14 @@ import { browserClock } from '@gocommerce/adapters/browser/clock';
 import { NavigatorClipboard } from '@gocommerce/adapters/browser/clipboard';
 import { SvelteKitRouter } from '@gocommerce/adapters/svelte/router.svelte';
 import { ViewportWidthTracker } from '@gocommerce/adapters/svelte/platform';
+import { memoryStoreFactory } from '@gocommerce/adapters-memory/store';
+import { jsonStorageCodec } from '@gocommerce/adapters-memory/storage';
+import {
+	columnsForWidth,
+	DEFAULT_COLUMN_WIDTH,
+	MAX_COLUMNS,
+	MIN_COLUMNS
+} from '@gocommerce/ui-core/viewport';
 import { createMapService } from '@gocommerce/adapters-maps/mapFactory';
 import productsData from './data/products.json';
 
@@ -68,20 +76,38 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 	const config = init.config ?? readEnvConfig();
 	const storage = init.storage ?? new LocalStorageAdapter();
 	const clock = init.clock ?? browserClock;
-	const viewport = init.viewport ?? new ViewportWidthTracker();
+	const viewport =
+		init.viewport ??
+		new ViewportWidthTracker({
+			columnWidth: DEFAULT_COLUMN_WIDTH,
+			min: MIN_COLUMNS,
+			max: MAX_COLUMNS,
+			columnsForWidth
+		});
 	const router = init.router ?? new SvelteKitRouter();
 	const clipboard = init.clipboard ?? new NavigatorClipboard();
 	const gateway = init.gateway ?? new SimulatedCheckoutGateway();
 	const createMap = init.createMap ?? createMapService;
 
-	const catalog = new ProductCatalog((init.productsData ?? productsData) as ProductsColumnar, {
-		imagesBaseUrl: config.imagesBaseUrl
-	});
-	const cart = new CartService(storage, catalog, logger);
-	const products = new ProductPageService(catalog, clock);
-	const checkout = new CheckoutService(gateway, storage, router, logger);
+	const catalog = new ProductCatalog(
+		(init.productsData ?? productsData) as ProductsColumnar,
+		{
+			imagesBaseUrl: config.imagesBaseUrl
+		},
+		memoryStoreFactory
+	);
+	const cart = new CartService(storage, catalog, logger, memoryStoreFactory, jsonStorageCodec);
+	const products = new ProductPageService(catalog, clock, memoryStoreFactory);
+	const checkout = new CheckoutService(
+		gateway,
+		storage,
+		router,
+		logger,
+		memoryStoreFactory,
+		jsonStorageCodec
+	);
 	const payment = new PaymentService({ bank: config.bank }, cart);
-	const maps = new MapLocationService(() => createMap(config, logger), logger);
+	const maps = new MapLocationService(() => createMap(config, logger), logger, memoryStoreFactory);
 
 	if (typeof window !== 'undefined') {
 		viewport.setElement(window);

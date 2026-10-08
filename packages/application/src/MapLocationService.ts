@@ -1,5 +1,5 @@
 import type { WritableStore } from '@gocommerce/ports/Store';
-import { createStore } from '@gocommerce/adapters-memory/store';
+import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 import type { Logger } from '@gocommerce/ports/Logger';
 import type { IMapService, MapConfig } from '@gocommerce/ports/MapService';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
@@ -17,9 +17,10 @@ export class MapLocationService {
 
 	constructor(
 		private factory: () => IMapService,
-		private logger: Logger
+		private logger: Logger,
+		stores: StoreFactory
 	) {
-		this.state = createStore({
+		this.state = stores.create({
 			coordinates: {},
 			locationNotFound: false,
 			apiKeyMissing: false,
@@ -27,7 +28,7 @@ export class MapLocationService {
 		});
 	}
 
-	async initialize(container: HTMLDivElement, config?: MapConfig): Promise<void> {
+	async initialize(container: unknown, config?: MapConfig): Promise<void> {
 		this.service = this.factory();
 
 		if (!this.service.hasApiKey()) {

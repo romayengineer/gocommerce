@@ -1,15 +1,23 @@
 import type { WritableStore } from '@gocommerce/ports/Store';
 import { createStore } from '@gocommerce/adapters-memory/store';
 import type { Platform, Viewport, ViewportTracker } from '@gocommerce/ports/Platform';
-import {
-	columnsForWidth,
-	DEFAULT_COLUMN_WIDTH,
-	MAX_COLUMNS,
-	MIN_COLUMNS
-} from '@gocommerce/ui-core/viewport';
 
-function currentWindowWidth(): number {
-	return typeof window !== 'undefined' ? window.innerWidth : DEFAULT_COLUMN_WIDTH * 2;
+export type ColumnsForWidthFn = (
+	width: number,
+	columnWidth: number,
+	min: number,
+	max: number
+) => number;
+
+export interface ViewportTrackerInit {
+	columnWidth: number;
+	min: number;
+	max: number;
+	columnsForWidth: ColumnsForWidthFn;
+}
+
+function currentWindowWidth(fallback: number): number {
+	return typeof window !== 'undefined' ? window.innerWidth : fallback;
 }
 
 export class BrowserPlatform implements Platform {
@@ -19,6 +27,8 @@ export class BrowserPlatform implements Platform {
 /**
  * Tracks the viewport width and derives the responsive column count.
  * Tracks the whole window unless `setElement` is called with a container.
+ * Column math is injected (owns no ui-core import) — composition wires
+ * `columnsForWidth` + constants from `@gocommerce/ui-core/viewport`.
  */
 export class ViewportWidthTracker implements ViewportTracker {
 	readonly viewport: WritableStore<Viewport>;
@@ -26,26 +36,23 @@ export class ViewportWidthTracker implements ViewportTracker {
 	private resizeListener: (() => void) | null = null;
 	private resizeObserver: ResizeObserver | null = null;
 
-	constructor(
-		private columnWidth: number = DEFAULT_COLUMN_WIDTH,
-		private min: number = MIN_COLUMNS,
-		private max: number = MAX_COLUMNS
-	) {
+	constructor(private init: ViewportTrackerInit) {
+		const width = currentWindowWidth(init.columnWidth * 2);
 		this.viewport = createStore({
-			width: currentWindowWidth(),
-			columns: columnsForWidth(currentWindowWidth(), columnWidth, min, max)
+			width,
+			columns: init.columnsForWidth(width, init.columnWidth, init.min, init.max)
 		});
 	}
 
-	setElement(element: Element | Window | null): void {
+	setElement(element: unknown): void {
 		this.removeResizeListener();
-		this.element = element;
+		this.element = element as Element | Window | null;
 
-		if (this.element instanceof Window) {
+		if (typeof Window !== 'undefined' && this.element instanceof Window) {
 			this.updateWidth(this.element.innerWidth);
 			this.resizeListener = () => this.updateWidth(window.innerWidth);
 			window.addEventListener('resize', this.resizeListener);
-		} else if (this.element instanceof Element) {
+		} else if (typeof Element !== 'undefined' && this.element instanceof Element) {
 			const container = this.element;
 			this.updateWidth(container.clientWidth);
 			this.resizeObserver = new ResizeObserver(() => {
@@ -58,7 +65,7 @@ export class ViewportWidthTracker implements ViewportTracker {
 	private updateWidth(width: number): void {
 		this.viewport.set({
 			width,
-			columns: columnsForWidth(width, this.columnWidth, this.min, this.max)
+			columns: this.init.columnsForWidth(width, this.init.columnWidth, this.init.min, this.init.max)
 		});
 	}
 

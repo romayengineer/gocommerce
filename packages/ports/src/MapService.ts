@@ -38,7 +38,7 @@ export interface CenterZoom {
 }
 
 export interface IMapService {
-	initialize(container: HTMLDivElement, config?: MapConfig): Promise<void>;
+	initialize(container: unknown, config?: MapConfig): Promise<void>;
 	updateLocation(config: MapConfig): Promise<ShippingCoordinates | undefined>;
 	isInitialized(): boolean;
 	hasApiKey(): boolean;

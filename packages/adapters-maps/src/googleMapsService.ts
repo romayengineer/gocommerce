@@ -18,8 +18,8 @@ export class GoogleMapsService implements IMapService {
 		this.logger = logger;
 	}
 
-	async initialize(container: HTMLDivElement): Promise<void> {
-		this.mapContainer = container;
+	async initialize(container: unknown): Promise<void> {
+		this.mapContainer = container as HTMLDivElement;
 		await this.loadGoogleMapsScript();
 		this.initializeMap();
 		this.initializeGeocoder();

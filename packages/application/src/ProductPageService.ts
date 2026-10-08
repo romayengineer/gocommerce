@@ -1,5 +1,5 @@
-import { combine, createStore, derived } from '@gocommerce/adapters-memory/store';
 import type { ReadableStore, WritableStore } from '@gocommerce/ports/Store';
+import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 import type { Clock, TimerHandle } from '@gocommerce/ports/Clock';
 import type { DisplayProduct } from '@gocommerce/domain/product';
 import type { ProductCatalog } from './ProductCatalog';
@@ -113,21 +113,22 @@ export class ProductPageService {
 	constructor(
 		private catalog: ProductCatalog,
 		private clock: Clock,
+		stores: StoreFactory,
 		debounceMs = 1000
 	) {
-		this.sortBy = createStore<SortOption>('random');
-		this.filterCategory = createStore(ALL);
-		this.filterSize = createStore(ALL);
-		this.filterBrand = createStore(ALL);
-		this.searchQuery = createStore('');
-		this.debouncedSearchQuery = createStore('');
+		this.sortBy = stores.create<SortOption>('random');
+		this.filterCategory = stores.create(ALL);
+		this.filterSize = stores.create(ALL);
+		this.filterBrand = stores.create(ALL);
+		this.searchQuery = stores.create('');
+		this.debouncedSearchQuery = stores.create('');
 
 		this.displayProducts = catalog.products;
-		this.categories = derived(catalog.categories, (categories) => [ALL, ...categories]);
-		this.sizes = derived(catalog.sizes, (sizes) => [ALL, ...sizes]);
-		this.brands = derived(catalog.brands, (brands) => [ALL, ...brands]);
+		this.categories = stores.derived(catalog.categories, (categories) => [ALL, ...categories]);
+		this.sizes = stores.derived(catalog.sizes, (sizes) => [ALL, ...sizes]);
+		this.brands = stores.derived(catalog.brands, (brands) => [ALL, ...brands]);
 
-		this.filtered = combine(
+		this.filtered = stores.combine(
 			[this.displayProducts, this.filterCategory, this.filterSize, this.filterBrand, this.debouncedSearchQuery],
 			() =>
 				filterProducts(this.displayProducts.get(), {
@@ -138,7 +139,7 @@ export class ProductPageService {
 				})
 		);
 
-		this.sorted = combine([this.filtered, this.sortBy], () =>
+		this.sorted = stores.combine([this.filtered, this.sortBy], () =>
 			sortProducts(this.filtered.get(), this.sortBy.get())
 		);
 

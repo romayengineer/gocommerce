@@ -1,7 +1,7 @@
 import type { WritableStore } from '@gocommerce/ports/Store';
-import { createStore } from '@gocommerce/adapters-memory/store';
+import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 import type { KeyValueStorage } from '@gocommerce/ports/Storage';
-import { readJSON, writeJSON } from '@gocommerce/adapters-memory/storage';
+import type { StorageCodec } from '@gocommerce/ports/StorageCodec';
 import type { Logger } from '@gocommerce/ports/Logger';
 import type { RouterPort } from '@gocommerce/ports/Router';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@gocommerce/domain/shipping';
 
 export const CHECKOUT_FORM_STORAGE_KEY = 'ecommerce_checkout_form';
+export const DEFAULT_CHECKOUT_SUCCESS_ROUTE = '#/payment';
 
 export interface CheckoutGateway {
 	submit(data: ShippingFormData): Promise<void>;
@@ -29,17 +30,20 @@ export class CheckoutService {
 		private storage: KeyValueStorage,
 		private router: RouterPort,
 		private logger: Logger,
-		private key: string = CHECKOUT_FORM_STORAGE_KEY
+		stores: StoreFactory,
+		codec: StorageCodec,
+		private key: string = CHECKOUT_FORM_STORAGE_KEY,
+		private successRoute: string = DEFAULT_CHECKOUT_SUCCESS_ROUTE
 	) {
-		const stored = readJSON<unknown>(storage, key);
+		const stored = codec.readJSON<unknown>(storage, key);
 		const formData = restoreShippingFormData(stored);
 
-		this.formData = createStore(formData);
-		this.errors = createStore({});
-		this.submitted = createStore(false);
-		this.submitting = createStore(false);
+		this.formData = stores.create(formData);
+		this.errors = stores.create({});
+		this.submitted = stores.create(false);
+		this.submitting = stores.create(false);
 
-		this.formData.subscribe((data) => writeJSON(storage, key, data));
+		this.formData.subscribe((data) => codec.writeJSON(storage, key, data));
 	}
 
 	validate(): boolean {
@@ -60,7 +64,7 @@ export class CheckoutService {
 		try {
 			this.logger.log('Order submitted:', this.formData.get());
 			await this.gateway.submit(this.formData.get());
-			this.router.navigate('#/payment');
+			this.router.navigate(this.successRoute);
 		} finally {
 			this.submitting.set(false);
 		}

@@ -2,7 +2,9 @@
   "dependencies": {
     "@gocommerce/adapters": "*",
     "@gocommerce/adapters-maps": "*",
-    "@gocommerce/application": "*"
+    "@gocommerce/adapters-memory": "*",
+    "@gocommerce/application": "*",
+    "@gocommerce/ui-core": "*"
   },
   "devDependencies": {
     "@gocommerce/config": "*",

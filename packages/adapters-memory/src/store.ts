@@ -1,4 +1,5 @@
 import type { ReadableStore, WritableStore } from '@gocommerce/ports/Store';
+import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 
 export function createStore<T>(initial: T): WritableStore<T> {
 	let value = initial;
@@ -50,7 +51,14 @@ export function combine<B>(sources: ReadableStore<unknown>[], compute: () => B):
 			);
 			listener(compute());
 			started = true;
-			return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
+			return () => 	unsubscribers.forEach((unsubscribe) => unsubscribe());
 		}
 	};
 }
+
+/** Default in-memory `StoreFactory` injected by the composition root. */
+export const memoryStoreFactory: StoreFactory = {
+	create: createStore,
+	derived,
+	combine
+};

@@ -1,5 +1,5 @@
 import type { ReadableStore, WritableStore } from '@gocommerce/ports/Store';
-import { createStore, derived } from '@gocommerce/adapters-memory/store';
+import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 import {
 	cleanCategories,
 	deleteProduct as removeProduct,
@@ -21,18 +21,23 @@ export class ProductCatalog {
 	readonly sizes: ReadableStore<string[]>;
 	readonly categories: ReadableStore<string[]>;
 
-	constructor(data: ProductsColumnar, config: CatalogConfig, random: RandomFn = Math.random) {
+	constructor(
+		data: ProductsColumnar,
+		config: CatalogConfig,
+		stores: StoreFactory,
+		random: RandomFn = Math.random
+	) {
 		const parsed = ProductsColumnarSchema.parse(data);
-		this.products = createStore(
+		this.products = stores.create(
 			shuffleFisherYates(mapColumnarToDisplay(parsed, config.imagesBaseUrl), random)
 		);
-		this.brands = derived(this.products, (products) =>
+		this.brands = stores.derived(this.products, (products) =>
 			Array.from(new Set(products.map((p) => p.brand))).sort()
 		);
-		this.sizes = derived(this.products, (products) =>
+		this.sizes = stores.derived(this.products, (products) =>
 			Array.from(new Set(products.flatMap((p) => p.items.map((i) => i.size))))
 		);
-		this.categories = derived(this.products, (products) =>
+		this.categories = stores.derived(this.products, (products) =>
 			cleanCategories(products.flatMap((p) => p.categories)).sort()
 		);
 	}

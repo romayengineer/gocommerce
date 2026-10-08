@@ -7,7 +7,7 @@ export interface Viewport {
 
 export interface ViewportTracker {
 	readonly viewport: ReadableStore<Viewport>;
-	setElement(element: Element | Window | null): void;
+	setElement(element: unknown): void;
 }
 
 export interface Platform {

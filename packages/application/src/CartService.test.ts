@@ -6,6 +6,8 @@ import type { DisplayProduct } from '@gocommerce/domain/product';
 import { CartService } from '@gocommerce/application/CartService';
 import { ProductCatalog } from '@gocommerce/application/ProductCatalog';
 import type { ProductsColumnar } from '@gocommerce/domain/product';
+import { memoryStoreFactory } from '@gocommerce/adapters-memory/store';
+import { jsonStorageCodec } from '@gocommerce/adapters-memory/storage';
 
 function memoryStorage(): KeyValueStorage {
 	const map = new Map<string, string>();
@@ -30,8 +32,13 @@ const columnar: ProductsColumnar = {
 };
 
 function makeServices(storage: KeyValueStorage) {
-	const catalog = new ProductCatalog(columnar, { imagesBaseUrl: 'https://cdn.test' }, () => 0.5);
-	const cart = new CartService(storage, catalog, noopLogger, 'test_cart');
+	const catalog = new ProductCatalog(
+		columnar,
+		{ imagesBaseUrl: 'https://cdn.test' },
+		memoryStoreFactory,
+		() => 0.5
+	);
+	const cart = new CartService(storage, catalog, noopLogger, memoryStoreFactory, jsonStorageCodec, 'test_cart');
 	return { catalog, cart };
 }
 
@@ -84,6 +91,7 @@ describe('CartService', () => {
 			new ProductCatalog(
 				{ ...columnar, productName: [] },
 				{ imagesBaseUrl: 'https://cdn.test' },
+				memoryStoreFactory,
 				() => 0.5
 			);
 		expect(catalog).toThrow();

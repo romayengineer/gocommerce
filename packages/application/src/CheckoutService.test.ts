@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { CheckoutService } from '@gocommerce/application/CheckoutService';
 import { createEmptyShippingFormData, type ShippingFormData } from '@gocommerce/domain/shipping';
+import { memoryStoreFactory } from '@gocommerce/adapters-memory/store';
+import { jsonStorageCodec } from '@gocommerce/adapters-memory/storage';
 import type { KeyValueStorage } from '@gocommerce/ports/Storage';
 import type { RouterPort } from '@gocommerce/ports/Router';
 import type { Logger } from '@gocommerce/ports/Logger';
@@ -45,7 +47,15 @@ const validForm: ShippingFormData = {
 };
 
 function makeService(storage: KeyValueStorage): CheckoutService {
-	return new CheckoutService({ submit: async () => {} }, storage, fakeRouter, noopLogger, KEY);
+	return new CheckoutService(
+		{ submit: async () => {} },
+		storage,
+		fakeRouter,
+		noopLogger,
+		memoryStoreFactory,
+		jsonStorageCodec,
+		KEY
+	);
 }
 
 describe('CheckoutService persistence', () => {

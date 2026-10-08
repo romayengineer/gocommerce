@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "@gocommerce/adapters-memory": "*",
     "@gocommerce/domain": "*"
   },
   "devDependencies": {
+    "@gocommerce/adapters-memory": "*",
     "@gocommerce/ports": "*",
     "vitest": "^2.1.9"
   },

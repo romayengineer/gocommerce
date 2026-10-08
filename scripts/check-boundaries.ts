@@ -4,7 +4,8 @@
  * Enforces the package dependency DAG of the layered architecture:
  *
  *   domain (innermost, zod only) <- ports (type-only) <- application
- *   (domain+ports+adapters-memory defaults; owns narrow *Options, no config)
+ *   (domain+ports only; stores/codec injected via ports/StoreFactory and
+ *   ports/StorageCodec, composition supplies adapters-memory defaults)
  *   <- adapters + adapters-maps (siblings, never import each other; maps owns
  *   leaflet/google SDKs, SDK payloads load lazily inside each service)
  *   adapters-memory (ports' in-memory defaults, ports types only)
@@ -159,14 +160,15 @@ for (const f of collect('ports')) {
 	}
 }
 
-// 3. application: no adapters/ui/composition/config (narrow options owned here,
-// composition maps AppConfig -> options). Documented exception: the in-memory
-// store defaults in adapters-memory (ports' sibling impl, dependency-free).
+// 3. application: no adapters (incl. adapters-memory)/ui/composition/config.
+// Stores and JSON codec arrive via ports/StoreFactory + ports/StorageCodec
+// (type-only) and are injected by composition — never value-imported here.
 for (const f of collect('application')) {
 	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
-		if (i.spec.startsWith('@gocommerce/adapters-memory/')) continue;
 		if (/^@gocommerce\/(adapters|ui|composition|config)/.test(i.spec)) violation(f, `application must not import ${i.spec}`);
+		if (/^@gocommerce\/adapters-memory\//.test(i.spec))
+			violation(f, `application must not import ${i.spec} (inject StoreFactory/StorageCodec via ports instead)`);
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) violation(f, `application must have no third-party deps (found ${b})`);

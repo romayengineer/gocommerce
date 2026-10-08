@@ -57,8 +57,8 @@ export class LeafletService implements IMapService {
 	private readonly DEBOUNCE_DELAY = 2000;
 	private lastLocationFound = true;
 
-	async initialize(container: HTMLDivElement, config?: MapConfig): Promise<void> {
-		this.mapContainer = container;
+	async initialize(container: unknown, config?: MapConfig): Promise<void> {
+		this.mapContainer = container as HTMLDivElement;
 		await this.initializeMap(config);
 	}
 
