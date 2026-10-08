@@ -49,6 +49,34 @@ describe('product mapping', () => {
 		);
 	});
 
+	it('maps empty properties string to no properties', () => {
+		for (const properties of ['', '   ', ';', '  ; ']) {
+			const [product] = mapColumnarToDisplay(
+				{ ...columnar, properties: [properties] },
+				'https://cdn.example.com/images'
+			);
+			if (!product) throw new Error('expected one mapped product');
+			expect(product.properties).toEqual([]);
+		}
+	});
+
+	it('maps per-row empty properties independently', () => {
+		const twoRows: ProductsColumnar = {
+			productId: ['p1', 'p2'],
+			productName: ['Perfume Gatsby', 'Perfume Other'],
+			description: ['A fine fragrance', 'Another fragrance'],
+			brand: ['brand', 'brand'],
+			categories: ['Perfume;Home', 'Perfume'],
+			properties: ['', 'type=Eau de Parfum'],
+			images_count: [2, 1],
+			items: ['S=100;M=200', 'S=50']
+		};
+		const [first, second] = mapColumnarToDisplay(twoRows, 'https://cdn.example.com/images');
+		if (!first || !second) throw new Error('expected two mapped products');
+		expect(first.properties).toEqual([]);
+		expect(second.properties).toEqual([{ name: 'type', values: ['Eau de Parfum'] }]);
+	});
+
 	it('cleans category paths to unique last segments', () => {
 		const cleaned = cleanCategories(['/perfume/mujer/', '/perfume/hombre/', '/hogar/']);
 		expect(cleaned.sort()).toEqual(['hogar', 'hombre', 'mujer']);

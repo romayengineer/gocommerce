@@ -95,6 +95,8 @@ export function mapColumnarToDisplay(
 			categories: columnAt(data.categories, index, 'categories').split(';'),
 			properties: columnAt(data.properties, index, 'properties')
 				.split(';')
+				.map((part) => part.trim())
+				.filter((part) => part !== '')
 				.map((category) => {
 					const parts: string[] = category.split('=');
 					return {
