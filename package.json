@@ -55,6 +55,7 @@
   "allowScripts": {
     "es5-ext@0.10.64": true,
     "esbuild@0.21.5": true,
-    "esbuild@0.19.12": true
+    "esbuild@0.19.12": true,
+    "fsevents@2.3.3": true
   }
 }
