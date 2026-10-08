@@ -91,8 +91,8 @@ export function validateShippingForm(formData: ShippingFormData): FieldErrors {
 	const newErrors: FieldErrors = {};
 	if (
 		!formData.coordinates ||
-		!formData.coordinates.latitude ||
-		!formData.coordinates.longitude
+		typeof formData.coordinates.latitude !== 'number' ||
+		typeof formData.coordinates.longitude !== 'number'
 	) {
 		newErrors.coordinates = { errors: ['latitude and longitude are required'] };
 	}

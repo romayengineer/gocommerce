@@ -5,8 +5,6 @@ export interface SearchOption {
 
 /**
  * Presentation search helpers owned by ui-core.
- * (Canonical copy moved from @gocommerce/domain/search; that export is
- * deprecated — prefer this module.)
  */
 export function filterOptions<T extends SearchOption>(options: T[], query: string): T[] {
 	const normalized = query.toLowerCase();

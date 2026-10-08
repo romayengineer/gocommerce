@@ -137,11 +137,15 @@ export function cleanCategories(categories: string[]): string[] {
 	);
 }
 
-export function deleteProduct(productList: DisplayProduct[], productId: string): void {
-	const index = productList.findIndex((p) => p.productId === productId);
-	if (index !== -1) {
-		productList.splice(index, 1);
-	}
+/**
+ * Returns a new array with the product removed (pure: no mutation).
+ * Callers replace their stored list with the result.
+ */
+export function deleteProduct(
+	productList: DisplayProduct[],
+	productId: string
+): DisplayProduct[] {
+	return productList.filter((p) => p.productId !== productId);
 }
 
 export function productFullUrl(product?: DisplayProduct): string {

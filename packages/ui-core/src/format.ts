@@ -14,8 +14,6 @@ const LOCALES: Record<string, string> = {
 /**
  * Format a price for display. Presentation helper owned by ui-core so
  * Svelte components never import value helpers from domain.
- * (Canonical copy moved from @gocommerce/domain/money; that export is
- * deprecated — prefer this module.)
  */
 export function formatPrice(
 	value: number,

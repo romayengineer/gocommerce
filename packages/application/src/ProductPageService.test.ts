@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { filterProducts, sortProducts } from '@gocommerce/application/ProductPageService';
+import {
+	filterProducts,
+	sortProducts,
+	matchesCategory,
+	type SortOption
+} from '@gocommerce/application/ProductPageService';
 import type { DisplayProduct } from '@gocommerce/domain/product';
 
 function product(overrides: Partial<DisplayProduct>): DisplayProduct {
@@ -38,6 +43,18 @@ describe('filterProducts', () => {
 		expect(result.map((p) => p.productId)).toEqual(['1']);
 	});
 
+	it('filters by plain (slash-less) category', () => {
+		const plain = [product({ productId: '9', categories: ['Perfume'] })];
+		const result = filterProducts(plain, { category: 'perfume', brand: 'all', size: 'all', query: '' });
+		expect(result.map((p) => p.productId)).toEqual(['9']);
+	});
+
+	it('matches brands case-insensitively', () => {
+		const mixed = [product({ productId: '9', brand: 'Natura' })];
+		const result = filterProducts(mixed, { category: 'all', brand: 'natura', size: 'all', query: '' });
+		expect(result.map((p) => p.productId)).toEqual(['9']);
+	});
+
 	it('filters by size', () => {
 		const result = filterProducts(products, { category: 'all', brand: 'all', size: 'S', query: '' });
 		expect(result.map((p) => p.productId)).toEqual(['1', '3']);
@@ -62,5 +79,22 @@ describe('sortProducts', () => {
 
 	it('returns the same list for random', () => {
 		expect(sortProducts(products, 'random')).toEqual(products);
+	});
+
+	it('is exhaustive over SortOption (type-level)', () => {
+		const options: SortOption[] = ['random', 'name-asc', 'name-desc', 'price-asc', 'price-desc'];
+		for (const option of options) {
+			expect(() => sortProducts(products, option)).not.toThrow();
+		}
+	});
+});
+
+describe('matchesCategory', () => {
+	it('matches path-style, plain, and case variants', () => {
+		expect(matchesCategory(['/perfume/mujer/'], 'mujer')).toBe(true);
+		expect(matchesCategory(['/perfume/mujer'], 'mujer')).toBe(true);
+		expect(matchesCategory(['Perfume'], 'perfume')).toBe(true);
+		expect(matchesCategory(['/Perfume/MUJER/'], 'mujer')).toBe(true);
+		expect(matchesCategory(['/hogar/'], 'mujer')).toBe(false);
 	});
 });

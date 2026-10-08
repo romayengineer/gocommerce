@@ -69,6 +69,26 @@ describe('CartService', () => {
 		expect(cart.items.get()).toEqual([]);
 	});
 
+	it.each([[0], [-2], [1.5], [Number.NaN]])(
+		'clears persisted items with non-positive-integer quantity %s',
+		(quantity) => {
+			const storage = memoryStorage();
+			storage.set('test_cart', JSON.stringify([{ productId: 'p1', itemId: 'p1S', quantity }]));
+			const { cart } = makeServices(storage);
+			expect(cart.items.get()).toEqual([]);
+		}
+	);
+
+	it('rejects ragged catalog data at construction', () => {
+		const catalog = () =>
+			new ProductCatalog(
+				{ ...columnar, productName: [] },
+				{ imagesBaseUrl: 'https://cdn.test' },
+				() => 0.5
+			);
+		expect(catalog).toThrow();
+	});
+
 	it('resolves catalog products reactively', () => {
 		const storage = memoryStorage();
 		const { catalog, cart } = makeServices(storage);

@@ -1,8 +1,5 @@
 /**
  * Presentation option data owned by ui-core.
- * (Canonical copies moved from @gocommerce/domain/amenities and
- * @gocommerce/domain/locations; those exports are deprecated — prefer this
- * module. The domain copies are kept for backward compat only.)
  */
 
 const AMENITY_NAMES = [

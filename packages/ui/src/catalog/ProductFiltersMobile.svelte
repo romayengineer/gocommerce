@@ -14,6 +14,15 @@
 		filterBrand,
 		searchQuery
 	} from '@gocommerce/composition/view';
+	import type { SortOption } from '@gocommerce/composition/view';
+
+	const SORT_OPTIONS: SortOption[] = ['random', 'name-asc', 'name-desc', 'price-asc', 'price-desc'];
+
+	function setSortBy(value: string): void {
+		if ((SORT_OPTIONS as string[]).includes(value)) {
+			productPage.sortBy.set(value as SortOption);
+		}
+	}
 
 	let isDesktop = $derived($viewport.width >= 1024);
 	let isMobileFiltersOpen = $state(false);
@@ -68,7 +77,7 @@
 				<div class="px-3 py-3">
 					<select
 						value={$sortBy}
-						onchange={onChange((e) => (productPage.sortBy.set(e.currentTarget.value)))}
+						onchange={onChange((e) => setSortBy(e.currentTarget.value))}
 						aria-label={$t('filters.sort')}
 						class="w-full rounded border p-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500 md:text-base"
 					>

@@ -15,6 +15,23 @@ export interface ProductFilters {
 	query: string;
 }
 
+/**
+ * Match a cleaned category filter value against a product's raw categories.
+ * Raw entries may be path-style (`/perfume/mujer/`) or plain (`Perfume`);
+ * comparison is case-insensitive and tolerant of trailing slashes.
+ */
+export function matchesCategory(rawCategories: string[], category: string): boolean {
+	return rawCategories.some((cat) => {
+		const lower = cat.toLowerCase();
+		return (
+			lower === category ||
+			lower === `${category}/` ||
+			lower.endsWith(`/${category}`) ||
+			lower.endsWith(`/${category}/`)
+		);
+	});
+}
+
 export function filterProducts(
 	products: DisplayProduct[],
 	filters: ProductFilters
@@ -24,10 +41,10 @@ export function filterProducts(
 	const size = filters.size.toUpperCase();
 
 	let result = products.filter((p) => {
-		if (category !== 'all' && !p.categories.some((cat) => cat.endsWith(`${category}/`))) {
+		if (category !== 'all' && !matchesCategory(p.categories, category)) {
 			return false;
 		}
-		if (brand !== 'all' && p.brand !== brand) {
+		if (brand !== 'all' && p.brand.toLowerCase() !== brand) {
 			return false;
 		}
 		if (filters.query.trim() !== '') {
@@ -60,19 +77,24 @@ function firstPrice(p: DisplayProduct): number {
 	return first.price;
 }
 
-export function sortProducts(products: DisplayProduct[], sortBy: string): DisplayProduct[] {
+export function sortProducts(products: DisplayProduct[], sortBy: SortOption): DisplayProduct[] {
 	if (sortBy === 'random') return products;
 	return [...products].sort((a, b) => {
-		if (sortBy === 'name-asc') return a.productName.localeCompare(b.productName);
-		if (sortBy === 'name-desc') return b.productName.localeCompare(a.productName);
-		if (sortBy === 'price-asc') return firstPrice(a) - firstPrice(b);
-		if (sortBy === 'price-desc') return firstPrice(b) - firstPrice(a);
-		return 0;
+		switch (sortBy) {
+			case 'name-asc':
+				return a.productName.localeCompare(b.productName);
+			case 'name-desc':
+				return b.productName.localeCompare(a.productName);
+			case 'price-asc':
+				return firstPrice(a) - firstPrice(b);
+			case 'price-desc':
+				return firstPrice(b) - firstPrice(a);
+		}
 	});
 }
 
 export class ProductPageService {
-	readonly sortBy: WritableStore<string>;
+	readonly sortBy: WritableStore<SortOption>;
 	readonly filterCategory: WritableStore<string>;
 	readonly filterSize: WritableStore<string>;
 	readonly filterBrand: WritableStore<string>;
@@ -93,7 +115,7 @@ export class ProductPageService {
 		private clock: Clock,
 		debounceMs = 1000
 	) {
-		this.sortBy = createStore('random');
+		this.sortBy = createStore<SortOption>('random');
 		this.filterCategory = createStore(ALL);
 		this.filterSize = createStore(ALL);
 		this.filterBrand = createStore(ALL);

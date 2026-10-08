@@ -97,12 +97,13 @@ describe('product mapping', () => {
 		expect(productFullUrl(product)).toBe('/#/products/p1/brand-gatsby');
 	});
 
-	it('removes a product in place', () => {
+	it('removes a product without mutating the input', () => {
 		const products = [
 			{ productId: 'a' } as DisplayProduct,
 			{ productId: 'b' } as DisplayProduct
 		];
-		deleteProduct(products, 'a');
-		expect(products).toEqual([{ productId: 'b' } as DisplayProduct]);
+		const next = deleteProduct(products, 'a');
+		expect(next).toEqual([{ productId: 'b' } as DisplayProduct]);
+		expect(products).toHaveLength(2);
 	});
 });

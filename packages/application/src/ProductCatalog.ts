@@ -5,6 +5,7 @@ import {
 	deleteProduct as removeProduct,
 	mapColumnarToDisplay,
 	productFullUrl,
+	ProductsColumnarSchema,
 	type DisplayProduct,
 	type ProductsColumnar
 } from '@gocommerce/domain/product';
@@ -21,8 +22,9 @@ export class ProductCatalog {
 	readonly categories: ReadableStore<string[]>;
 
 	constructor(data: ProductsColumnar, config: CatalogConfig, random: RandomFn = Math.random) {
+		const parsed = ProductsColumnarSchema.parse(data);
 		this.products = createStore(
-			shuffleFisherYates(mapColumnarToDisplay(data, config.imagesBaseUrl), random)
+			shuffleFisherYates(mapColumnarToDisplay(parsed, config.imagesBaseUrl), random)
 		);
 		this.brands = derived(this.products, (products) =>
 			Array.from(new Set(products.map((p) => p.brand))).sort()
@@ -40,9 +42,7 @@ export class ProductCatalog {
 	}
 
 	deleteProduct(productId: string): void {
-		const next = [...this.products.get()];
-		removeProduct(next, productId);
-		this.products.set(next);
+		this.products.set(removeProduct(this.products.get(), productId));
 	}
 
 	productFullUrl(product?: DisplayProduct): string {

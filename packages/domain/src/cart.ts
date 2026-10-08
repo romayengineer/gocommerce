@@ -4,7 +4,7 @@ import type { DisplayProduct, DisplayProductItems } from './product';
 export const cartItemSchema = z.object({
 	productId: z.string(),
 	itemId: z.string(),
-	quantity: z.number()
+	quantity: z.number().int().positive()
 });
 
 export type CartItem = z.infer<typeof cartItemSchema>;
