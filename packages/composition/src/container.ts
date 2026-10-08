@@ -70,6 +70,8 @@ export interface AppContainer {
 	checkout: CheckoutService;
 	payment: PaymentService;
 	maps: MapLocationService;
+	/** Release container-owned listeners (viewport tracking). UI shells own mounting via `viewport.setElement(...)`. */
+	dispose(): void;
 }
 
 export function createContainer(init: ContainerInit = {}): AppContainer {
@@ -78,13 +80,16 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 	const clock = init.clock ?? browserClock;
 	const viewport =
 		init.viewport ??
-		new ViewportWidthTracker({
-			columnWidth: DEFAULT_COLUMN_WIDTH,
-			min: MIN_COLUMNS,
-			max: MAX_COLUMNS,
-			columnsForWidth
-		});
-	const router = init.router ?? new SvelteKitRouter();
+		new ViewportWidthTracker(
+			{
+				columnWidth: DEFAULT_COLUMN_WIDTH,
+				min: MIN_COLUMNS,
+				max: MAX_COLUMNS,
+				columnsForWidth
+			},
+			memoryStoreFactory
+		);
+	const router = init.router ?? new SvelteKitRouter(memoryStoreFactory);
 	const clipboard = init.clipboard ?? new NavigatorClipboard();
 	const gateway = init.gateway ?? new SimulatedCheckoutGateway();
 	const createMap = init.createMap ?? createMapService;
@@ -109,10 +114,6 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 	const payment = new PaymentService({ bank: config.bank }, cart);
 	const maps = new MapLocationService(() => createMap(config, logger), logger, memoryStoreFactory);
 
-	if (typeof window !== 'undefined') {
-		viewport.setElement(window);
-	}
-
 	return {
 		config,
 		logger,
@@ -125,6 +126,7 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 		products,
 		checkout,
 		payment,
-		maps
+		maps,
+		dispose: () => viewport.dispose()
 	};
 }

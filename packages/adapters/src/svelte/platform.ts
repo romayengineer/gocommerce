@@ -1,8 +1,7 @@
 import type { WritableStore } from '@gocommerce/ports/Store';
-import { createStore } from '@gocommerce/foundation/store';
+import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 import type {
 	ColumnsForWidthFn,
-	Platform,
 	Viewport,
 	ViewportTracker
 } from '@gocommerce/ports/Platform';
@@ -18,15 +17,13 @@ function currentWindowWidth(fallback: number): number {
 	return typeof window !== 'undefined' ? window.innerWidth : fallback;
 }
 
-export class BrowserPlatform implements Platform {
-	readonly isBrowser = typeof window !== 'undefined';
-}
-
 /**
  * Tracks the viewport width and derives the responsive column count.
- * Tracks the whole window unless `setElement` is called with a container.
- * Column math is injected (owns no ui-core import) — composition wires
- * `columnsForWidth` + constants from `@gocommerce/ui-core/viewport`.
+ * Mounting is owned by the UI shell via `setElement`; the store factory is
+ * injected (composition supplies `memoryStoreFactory`) so this adapter
+ * constructs no stores of its own. Column math is likewise injected —
+ * composition wires `columnsForWidth` + constants from
+ * `@gocommerce/ui-core/viewport`.
  */
 export class ViewportWidthTracker implements ViewportTracker {
 	readonly viewport: WritableStore<Viewport>;
@@ -34,17 +31,20 @@ export class ViewportWidthTracker implements ViewportTracker {
 	private resizeListener: (() => void) | null = null;
 	private resizeObserver: ResizeObserver | null = null;
 
-	constructor(private init: ViewportTrackerInit) {
+	constructor(
+		private init: ViewportTrackerInit,
+		stores: StoreFactory
+	) {
 		const width = currentWindowWidth(init.columnWidth * 2);
-		this.viewport = createStore({
+		this.viewport = stores.create({
 			width,
 			columns: init.columnsForWidth(width, init.columnWidth, init.min, init.max)
 		});
 	}
 
-	setElement(element: unknown): void {
+	setElement(element: Element | Window | null): void {
 		this.removeResizeListener();
-		this.element = element as Element | Window | null;
+		this.element = element;
 
 		if (typeof Window !== 'undefined' && this.element instanceof Window) {
 			this.updateWidth(this.element.innerWidth);
@@ -65,6 +65,12 @@ export class ViewportWidthTracker implements ViewportTracker {
 			width,
 			columns: this.init.columnsForWidth(width, this.init.columnWidth, this.init.min, this.init.max)
 		});
+	}
+
+	/** Release resize listeners/observers (HMR, tests, unmount). */
+	dispose(): void {
+		this.removeResizeListener();
+		this.element = null;
 	}
 
 	private removeResizeListener(): void {

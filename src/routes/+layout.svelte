@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { locale } from 'svelte-i18n';
-	import { logger, config } from '@gocommerce/composition/view';
+	import { logger, config, viewportTracker } from '@gocommerce/composition/view';
 	import Navigation from '$lib/layout/Navigation.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import '../app.css';
@@ -11,6 +11,14 @@
 			if ($locale) document.documentElement.lang = $locale;
 			if (config.view?.theme) document.documentElement.dataset.theme = config.view.theme;
 		}
+	});
+
+	onMount(() => {
+		// Default viewport mount (window tracking). Feature grids may override
+		// with their container via `viewportTracker.setElement(...)`; the
+		// container itself mounts nothing so it stays side-effect free.
+		viewportTracker.setElement(window);
+		return () => viewportTracker.dispose();
 	});
 
 	onMount(() => {

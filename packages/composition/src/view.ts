@@ -4,10 +4,13 @@ import type { DisplayProduct } from '@gocommerce/domain/product';
 
 export type { SortOption } from '@gocommerce/application/ProductPageService';
 
-// view.ts is the app's composition root: importing it wires the default
-// container (browser adapters + bundled data). Tests and tools should use
-// createContainer(init) from @gocommerce/composition/container with injected
-// fakes instead of importing this module.
+// view.ts is the app's wired singleton: importing it builds the default
+// container (browser adapters + bundled data) once. Construction is
+// side-effect free (no DOM listeners — the UI shell mounts the viewport via
+// `viewportTracker.setElement(...)`), so import cost is just object creation.
+// Tests and tools should use createContainer(init) from
+// @gocommerce/composition/container with injected fakes instead of importing
+// this module.
 const container = createContainer();
 
 // NOTE: the Svelte bridge (toSvelte) is intentionally NOT re-exported.
@@ -74,6 +77,11 @@ export const searchQuery = toSvelte(container.products.searchQuery);
 
 export function findProduct(productId: string): DisplayProduct | undefined {
 	return container.catalog.findByProductId(productId);
+}
+
+/** Release singleton-owned listeners (HMR, tests). */
+export function disposeView(): void {
+	container.dispose();
 }
 
 export function productFullUrl(product?: DisplayProduct): string {

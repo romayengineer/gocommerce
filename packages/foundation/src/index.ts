@@ -7,6 +7,10 @@
  * `memoryStoreFactory`/`jsonStorageCodec`. browser/Svelte implementations
  * live in `adapters`, map SDKs in `adapters-maps`, geography values in
  * `@gocommerce/domain/geo`.
+ *
+ * Naming: `foundation` (not `adapters-memory`) is the settled name for this
+ * kernel — it holds the default `ports` implementations every adapter and
+ * test builds on, not a single backend adapter.
  */
 export { createStore, derived, combine, memoryStoreFactory } from './store';
 export { readJSON, writeJSON, jsonStorageCodec } from './storage';

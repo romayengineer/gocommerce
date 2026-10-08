@@ -13,7 +13,9 @@
  *   geo values come from domain/geo, never foundation)
  *   foundation (ports' dependency-free runtime kernel: stores, storage,
  *   logger, clock; ports types only)
- *   composition (root: wires everything incl. AppConfig -> options mapping)
+ *   composition (root: wires everything incl. AppConfig -> options mapping;
+ *   the barrel exposes createContainer only — the wired singleton + Svelte
+ *   bridges live behind the @gocommerce/composition/view deep path)
  *   config (schemas + zod, no workspace imports) | ui (presentation)
  *
  * Documented exceptions:

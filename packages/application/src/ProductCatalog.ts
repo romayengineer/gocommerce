@@ -25,11 +25,17 @@ export class ProductCatalog {
 		data: ProductsColumnar,
 		config: CatalogConfig,
 		stores: StoreFactory,
-		random: RandomFn = Math.random
+		/**
+		 * Shuffle source. Omit for deterministic load order (bundled JSON
+		 * order) — shuffling is an explicit UI concern, so callers pass a
+		 * seeded `RandomFn` only when random order is actually wanted.
+		 */
+		random?: RandomFn
 	) {
 		const parsed = ProductsColumnarSchema.parse(data);
+		const display = mapColumnarToDisplay(parsed, config.imagesBaseUrl);
 		this.products = stores.create(
-			shuffleFisherYates(mapColumnarToDisplay(parsed, config.imagesBaseUrl), random)
+			random ? shuffleFisherYates(display, random) : display
 		);
 		this.brands = stores.derived(this.products, (products) =>
 			Array.from(new Set(products.map((p) => p.brand))).sort()

@@ -7,7 +7,10 @@ export interface Viewport {
 
 export interface ViewportTracker {
 	readonly viewport: ReadableStore<Viewport>;
-	setElement(element: unknown): void;
+	/** Mount tracking onto a container (or the window). Owned by the UI shell. */
+	setElement(element: Element | Window | null): void;
+	/** Release resize listeners/observers (HMR, tests, unmount). */
+	dispose(): void;
 }
 
 /**
