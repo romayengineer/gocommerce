@@ -10,13 +10,18 @@
  * Documented exceptions:
  * - ports -> domain is TYPE-ONLY (e.g. MapService uses ShippingCoordinates).
  *   Value objects are shared by reference to avoid type drift; `import type`
- *   emits no runtime coupling.
- * - ui -> @gocommerce/composition/view ONLY (never /container): components
- *   consume the already-wired view-model; the wiring itself lives in
+ *   emits no runtime coupling. Declared as peer+dev, not runtime deps.
+ * - ui -> @gocommerce/composition/view ONLY (never /container, /domain,
+ *   /ports, or /adapters): components consume the already-wired view-model
+ *   plus pure helpers re-exported through view; the wiring itself lives in
  *   composition, which owns those dependencies.
- * - ui -> @gocommerce/adapters/svelte/* ONLY: framework bindings (store
- *   bridge, i18n setup). Kept narrow; no application/config imports.
- * - *.test.* files may cross layers to build fixtures/mocks.
+ * - src/routes (app shell) -> @gocommerce/composition/view + $lib +
+ *   presentation libs only (rule 8).
+ * - *.test.* files may cross layers to build fixtures/mocks, and may use
+ *   devDependencies.
+ * - Every non-relative import in non-test sources (static or dynamic
+ *   import()) must resolve to a declared dependency or peerDependency of
+ *   that package (rule 9, extraneous-dependency check).
  *
  * Usage: `npm run check:boundaries` (exit 0 = clean, 1 = violations).
  */
@@ -40,12 +45,14 @@ function collect(pkg) {
 }
 
 const IMPORT_RE = /import\s+(?:type\s+)?(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g;
+const DYNAMIC_IMPORT_RE = /import\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
 
 function importsOf(file) {
 	const content = readFileSync(file, 'utf8');
 	const found = [];
 	let m;
 	while ((m = IMPORT_RE.exec(content))) found.push({ spec: m[1], typeOnly: m[0].includes('import type') });
+	while ((m = DYNAMIC_IMPORT_RE.exec(content))) found.push({ spec: m[1], typeOnly: false });
 	return { content, found };
 }
 
@@ -167,8 +174,56 @@ for (const f of collectRoutes()) {
 	}
 }
 
+// 9. Extraneous-dependency check: every non-relative import in non-test
+// sources must resolve to a declared dependency or peerDependency.
+// (devDependencies are only visible to *.test.* files.)
+function pkgManifest(pkg) {
+	try {
+		return JSON.parse(readFileSync(join(ROOT, 'packages', pkg, 'package.json'), 'utf8'));
+	} catch {
+		return {};
+	}
+}
+
+/** Map an import specifier to the package name that must declare it. */
+function specToPackage(spec) {
+	if (spec.startsWith('@gocommerce/')) return spec.split('/').slice(0, 2).join('/');
+	if (spec.startsWith('$app/')) return '@sveltejs/kit';
+	if (spec === 'svelte' || spec.startsWith('svelte/')) return 'svelte';
+	if (spec.startsWith('@types/')) return spec.split('/').slice(0, 2).join('/');
+	if (spec.startsWith('@')) return spec.split('/').slice(0, 2).join('/');
+	return spec.split('/')[0];
+}
+
+const warnings = [];
+for (const pkg of ['domain', 'ports', 'application', 'adapters', 'composition', 'ui', 'config']) {
+	const manifest = pkgManifest(pkg);
+	const allowed = new Set([
+		...Object.keys(manifest.dependencies ?? {}),
+		...Object.keys(manifest.peerDependencies ?? {})
+	]);
+	const used = new Set();
+	for (const f of collect(pkg)) {
+		if (allowTests(f)) continue;
+		const { found } = importsOf(f);
+		for (const i of found) {
+			if (i.spec.startsWith('.') || i.spec.startsWith('$') || i.spec.endsWith('.json')) continue;
+			const name = specToPackage(i.spec);
+			if (name === `@gocommerce/${pkg}`) continue; // self-import within the package
+			used.add(name);
+			if (!allowed.has(name))
+				violation(f, `${pkg} imports extraneous dependency ${i.spec} (declare ${name} or route via composition/view)`);
+		}
+	}
+	for (const name of Object.keys(manifest.dependencies ?? {})) {
+		if (!used.has(name) && !name.startsWith('@gocommerce/'))
+			warnings.push(`${pkg}: declared dependency ${name} is never imported in non-test sources`);
+	}
+}
+
 if (failures.length > 0) {
 	console.error(`Boundary violations (${failures.length}):\n- ${failures.join('\n- ')}`);
 	process.exit(1);
 }
-console.log('Boundaries OK: domain/ports/application/adapters/composition/config/ui conform to the DAG.');
+for (const w of warnings) console.warn(`warning: ${w}`);
+console.log('Boundaries OK: domain/ports/application/adapters/composition/config/ui/src-routes conform to the DAG.');
