@@ -74,11 +74,13 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 	const gateway = init.gateway ?? new SimulatedCheckoutGateway();
 	const createMap = init.createMap ?? createMapService;
 
-	const catalog = new ProductCatalog((init.productsData ?? productsData) as ProductsColumnar, config);
+	const catalog = new ProductCatalog((init.productsData ?? productsData) as ProductsColumnar, {
+		imagesBaseUrl: config.imagesBaseUrl
+	});
 	const cart = new CartService(storage, catalog, logger);
 	const products = new ProductPageService(catalog, clock);
 	const checkout = new CheckoutService(gateway, storage, router, logger);
-	const payment = new PaymentService(config, cart);
+	const payment = new PaymentService({ bank: config.bank }, cart);
 	const maps = new MapLocationService(() => createMap(config), logger);
 
 	if (typeof window !== 'undefined') {

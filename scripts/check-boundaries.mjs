@@ -3,8 +3,9 @@
  *
  * Enforces the package dependency DAG of the layered architecture:
  *
- *   domain (innermost, zod only) <- ports <- application <- adapters
- *   composition (root: wires everything, no third-party runtime deps)
+ *   domain (innermost, zod only) <- ports <- application (domain+ports only;
+ *   owns narrow *Options, no config) <- adapters
+ *   composition (root: wires everything incl. AppConfig -> options mapping)
  *   config (standalone, no imports) | ui (presentation)
  *
  * Documented exceptions:
@@ -99,11 +100,12 @@ for (const f of collect('ports')) {
 	}
 }
 
-// 3. application: no adapters/ui/composition.
+// 3. application: no adapters/ui/composition/config (narrow options owned here,
+// composition maps AppConfig -> options).
 for (const f of collect('application')) {
 	const { found } = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(adapters|ui|composition)/.test(i.spec)) violation(f, `application must not import ${i.spec}`);
+		if (/^@gocommerce\/(adapters|ui|composition|config)/.test(i.spec)) violation(f, `application must not import ${i.spec}`);
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) violation(f, `application must have no third-party deps (found ${b})`);

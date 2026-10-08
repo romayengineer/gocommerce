@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*"
   },
