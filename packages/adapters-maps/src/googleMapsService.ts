@@ -1,7 +1,7 @@
 import type { Logger } from '@gocommerce/ports/Logger';
 import { noopLogger } from '@gocommerce/foundation/logger';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
-import type { IMapService, MapConfig } from '@gocommerce/ports/MapService';
+import type { IMapService, MapConfig, MapMountTarget } from '@gocommerce/ports/MapService';
 import { DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from '@gocommerce/domain/geo';
 
 export class GoogleMapsService implements IMapService {
@@ -18,8 +18,8 @@ export class GoogleMapsService implements IMapService {
 		this.logger = logger;
 	}
 
-	async initialize(container: unknown): Promise<void> {
-		this.mapContainer = container as HTMLDivElement;
+	async initialize(target: MapMountTarget): Promise<void> {
+		this.mapContainer = target as HTMLDivElement;
 		await this.loadGoogleMapsScript();
 		this.initializeMap();
 		this.initializeGeocoder();

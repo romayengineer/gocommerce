@@ -26,6 +26,7 @@ export class CartService {
 	readonly products: ReadableStore<CartItemFull[]>;
 	readonly count: ReadableStore<number>;
 	readonly total: ReadableStore<number>;
+	private readonly unsubscribePersist: () => void;
 
 	constructor(
 		private storage: KeyValueStorage,
@@ -47,7 +48,7 @@ export class CartService {
 		}
 
 		this.items = stores.create(initial);
-		this.items.subscribe((items) => codec.writeJSON(storage, key, items));
+		this.unsubscribePersist = this.items.subscribe((items) => codec.writeJSON(storage, key, items));
 
 		this.products = stores.combine([this.items, this.catalog.products], () =>
 			resolveCartItems(this.items.get(), this.catalog.products.get())
@@ -71,5 +72,10 @@ export class CartService {
 	clearCart(): void {
 		this.items.set([]);
 		this.storage.remove(this.key);
+	}
+
+	/** Release the persistence subscription (HMR, tests, unmount). */
+	dispose(): void {
+		this.unsubscribePersist();
 	}
 }

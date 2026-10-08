@@ -109,6 +109,7 @@ export class ProductPageService {
 	readonly sorted: ReadableStore<DisplayProduct[]>;
 
 	private debounceHandle: TimerHandle | null = null;
+	private readonly unsubscribeSearch: () => void;
 
 	constructor(
 		private catalog: ProductCatalog,
@@ -143,12 +144,21 @@ export class ProductPageService {
 			sortProducts(this.filtered.get(), this.sortBy.get())
 		);
 
-		this.searchQuery.subscribe((value) => {
+		this.unsubscribeSearch = this.searchQuery.subscribe((value) => {
 			if (this.debounceHandle) this.clock.clearTimeout(this.debounceHandle);
 			this.debounceHandle = this.clock.setTimeout(() => {
 				this.debouncedSearchQuery.set(value);
 			}, debounceMs);
 		});
+	}
+
+	/** Release the search subscription and pending debounce (HMR, tests, unmount). */
+	dispose(): void {
+		this.unsubscribeSearch();
+		if (this.debounceHandle) {
+			this.clock.clearTimeout(this.debounceHandle);
+			this.debounceHandle = null;
+		}
 	}
 
 	handleProductImageFailed(productId: string): void {

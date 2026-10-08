@@ -26,7 +26,9 @@ const fakeRouter: RouterPort = {
 		get: () => ({ path: '/checkout', href: '', params: {}, query: new URLSearchParams() }),
 		subscribe: () => () => {}
 	},
-	navigate: () => {}
+	navigate: () => {},
+	start: () => {},
+	stop: () => {}
 };
 
 const KEY = 'checkout_test_form';

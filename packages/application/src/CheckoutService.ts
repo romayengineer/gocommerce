@@ -24,6 +24,7 @@ export class CheckoutService {
 	readonly errors: WritableStore<FieldErrors>;
 	readonly submitted: WritableStore<boolean>;
 	readonly submitting: WritableStore<boolean>;
+	private readonly unsubscribePersist: () => void;
 
 	constructor(
 		private gateway: CheckoutGateway,
@@ -43,7 +44,7 @@ export class CheckoutService {
 		this.submitted = stores.create(false);
 		this.submitting = stores.create(false);
 
-		this.formData.subscribe((data) => codec.writeJSON(storage, key, data));
+		this.unsubscribePersist = this.formData.subscribe((data) => codec.writeJSON(storage, key, data));
 	}
 
 	validate(): boolean {
@@ -73,5 +74,10 @@ export class CheckoutService {
 	clear(): void {
 		this.formData.set(createEmptyShippingFormData());
 		this.storage.remove(this.key);
+	}
+
+	/** Release the persistence subscription (HMR, tests, unmount). */
+	dispose(): void {
+		this.unsubscribePersist();
 	}
 }

@@ -101,7 +101,7 @@ export interface AppContainer {
 	checkout: CheckoutService;
 	payment: PaymentService;
 	maps: MapLocationService;
-	/** Release container-owned listeners (viewport tracking). UI shells own mounting via `viewport.setElement(...)`. */
+	/** Release container-owned listeners (viewport tracking, router sync, service subscriptions). UI shells own mounting via `viewport.setElement(...)` and `router.start()`. */
 	dispose(): void;
 }
 
@@ -188,6 +188,12 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 		checkout,
 		payment,
 		maps,
-		dispose: () => viewport.dispose()
+		dispose: () => {
+			products.dispose();
+			cart.dispose();
+			checkout.dispose();
+			router.stop();
+			viewport.dispose();
+		}
 	};
 }

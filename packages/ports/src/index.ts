@@ -8,4 +8,4 @@ export type { Clock, TimerHandle } from './Clock';
 export type { RouterPort, Route, NavigationOptions } from './Router';
 export type { Platform, Viewport, ViewportTracker, ColumnsForWidthFn } from './Platform';
 export type { Clipboard } from './Clipboard';
-export type { IMapService, MapConfig, LatLng, CenterZoom } from './MapService';
+export type { IMapService, MapConfig, MapMountTarget, LatLng, CenterZoom } from './MapService';

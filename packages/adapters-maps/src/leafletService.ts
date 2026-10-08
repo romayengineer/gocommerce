@@ -1,7 +1,7 @@
 import type L from 'leaflet';
 
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
-import type { CenterZoom, IMapService, MapConfig } from '@gocommerce/ports/MapService';
+import type { CenterZoom, IMapService, MapConfig, MapMountTarget } from '@gocommerce/ports/MapService';
 import {
 	mapHasAddress,
 	DEFAULT_CENTER,
@@ -57,8 +57,8 @@ export class LeafletService implements IMapService {
 	private readonly DEBOUNCE_DELAY = 2000;
 	private lastLocationFound = true;
 
-	async initialize(container: unknown, config?: MapConfig): Promise<void> {
-		this.mapContainer = container as HTMLDivElement;
+	async initialize(target: MapMountTarget, config?: MapConfig): Promise<void> {
+		this.mapContainer = target as HTMLDivElement;
 		await this.initializeMap(config);
 	}
 

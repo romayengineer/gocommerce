@@ -1,7 +1,7 @@
 import type { WritableStore } from '@gocommerce/ports/Store';
 import type { StoreFactory } from '@gocommerce/ports/StoreFactory';
 import type { Logger } from '@gocommerce/ports/Logger';
-import type { IMapService, MapConfig } from '@gocommerce/ports/MapService';
+import type { IMapService, MapConfig, MapMountTarget } from '@gocommerce/ports/MapService';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
 
 export interface MapLocationState {
@@ -28,7 +28,7 @@ export class MapLocationService {
 		});
 	}
 
-	async initialize(container: unknown, config?: MapConfig): Promise<void> {
+	async initialize(target: MapMountTarget, config?: MapConfig): Promise<void> {
 		this.service = this.factory();
 
 		if (!this.service.hasApiKey()) {
@@ -37,7 +37,7 @@ export class MapLocationService {
 		}
 
 		try {
-			await this.service.initialize(container, config);
+			await this.service.initialize(target, config);
 			this.state.update((s) => ({ ...s, initialized: true }));
 		} catch (error) {
 			this.logger.error('Failed to initialize map:', error);

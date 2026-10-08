@@ -48,6 +48,8 @@ function fakeRouter(href: string): RouterPort & { navigate: ReturnType<typeof vi
 	return {
 		route,
 		navigate: vi.fn(),
+		start: () => {},
+		stop: () => {},
 		setHref(next: string): void {
 			route.set({ href: next, path: '/', params: {}, query: new URLSearchParams() });
 		}
