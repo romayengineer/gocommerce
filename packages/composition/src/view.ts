@@ -2,8 +2,9 @@ import { toSvelte } from '@gocommerce/adapters/svelte/store';
 import { container } from '@gocommerce/composition/container';
 import type { DisplayProduct } from '@gocommerce/domain/product';
 
-// Re-export the Svelte bridge so UI consumes it via composition/view only.
-export { toSvelte } from '@gocommerce/adapters/svelte/store';
+// NOTE: the Svelte bridge (toSvelte) is intentionally NOT re-exported.
+// view.ts is the sole place that bridges core stores to Svelte; consumers
+// use the ready-made stores below (viewport, cartItems, ...) instead.
 
 // Re-export i18n locale helpers (owned by adapters/svelte/i18n) via view.
 export {
