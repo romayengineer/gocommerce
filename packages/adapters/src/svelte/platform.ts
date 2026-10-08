@@ -6,7 +6,7 @@ import {
 	DEFAULT_COLUMN_WIDTH,
 	MAX_COLUMNS,
 	MIN_COLUMNS
-} from '@gocommerce/domain/viewport';
+} from '@gocommerce/ui-core/viewport';
 
 function currentWindowWidth(): number {
 	return typeof window !== 'undefined' ? window.innerWidth : DEFAULT_COLUMN_WIDTH * 2;

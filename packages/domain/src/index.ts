@@ -1,12 +1,10 @@
 export * from './amenities';
 export * from './cart';
-export * from './grid';
 export * from './locations';
 export * from './money';
 export * from './product';
 export * from './random';
 export * from './search';
 export * from './shipping';
-export * from './url';
 export * from './validation';
-export * from './viewport';
+// Presentation helpers (grid, url, viewport) live in @gocommerce/ui-core.

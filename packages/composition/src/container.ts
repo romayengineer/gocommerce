@@ -1,4 +1,4 @@
-import type { AppConfig } from '@gocommerce/config';
+import type { AppConfig } from '@gocommerce/config/config';
 import type { Clipboard } from '@gocommerce/ports/Clipboard';
 import type { Clock } from '@gocommerce/ports/Clock';
 import type { Logger } from '@gocommerce/ports/Logger';

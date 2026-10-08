@@ -1,4 +1,4 @@
-import { configSchema, type AppConfig } from '@gocommerce/config';
+import { configSchema, type AppConfig } from '@gocommerce/config/config';
 
 /** Read the application configuration from the build-time environment. */
 export function readEnvConfig(): AppConfig {

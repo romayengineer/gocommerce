@@ -3,7 +3,8 @@
     "@gocommerce/adapters-memory": "*",
     "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
-    "@gocommerce/ports": "*"
+    "@gocommerce/ports": "*",
+    "@gocommerce/ui-core": "*"
   },
   "devDependencies": {
     "svelte-i18n": "^4.0.1"

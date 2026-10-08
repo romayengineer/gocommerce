@@ -3,6 +3,7 @@
     "@gocommerce/composition": "*",
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*",
+    "@gocommerce/ui-core": "*",
     "@splidejs/splide": "^4.1.4",
     "lucide-svelte": "^1.0.1",
     "svelte-i18n": "^4.0.1"

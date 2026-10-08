@@ -132,7 +132,8 @@ for (const f of collect('application')) {
 for (const f of collect('adapters')) {
 	const { found } = importsOf(f);
 	for (const i of found) {
-		if (/^@gocommerce\/(application|ui|composition|adapters-maps)/.test(i.spec))
+		// NOTE: `ui/` (with slash) so @gocommerce/ui-core stays allowed.
+		if (/^@gocommerce\/(application|ui\/|composition|adapters-maps)/.test(i.spec))
 			violation(f, `adapters must not import ${i.spec}`);
 		if (i.spec.startsWith('$app/') && !f.endsWith('svelte/router.svelte.ts'))
 			violation(f, `$app/* coupling must live in svelte/router.svelte.ts (found in ${rel(f)})`);
@@ -158,6 +159,19 @@ for (const f of collect('adapters-memory')) {
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) violation(f, `adapters-memory must be dependency-free (found ${b})`);
+	}
+}
+
+// 4c. ui-core: dependency-free presentation helpers (grid, viewport, url).
+// No workspace imports, no third-party deps.
+for (const f of collect('ui-core')) {
+	const { found } = importsOf(f);
+	for (const i of found) {
+		if (i.spec.startsWith('@gocommerce/'))
+			violation(f, `ui-core must not import ${i.spec}`);
+	}
+	if (!allowTests(f)) {
+		for (const b of bareImports(f, found)) violation(f, `ui-core must be dependency-free (found ${b})`);
 	}
 }
 
@@ -247,7 +261,7 @@ function specToPackage(spec) {
 }
 
 const warnings = [];
-for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'adapters-memory', 'composition', 'ui', 'config']) {
+for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'adapters-memory', 'ui-core', 'composition', 'ui', 'config']) {
 	const manifest = pkgManifest(pkg);
 	const allowed = new Set([
 		...Object.keys(manifest.dependencies ?? {}),
@@ -272,9 +286,24 @@ for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps'
 	}
 }
 
+// 10. No bare barrel imports: non-test sources must use deep paths
+// (@gocommerce/<pkg>/<module>), never the package root, so bundlers can
+// tree-shake and dependencies stay explicit.
+const BARREL_RE = /^@gocommerce\/[a-z-]+$/;
+for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'adapters-memory', 'ui-core', 'composition', 'ui', 'config']) {
+	for (const f of collect(pkg)) {
+		if (allowTests(f)) continue;
+		const { found } = importsOf(f);
+		for (const i of found) {
+			if (BARREL_RE.test(i.spec))
+				violation(f, `${pkg} must use deep imports (found bare barrel ${i.spec})`);
+		}
+	}
+}
+
 if (failures.length > 0) {
 	console.error(`Boundary violations (${failures.length}):\n- ${failures.join('\n- ')}`);
 	process.exit(1);
 }
 for (const w of warnings) console.warn(`warning: ${w}`);
-console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/adapters-memory/composition/config/ui/src-routes conform to the DAG.');
+console.log('Boundaries OK: domain/ports/application/adapters/adapters-maps/adapters-memory/ui-core/composition/config/ui/src-routes conform to the DAG.');

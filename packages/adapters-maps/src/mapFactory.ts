@@ -1,4 +1,4 @@
-import type { AppConfig } from '@gocommerce/config';
+import type { AppConfig } from '@gocommerce/config/config';
 import type { Logger } from '@gocommerce/ports/Logger';
 import { noopLogger } from '@gocommerce/adapters-memory/logger';
 import type { IMapService } from '@gocommerce/ports/MapService';

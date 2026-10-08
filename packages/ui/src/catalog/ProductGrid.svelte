@@ -2,8 +2,8 @@
 	import { t } from 'svelte-i18n';
 	import ProductCard from '$lib/catalog/ProductCard.svelte';
 	import type { DisplayProduct } from '@gocommerce/domain/product';
-	import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from '@gocommerce/domain/grid';
-	import { updatePageInUrl } from '@gocommerce/domain/url';
+	import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from '@gocommerce/ui-core/grid';
+	import { updatePageInUrl } from '@gocommerce/ui-core/url';
 	import { viewport, route, router, logger, viewportTracker } from '@gocommerce/composition/view';
 
 	interface Props {

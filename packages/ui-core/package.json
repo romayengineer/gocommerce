@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "name": "@gocommerce/ui-core",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1"
+}
