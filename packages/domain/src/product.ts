@@ -63,6 +63,18 @@ function range(n: number): number[] {
 }
 
 /**
+ * Read a parallel column (or `key=value` part) at an index. Columnar
+ * payloads must be rectangular; ragged input fails fast instead of
+ * producing corrupt display models (e.g. a missing price silently
+ * coercing to 0).
+ */
+function columnAt<T>(column: T[], index: number, name: string): T {
+	const value: T | undefined = column[index];
+	if (value === undefined) throw new Error(`ragged columnar data: missing ${name} at index ${index}`);
+	return value;
+}
+
+/**
  * Transform the columnar product representation loaded from JSON into the
  * display model. `imagesBaseUrl` is injected (the core never reads env vars).
  */
@@ -71,39 +83,41 @@ export function mapColumnarToDisplay(
 	imagesBaseUrl: string
 ): DisplayProduct[] {
 	return data.productId.map((_, index) => {
-		// Parallel columns share the row index; fallbacks only apply to
-		// ragged input and keep the declared DisplayProduct contract.
-		const productId: string = data.productId[index] ?? '';
-		const productName: string = data.productName[index] ?? '';
-		const description: string = data.description[index] ?? '';
-		const brand: string = data.brand[index] ?? '';
+		const productId: string = columnAt(data.productId, index, 'productId');
+		const productName: string = columnAt(data.productName, index, 'productName');
+		const description: string = columnAt(data.description, index, 'description');
+		const brand: string = columnAt(data.brand, index, 'brand');
 		return {
 			productId,
 			productName,
 			description,
 			brand,
-			categories: data.categories[index]?.split(';') ?? [],
-			properties: (data.properties[index]?.split(';') ?? []).map((category) => {
-				const parts: string[] = category.split('=');
-				return {
-					name: parts[0] ?? '',
-					values: [parts[1] ?? '']
-				};
-			}),
+			categories: columnAt(data.categories, index, 'categories').split(';'),
+			properties: columnAt(data.properties, index, 'properties')
+				.split(';')
+				.map((category) => {
+					const parts: string[] = category.split('=');
+					return {
+						name: columnAt(parts, 0, 'property name'),
+						values: [columnAt(parts, 1, 'property value')]
+					};
+				}),
 			allText: `${productName} ${description} ${brand}`,
-			images: range(data.images_count[index] ?? 0).map((imageIndex) => {
+			images: range(columnAt(data.images_count, index, 'images_count')).map((imageIndex) => {
 				return `${imagesBaseUrl}/${productId}/${imageIndex}.webp`;
 			}),
-			items: (data.items[index]?.split(';') ?? []).map((item) => {
-				const parts: string[] = item.split('=');
-				const size: string = parts[0] ?? '';
-				const price: string = parts[1] ?? '';
-				return {
-					itemId: `${productId}${size}`,
-					size,
-					price: Number(price)
-				};
-			})
+			items: columnAt(data.items, index, 'items')
+				.split(';')
+				.map((item) => {
+					const parts: string[] = item.split('=');
+					const size: string = columnAt(parts, 0, 'item size');
+					const price: string = columnAt(parts, 1, 'item price');
+					return {
+						itemId: `${productId}${size}`,
+						size,
+						price: Number(price)
+					};
+				})
 		};
 	});
 }

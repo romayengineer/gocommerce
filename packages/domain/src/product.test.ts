@@ -31,6 +31,24 @@ describe('product mapping', () => {
 		expect(product.allText).toBe('Perfume Gatsby A fine fragrance brand');
 	});
 
+	it('fails fast on ragged columnar input', () => {
+		const ragged: ProductsColumnar = { ...columnar, productName: [] };
+		expect(() => mapColumnarToDisplay(ragged, 'https://cdn.example.com/images')).toThrow(
+			/ragged columnar data: missing productName at index 0/
+		);
+	});
+
+	it('fails fast on malformed property and item entries', () => {
+		const badProperty: ProductsColumnar = { ...columnar, properties: ['type'] };
+		expect(() => mapColumnarToDisplay(badProperty, 'https://cdn.example.com/images')).toThrow(
+			/ragged columnar data: missing property value at index 1/
+		);
+		const badItem: ProductsColumnar = { ...columnar, items: ['S'] };
+		expect(() => mapColumnarToDisplay(badItem, 'https://cdn.example.com/images')).toThrow(
+			/ragged columnar data: missing item price at index 1/
+		);
+	});
+
 	it('cleans category paths to unique last segments', () => {
 		const cleaned = cleanCategories(['/perfume/mujer/', '/perfume/hombre/', '/hogar/']);
 		expect(cleaned.sort()).toEqual(['hogar', 'hombre', 'mujer']);
