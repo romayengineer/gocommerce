@@ -52,13 +52,21 @@ export function filterProducts(
 	return result;
 }
 
+/** First-item price for price sorting; an itemless product is a data error. */
+function firstPrice(p: DisplayProduct): number {
+	const first = p.items[0];
+	if (first === undefined)
+		throw new Error(`cannot sort product '${p.productId}' by price: no items`);
+	return first.price;
+}
+
 export function sortProducts(products: DisplayProduct[], sortBy: string): DisplayProduct[] {
 	if (sortBy === 'random') return products;
 	return [...products].sort((a, b) => {
 		if (sortBy === 'name-asc') return a.productName.localeCompare(b.productName);
 		if (sortBy === 'name-desc') return b.productName.localeCompare(a.productName);
-		if (sortBy === 'price-asc') return a.items[0].price - b.items[0].price;
-		if (sortBy === 'price-desc') return b.items[0].price - a.items[0].price;
+		if (sortBy === 'price-asc') return firstPrice(a) - firstPrice(b);
+		if (sortBy === 'price-desc') return firstPrice(b) - firstPrice(a);
 		return 0;
 	});
 }

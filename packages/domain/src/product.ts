@@ -128,8 +128,8 @@ export function cleanCategories(categories: string[]): string[] {
 			categories.map((category) => {
 				const pathParts = category.split('/').filter((part) => part !== '');
 				const last: string | undefined = pathParts[pathParts.length - 1];
-				const categoryName: string = last ?? category;
-				return categoryName.toLowerCase();
+				if (last === undefined) return category.toLowerCase();
+				return last.toLowerCase();
 			})
 		)
 	);

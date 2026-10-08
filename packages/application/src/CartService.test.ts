@@ -75,8 +75,8 @@ describe('CartService', () => {
 		cart.addToCart('p1', 'p1S', 1);
 		const products = toArray(cart.products);
 		expect(products).toHaveLength(1);
-		expect(products[0].product.productId).toBe('p1');
-		expect(products[0].product.price).toBe(100);
+		expect(products[0]?.product.productId).toBe('p1');
+		expect(products[0]?.product.price).toBe(100);
 
 		// deleting from catalog removes it from resolved cart items
 		catalog.deleteProduct('p1');
