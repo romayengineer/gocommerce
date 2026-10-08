@@ -1,5 +1,5 @@
 {
-  "dependencies": {
+  "devDependencies": {
     "@gocommerce/domain": "*"
   },
   "exports": {
@@ -7,6 +7,9 @@
     "./*": "./src/*"
   },
   "name": "@gocommerce/ports",
+  "peerDependencies": {
+    "@gocommerce/domain": "*"
+  },
   "private": true,
   "type": "module",
   "version": "0.0.1"

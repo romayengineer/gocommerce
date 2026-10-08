@@ -2,6 +2,40 @@ import { toSvelte } from '@gocommerce/adapters/svelte/store';
 import { container } from '@gocommerce/composition/container';
 import type { DisplayProduct } from '@gocommerce/domain/product';
 
+// Re-export the Svelte bridge + framework-agnostic store factory so UI
+// consumes them via composition/view only (never ports/adapters directly).
+export { toSvelte } from '@gocommerce/adapters/svelte/store';
+export { createStore } from '@gocommerce/ports/Store';
+export type { WritableStore, ReadableStore } from '@gocommerce/ports/Store';
+
+// Re-export i18n locale helpers (owned by adapters/svelte/i18n) via view.
+export {
+	locales,
+	localeNames,
+	localeFlags,
+	setLocale,
+	defaultLocale
+} from '@gocommerce/adapters/svelte/i18n';
+
+// Re-export pure domain helpers/types consumed by presentation components.
+// UI must import these from composition/view, not from @gocommerce/domain/*.
+export { formatPrice } from '@gocommerce/domain/money';
+export { ARGENTINE_PROVINCES } from '@gocommerce/domain/locations';
+export { AMENITIES } from '@gocommerce/domain/amenities';
+export { filterOptions, matchesOption } from '@gocommerce/domain/search';
+export type { SearchOption } from '@gocommerce/domain/search';
+export {
+	computeGridLayout,
+	pageFromScrollHeight,
+	DEFAULT_GRID_CONFIG
+} from '@gocommerce/domain/grid';
+export type { GridConfig, GridLayout } from '@gocommerce/domain/grid';
+export { updatePageInUrl, getPageInUrl } from '@gocommerce/domain/url';
+export type { CartItemFull } from '@gocommerce/domain/cart';
+export type { DisplayProduct } from '@gocommerce/domain/product';
+export type { ShippingFormData, FieldErrors, ShippingCoordinates } from '@gocommerce/domain/shipping';
+export type { MapConfig } from '@gocommerce/ports/MapService';
+
 export const config = container.config;
 export const logger = container.logger;
 export const router = container.router;

@@ -1,6 +1,6 @@
 import Splide from '@splidejs/splide';
 import type { Options } from '@splidejs/splide';
-import { createStore, type WritableStore } from '@gocommerce/ports/Store';
+import { createStore, type WritableStore } from '@gocommerce/composition/view';
 
 export class SplideCarousel {
 	private splide: Splide | null = null;

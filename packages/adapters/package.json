@@ -2,7 +2,11 @@
   "dependencies": {
     "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
-    "@gocommerce/ports": "*",
+    "@gocommerce/ports": "*"
+  },
+  "devDependencies": {
+    "@types/google.maps": "^3.64.1",
+    "@types/leaflet": "^1.9.21",
     "leaflet": "^1.9.4",
     "svelte-i18n": "^4.0.1"
   },
@@ -13,7 +17,9 @@
   "name": "@gocommerce/adapters",
   "peerDependencies": {
     "@sveltejs/kit": "^2.61.1",
-    "svelte": "^5.55.10"
+    "leaflet": "^1.9.4",
+    "svelte": "^5.55.10",
+    "svelte-i18n": "^4.0.1"
   },
   "private": true,
   "type": "module",

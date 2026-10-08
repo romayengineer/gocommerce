@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { locale, t } from 'svelte-i18n';
-	import { locales, localeNames, localeFlags, setLocale, defaultLocale } from '@gocommerce/adapters/svelte/i18n';
+	import { locales, localeNames, localeFlags, setLocale, defaultLocale } from '@gocommerce/composition/view';
 
 	function handleLanguageChange(e: Event) {
 		const target = e.target as HTMLSelectElement;

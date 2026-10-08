@@ -1,12 +1,105 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount, tick, unmount } from 'svelte';
-import { readable, writable, type Writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
+import { init } from 'svelte-i18n';
 import CheckoutForm from './CheckoutForm.svelte';
-import { CheckoutService } from '@gocommerce/application/CheckoutService';
-import type { KeyValueStorage } from '@gocommerce/ports/Storage';
-import type { RouterPort } from '@gocommerce/ports/Router';
-import type { Logger } from '@gocommerce/ports/Logger';
-import '@gocommerce/adapters/svelte/i18n';
+
+init({ fallbackLocale: 'es', initialLocale: 'es' });
+
+// Minimal fakes so this UI test does not depend on @gocommerce/application,
+// @gocommerce/ports, or @gocommerce/adapters (see gocommerce-5rp).
+interface KeyValueStorage {
+	get(key: string): string | null;
+	set(key: string, value: string): void;
+	remove(key: string): void;
+}
+
+interface FakeFormData {
+	firstName: string;
+	lastName: string;
+	email: string;
+	phone: string;
+	address: string;
+	amenity?: string;
+	city?: string;
+	county?: string;
+	stateName?: string;
+	zipCode?: string;
+	country?: string;
+	coordinates?: { latitude?: number; longitude?: number };
+}
+
+const EMPTY_FORM: FakeFormData = {
+	firstName: '',
+	lastName: '',
+	email: '',
+	phone: '',
+	address: '',
+	amenity: '',
+	city: '',
+	county: '',
+	stateName: '',
+	zipCode: '',
+	country: 'Argentina',
+	coordinates: { latitude: undefined, longitude: undefined }
+};
+
+function restoreForm(value: unknown): FakeFormData {
+	if (value === null || typeof value !== 'object' || Array.isArray(value)) return { ...EMPTY_FORM };
+	const source = value as Record<string, unknown>;
+	const restored: FakeFormData = { ...EMPTY_FORM };
+	for (const key of Object.keys(EMPTY_FORM) as (keyof FakeFormData)[]) {
+		if (key === 'coordinates') continue;
+		if (typeof source[key] === 'string') (restored[key] as unknown) = source[key];
+	}
+	return restored;
+}
+
+class FakeCheckoutService {
+	readonly formData: {
+		get(): FakeFormData;
+		set(value: FakeFormData): void;
+		subscribe(listener: (value: FakeFormData) => void): () => void;
+	};
+
+	constructor(
+		private storage: KeyValueStorage,
+		private key: string
+	) {
+		let current: FakeFormData = restoreForm(
+			(() => {
+				try {
+					const raw = storage.get(key);
+					return raw ? (JSON.parse(raw) as unknown) : null;
+				} catch {
+					return null;
+				}
+			})()
+		);
+		const listeners = new Set<(value: FakeFormData) => void>();
+		this.formData = {
+			get: () => current,
+			set: (next: FakeFormData) => {
+				current = next;
+				storage.set(key, JSON.stringify(next));
+				for (const listener of [...listeners]) listener(next);
+			},
+			subscribe: (listener: (value: FakeFormData) => void) => {
+				listeners.add(listener);
+				listener(current);
+				return () => {
+					listeners.delete(listener);
+				};
+			}
+		};
+	}
+
+	validate(): boolean {
+		return true;
+	}
+
+	async submit(): Promise<void> {}
+}
 
 const CHECKOUT_TEST_KEY = 'checkout_test_form';
 
@@ -18,7 +111,7 @@ const h = vi.hoisted(() => {
 		remove: (k) => map.delete(k)
 	};
 	const deps: {
-		checkout?: CheckoutService;
+		checkout?: FakeCheckoutService;
 		errors?: Writable<Record<string, unknown>>;
 		submitting?: Writable<boolean>;
 		maps?: { initialize: () => Promise<void>; updateLocation: () => Promise<unknown> };
@@ -27,42 +120,49 @@ const h = vi.hoisted(() => {
 	return { storage, deps };
 });
 
-vi.mock('@gocommerce/composition/view', () => ({
-	get checkoutService() {
-		return h.deps.checkout as CheckoutService;
-	},
-	get checkoutErrors() {
-		return h.deps.errors as Writable<Record<string, unknown>>;
-	},
-	get checkoutSubmitting() {
-		return h.deps.submitting as Writable<boolean>;
-	},
-	get mapService() {
-		return h.deps.maps as NonNullable<typeof h.deps.maps>;
-	},
-	get mapState() {
-		return h.deps.mapsState as Writable<{ apiKeyMissing: boolean; locationNotFound: boolean }>;
-	}
-}));
+vi.mock('@gocommerce/composition/view', () => {
+	// Fully stubbed view: wired services from hoisted fakes + minimal pure
+	// helpers inlined so this test has zero @gocommerce imports.
+	// (Full importOriginal would pull container -> $app/state, unavailable in vitest.)
+	const ARGENTINE_PROVINCES = [
+		{ value: 'Buenos Aires', label: 'Buenos Aires' },
+		{ value: 'CABA', label: 'Ciudad Autónoma de Buenos Aires' }
+	];
+	const AMENITIES: { value: string; label: string }[] = [];
+	const filterOptions = <T extends { value: string; label: string }>(options: T[], query: string): T[] => {
+		const q = query.trim().toLowerCase();
+		if (!q) return options;
+		return options.filter(
+			(o) => o.label.toLowerCase().includes(q) || o.value.toLowerCase().includes(q)
+		);
+	};
+	const matchesOption = (options: { value: string }[], value: string | undefined): boolean =>
+		typeof value === 'string' && options.some((o) => o.value === value);
+	return {
+		filterOptions,
+		matchesOption,
+		ARGENTINE_PROVINCES,
+		AMENITIES,
+		get checkoutService() {
+			return h.deps.checkout as FakeCheckoutService;
+		},
+		get checkoutErrors() {
+			return h.deps.errors as Writable<Record<string, unknown>>;
+		},
+		get checkoutSubmitting() {
+			return h.deps.submitting as Writable<boolean>;
+		},
+		get mapService() {
+			return h.deps.maps as NonNullable<typeof h.deps.maps>;
+		},
+		get mapState() {
+			return h.deps.mapsState as Writable<{ apiKeyMissing: boolean; locationNotFound: boolean }>;
+		}
+	};
+});
 
-const noopLogger: Logger = { log: () => {}, warn: () => {}, error: () => {} };
-
-const fakeRouter: RouterPort = {
-	route: {
-		get: () => ({ path: '/checkout', href: '', params: {}, query: new URLSearchParams() }),
-		subscribe: () => () => {}
-	},
-	navigate: vi.fn()
-};
-
-function makeService(): CheckoutService {
-	return new CheckoutService(
-		{ submit: async () => {} },
-		h.storage,
-		fakeRouter,
-		noopLogger,
-		CHECKOUT_TEST_KEY
-	);
+function makeService(): FakeCheckoutService {
+	return new FakeCheckoutService(h.storage, CHECKOUT_TEST_KEY);
 }
 
 describe('CheckoutForm persistence', () => {
@@ -108,13 +208,7 @@ describe('CheckoutForm persistence', () => {
 		expect(stored.firstName).toBe('Jane');
 
 		// Simulate a page refresh: a brand new service reads storage back.
-		const reloaded = new CheckoutService(
-			{ submit: async () => {} },
-			h.storage,
-			fakeRouter,
-			noopLogger,
-			CHECKOUT_TEST_KEY
-		);
+		const reloaded = new FakeCheckoutService(h.storage, CHECKOUT_TEST_KEY);
 		expect(reloaded.formData.get().firstName).toBe('Jane');
 
 		unmount(component);
@@ -138,13 +232,7 @@ describe('CheckoutForm persistence', () => {
 		expect(stored.firstName).toBe('Jane');
 
 		// ...and be restored when the page is refreshed.
-		const reloaded = new CheckoutService(
-			{ submit: async () => {} },
-			h.storage,
-			fakeRouter,
-			noopLogger,
-			CHECKOUT_TEST_KEY
-		);
+		const reloaded = new FakeCheckoutService(h.storage, CHECKOUT_TEST_KEY);
 		expect(reloaded.formData.get().firstName).toBe('Jane');
 
 		unmount(component);

@@ -2,7 +2,7 @@
 	import Link from '$lib/ui/Link.svelte';
 	import AddToCartButton from '$lib/catalog/AddToCartButton.svelte';
 	import SizeSelector from '$lib/catalog/SizeSelector.svelte';
-	import type { DisplayProduct } from '@gocommerce/domain/product';
+	import type { DisplayProduct } from '@gocommerce/composition/view';
 	import { productFullUrl } from '@gocommerce/composition/view';
 	import ProductImage from '$lib/catalog/ProductImage.svelte';
 
