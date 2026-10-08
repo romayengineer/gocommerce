@@ -40,16 +40,46 @@ interface ImportRef {
 	typeOnly: boolean;
 }
 
+interface FileImports {
+	content: string;
+	found: ImportRef[];
+}
+
 interface PackageManifest {
 	dependencies?: Record<string, string>;
 	peerDependencies?: Record<string, string>;
 	devDependencies?: Record<string, string>;
 }
 
-const ROOT: string = new URL('..', import.meta.url).pathname;
-const SRC = (pkg: string): string => join(ROOT, 'packages', pkg, 'src');
+type CheckedPackage =
+	| 'domain'
+	| 'ports'
+	| 'application'
+	| 'adapters'
+	| 'adapters-maps'
+	| 'adapters-memory'
+	| 'ui-core'
+	| 'composition'
+	| 'ui'
+	| 'config';
 
-function collect(pkg: string): string[] {
+const CHECKED_PACKAGES: readonly CheckedPackage[] = [
+	'domain',
+	'ports',
+	'application',
+	'adapters',
+	'adapters-maps',
+	'adapters-memory',
+	'ui-core',
+	'composition',
+	'ui',
+	'config'
+];
+
+const ROOT: string = new URL('..', import.meta.url).pathname;
+const SRC = (pkg: CheckedPackage): string => join(ROOT, 'packages', pkg, 'src');
+
+function collect(pkg: CheckedPackage): string[] {
 	const out: string[] = [];
 	const walk = (dir: string): void => {
 		for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -62,10 +92,10 @@ function collect(pkg: string): string[] {
 	return out;
 }
 
-const IMPORT_RE = /import\s+(?:type\s+)?(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g;
-const DYNAMIC_IMPORT_RE = /import\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+const IMPORT_RE: RegExp = /import\s+(?:type\s+)?(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g;
+const DYNAMIC_IMPORT_RE: RegExp = /import\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
 
-function importsOf(file: string): { content: string; found: ImportRef[] } {
+function importsOf(file: string): FileImports {
 	const content: string = readFileSync(file, 'utf8');
 	const found: ImportRef[] = [];
 	let m: RegExpExecArray | null;
@@ -85,20 +115,20 @@ function violation(file: string, detail: string): void {
 function bareImports(file: string, found: ImportRef[]): string[] {
 	void file;
 	return found
-		.filter((i) => !i.spec.startsWith('.') && !i.spec.startsWith('$') && !i.spec.startsWith('@gocommerce/'))
-		.map((i) => i.spec);
+		.filter((i: ImportRef) => !i.spec.startsWith('.') && !i.spec.startsWith('$') && !i.spec.startsWith('@gocommerce/'))
+		.map((i: ImportRef) => i.spec);
 }
 
 // 1. domain: only zod + relative; no outward @gocommerce imports (self in tests ok).
 for (const f of collect('domain')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (i.spec.startsWith('@gocommerce/') && !i.spec.startsWith('@gocommerce/domain/'))
 			violation(f, `domain must not import ${i.spec}`);
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) {
-			const root = b.split('/')[0] === '@types' ? b.split('/').slice(0, 2).join('/') : b.split('/')[0];
+			const root: string = b.split('/')[0] === '@types' ? b.split('/').slice(0, 2).join('/') : b.split('/')[0];
 			if (root !== 'zod') violation(f, `domain must only depend on zod (found ${b})`);
 		}
 	}
@@ -107,7 +137,7 @@ for (const f of collect('domain')) {
 // 2. ports: type-only; no value imports, no runtime of its own (defaults
 // live in adapters-memory). Domain imports must be type-only.
 for (const f of collect('ports')) {
-	const { content, found } = importsOf(f);
+	const { content, found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (/^@gocommerce\/(application|adapters|ui|composition|config)/.test(i.spec))
 			violation(f, `ports must not import ${i.spec}`);
@@ -117,10 +147,10 @@ for (const f of collect('ports')) {
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) violation(f, `ports must be dependency-free (found ${b})`);
 		// No runtime exports: interfaces and `export type` only.
-		const hasValueExport = content
+		const hasValueExport: boolean = content
 			.split('\n')
 			.some(
-				(line) =>
+				(line: string) =>
 					/^\s*export\s+(const|let|var|function|async\s+function|class|default|=\s*)/.test(line) ||
 					(/^\s*export\s*\{/.test(line) && !/^\s*export\s+type\b/.test(line))
 			);
@@ -132,7 +162,7 @@ for (const f of collect('ports')) {
 // composition maps AppConfig -> options). Documented exception: the in-memory
 // store defaults in adapters-memory (ports' sibling impl, dependency-free).
 for (const f of collect('application')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (i.spec.startsWith('@gocommerce/adapters-memory/')) continue;
 		if (/^@gocommerce\/(adapters|ui|composition|config)/.test(i.spec)) violation(f, `application must not import ${i.spec}`);
@@ -145,7 +175,7 @@ for (const f of collect('application')) {
 // 4. adapters + adapters-maps: no application/ui/composition (siblings must
 // not import each other); $app/* only in adapters svelte/router.
 for (const f of collect('adapters')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		// NOTE: `ui/` (with slash) so @gocommerce/ui-core stays allowed.
 		if (/^@gocommerce\/(application|ui\/|composition|adapters-maps)/.test(i.spec))
@@ -155,7 +185,7 @@ for (const f of collect('adapters')) {
 	}
 }
 for (const f of collect('adapters-maps')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (/^@gocommerce\/(application|ui|composition)/.test(i.spec) || /^@gocommerce\/adapters\//.test(i.spec))
 			violation(f, `adapters-maps must not import ${i.spec}`);
@@ -166,7 +196,7 @@ for (const f of collect('adapters-maps')) {
 // 4b. adapters-memory: ports types only; the dependency-free in-memory
 // defaults. Must not import anything else in the workspace.
 for (const f of collect('adapters-memory')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (i.spec.startsWith('@gocommerce/ports/')) continue;
 		if (i.spec.startsWith('@gocommerce/'))
@@ -180,7 +210,7 @@ for (const f of collect('adapters-memory')) {
 // 4c. ui-core: dependency-free presentation helpers (grid, viewport, url).
 // No workspace imports, no third-party deps.
 for (const f of collect('ui-core')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (i.spec.startsWith('@gocommerce/'))
 			violation(f, `ui-core must not import ${i.spec}`);
@@ -195,7 +225,7 @@ for (const f of collect('ui-core')) {
 // helpers come via composition/view or @gocommerce/ui-core/*.
 for (const f of collect('ui')) {
 	if (allowTests(f)) continue;
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (/^@gocommerce\/(application|config|adapters)/.test(i.spec)) violation(f, `ui must not import ${i.spec}`);
 		if (i.spec.startsWith('@gocommerce/composition/') && !i.spec.endsWith('/view'))
@@ -207,7 +237,7 @@ for (const f of collect('ui')) {
 
 // 6. composition: wires everything; no third-party runtime imports.
 for (const f of collect('composition')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const b of bareImports(f, found)) {
 		if (b.endsWith('.json')) continue;
 		violation(f, `composition must not depend on third-party ${b}`);
@@ -216,7 +246,7 @@ for (const f of collect('composition')) {
 
 // 7. config: standalone except zod (schemas validated here, like domain).
 for (const f of collect('config')) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (i.spec.startsWith('@gocommerce/config/')) continue; // self in tests ok
 		if (i.spec.startsWith('@gocommerce/'))
@@ -224,7 +254,7 @@ for (const f of collect('config')) {
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) {
-			const root = b.split('/')[0];
+			const root: string = b.split('/')[0];
 			if (root !== 'zod') violation(f, `config must only depend on zod (found ${b})`);
 		}
 	}
@@ -246,7 +276,7 @@ function collectRoutes(): string[] {
 	return out;
 }
 for (const f of collectRoutes()) {
-	const { found } = importsOf(f);
+	const { found }: FileImports = importsOf(f);
 	for (const i of found) {
 		if (/^@gocommerce\/(domain|ports|application|adapters|config)/.test(i.spec))
 			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
@@ -260,7 +290,7 @@ for (const f of collectRoutes()) {
 // 9. Extraneous-dependency check: every non-relative import in non-test
 // sources must resolve to a declared dependency or peerDependency.
 // (devDependencies are only visible to *.test.* files.)
-function pkgManifest(pkg: string): PackageManifest {
+function pkgManifest(pkg: CheckedPackage): PackageManifest {
 	try {
 		return JSON.parse(readFileSync(join(ROOT, 'packages', pkg, 'package.json'), 'utf8')) as PackageManifest;
 	} catch {
@@ -279,17 +309,17 @@ function specToPackage(spec: string): string {
 }
 
 const warnings: string[] = [];
-for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'adapters-memory', 'ui-core', 'composition', 'ui', 'config']) {
+for (const pkg of CHECKED_PACKAGES) {
 	const manifest: PackageManifest = pkgManifest(pkg);
-	const allowed = new Set<string>([
+	const allowed: Set<string> = new Set<string>([
 		...Object.keys(manifest.dependencies ?? {}),
 		...Object.keys(manifest.peerDependencies ?? {})
 	]);
-	const used = new Set<string>();
-	const usedAsValue = new Set<string>();
+	const used: Set<string> = new Set<string>();
+	const usedAsValue: Set<string> = new Set<string>();
 	for (const f of collect(pkg)) {
 		if (allowTests(f)) continue;
-		const { found } = importsOf(f);
+		const { found }: FileImports = importsOf(f);
 		for (const i of found) {
 			if (i.spec.startsWith('.') || i.spec.startsWith('$') || i.spec.endsWith('.json')) continue;
 			const name: string = specToPackage(i.spec);
@@ -314,11 +344,11 @@ for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps'
 // 10. No bare barrel imports: non-test sources must use deep paths
 // (@gocommerce/<pkg>/<module>), never the package root, so bundlers can
 // tree-shake and dependencies stay explicit.
-const BARREL_RE = /^@gocommerce\/[a-z-]+$/;
-for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps', 'adapters-memory', 'ui-core', 'composition', 'ui', 'config']) {
+const BARREL_RE: RegExp = /^@gocommerce\/[a-z-]+$/;
+for (const pkg of CHECKED_PACKAGES) {
 	for (const f of collect(pkg)) {
 		if (allowTests(f)) continue;
-		const { found } = importsOf(f);
+		const { found }: FileImports = importsOf(f);
 		for (const i of found) {
 			if (BARREL_RE.test(i.spec))
 				violation(f, `${pkg} must use deep imports (found bare barrel ${i.spec})`);
