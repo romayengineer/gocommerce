@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import ProductView from '$lib/catalog/ProductView.svelte';
-	import { catalog, router } from '@gocommerce/composition/view';
-	import { productFullUrl } from '@gocommerce/domain/product';
+	import { catalog, router, productFullUrl } from '@gocommerce/composition/view';
 
 	let productId: string = page.params.id!;
 

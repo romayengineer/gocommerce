@@ -140,6 +140,33 @@ for (const f of collect('config')) {
 	if (found.length > 0) violation(f, `config must have no imports (found ${found.map((i) => i.spec).join(', ')})`);
 }
 
+// 8. src/routes (app shell): consume composition/view + $lib + presentation
+// libs only; never reach past the view into domain/ports/application/adapters.
+const ROUTES_DIR = join(ROOT, 'src', 'routes');
+function collectRoutes() {
+	const out = [];
+	const walk = (dir) => {
+		for (const e of readdirSync(dir, { withFileTypes: true })) {
+			const p = join(dir, e.name);
+			if (e.isDirectory()) walk(p);
+			else if (/\.(ts|svelte)$/.test(e.name)) out.push(p);
+		}
+	};
+	if (existsSync(ROUTES_DIR)) walk(ROUTES_DIR);
+	return out;
+}
+for (const f of collectRoutes()) {
+	const { found } = importsOf(f);
+	for (const i of found) {
+		if (/^@gocommerce\/(domain|ports|application|adapters|config)/.test(i.spec))
+			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
+		if (i.spec.startsWith('@gocommerce/composition/') && i.spec !== '@gocommerce/composition/view')
+			violation(f, `routes must only consume @gocommerce/composition/view (found ${i.spec})`);
+		if (i.spec.startsWith('@gocommerce/ui/'))
+			violation(f, `routes must import UI via $lib, not ${i.spec}`);
+	}
+}
+
 if (failures.length > 0) {
 	console.error(`Boundary violations (${failures.length}):\n- ${failures.join('\n- ')}`);
 	process.exit(1);

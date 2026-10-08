@@ -20,7 +20,9 @@
     "@sveltejs/kit": "^2.61.1",
     "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "@types/google.maps": "^3.64.1",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^25.9.1",
+    "@vercel/config": "^0.5.1",
     "autoprefixer": "^10.4.0",
     "jsdom": "^30.1.2",
     "postcss": "^8.4.0",
@@ -32,16 +34,8 @@
     "vitest": "^2.1.9"
   },
   "dependencies": {
-    "@gocommerce/adapters": "*",
-    "@gocommerce/application": "*",
     "@gocommerce/composition": "*",
-    "@gocommerce/config": "*",
-    "@gocommerce/domain": "*",
-    "@gocommerce/ports": "*",
     "@gocommerce/ui": "*",
-    "@splidejs/splide": "^4.1.4",
-    "@types/leaflet": "^1.9.21",
-    "@vercel/config": "^0.5.1",
     "leaflet": "^1.9.4",
     "lucide-svelte": "^1.0.1",
     "svelte-i18n": "^4.0.1"
