@@ -1,5 +1,4 @@
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import type L from 'leaflet';
 
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
 import type { CenterZoom, IMapService, MapConfig } from '@gocommerce/ports/MapService';
@@ -25,13 +24,30 @@ import {
 | postalcode | postal code                | código_postal | código postal                       |
 */
 
-// Fix for default marker icons in Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-	iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
-	iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
-	shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href
-});
+// Leaflet is lazy-loaded on first initialize() so the composition root and
+// initial bundle never pull the heavy maps dependency (see gocommerce-s56).
+// `import type` above keeps type-checking with zero runtime coupling.
+type LeafletModule = typeof import('leaflet');
+
+let leafletModule: LeafletModule | null = null;
+
+async function loadLeaflet(): Promise<LeafletModule> {
+	if (!leafletModule) {
+		const [module] = await Promise.all([
+			import('leaflet'),
+			import('leaflet/dist/leaflet.css')
+		]);
+		// Fix for default marker icons in Leaflet
+		delete (module.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
+		module.Icon.Default.mergeOptions({
+			iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
+			iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
+			shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href
+		});
+		leafletModule = module;
+	}
+	return leafletModule;
+}
 
 export class LeafletService implements IMapService {
 	private map: L.Map | null = null;
@@ -51,16 +67,17 @@ export class LeafletService implements IMapService {
 			throw new Error('Map container not set');
 		}
 
+		const Leaflet = await loadLeaflet();
 		let centerZoom = await this.getCenter(config);
 
-		this.map = L.map(this.mapContainer).setView(centerZoom.center, centerZoom.zoom);
+		this.map = Leaflet.map(this.mapContainer).setView(centerZoom.center, centerZoom.zoom);
 
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
 			attribution: '© OpenStreetMap contributors'
 		}).addTo(this.map);
 
-		this.marker = L.marker(centerZoom.center).addTo(this.map);
+		this.marker = Leaflet.marker(centerZoom.center).addTo(this.map);
 	}
 
 	private async getCenter(config?: MapConfig): Promise<CenterZoom> {
