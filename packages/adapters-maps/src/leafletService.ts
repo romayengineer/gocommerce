@@ -140,13 +140,13 @@ export class LeafletService implements IMapService {
 			);
 			const results = (await response.json()) as Array<{ lat: string; lon: string }>;
 
-			if (results.length > 0) {
-				const { lat, lon } = results[0];
-				return {
-					lat: parseFloat(lat),
-					lng: parseFloat(lon)
-				};
-			}
+			const first = results[0];
+			if (first === undefined) return;
+			const { lat, lon } = first;
+			return {
+				lat: parseFloat(lat),
+				lng: parseFloat(lon)
+			};
 		} catch (error) {
 			return;
 		}
