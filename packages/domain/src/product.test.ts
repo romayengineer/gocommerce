@@ -16,6 +16,7 @@ const columnar: ProductsColumnar = {
 describe('product mapping', () => {
 	it('maps columnar data to display products with injected base URL', () => {
 		const [product] = mapColumnarToDisplay(columnar, 'https://cdn.example.com/images');
+		if (!product) throw new Error('expected one mapped product');
 		expect(product.productId).toBe('p1');
 		expect(product.categories).toEqual(['Perfume', 'Home']);
 		expect(product.properties).toEqual([{ name: 'type', values: ['Eau de Parfum'] }]);

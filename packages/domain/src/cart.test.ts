@@ -55,7 +55,9 @@ describe('cart reducers', () => {
 
 	it('sets quantity and removes when <= 0', () => {
 		expect(setQuantity([{ productId: 'p1', itemId: 'p1S', quantity: 1 }], 'p1', 'p1S', 0)).toEqual([]);
-		expect(setQuantity([{ productId: 'p1', itemId: 'p1S', quantity: 1 }], 'p1', 'p1S', 5)[0].quantity).toBe(5);
+		const updated = setQuantity([{ productId: 'p1', itemId: 'p1S', quantity: 1 }], 'p1', 'p1S', 5);
+		expect(updated).toHaveLength(1);
+		expect(updated[0]?.quantity).toBe(5);
 	});
 
 	it('sameItem matches productId and itemId', () => {
@@ -76,8 +78,8 @@ describe('cart selectors', () => {
 		];
 		const resolved = resolveCartItems(items, [product]);
 		expect(resolved).toHaveLength(1);
-		expect(resolved[0].product.productId).toBe('p1');
-		expect(resolved[0].quantity).toBe(2);
+		expect(resolved[0]?.product.productId).toBe('p1');
+		expect(resolved[0]?.quantity).toBe(2);
 	});
 
 	it('computes total price', () => {

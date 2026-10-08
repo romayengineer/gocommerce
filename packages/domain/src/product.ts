@@ -71,31 +71,33 @@ export function mapColumnarToDisplay(
 	imagesBaseUrl: string
 ): DisplayProduct[] {
 	return data.productId.map((_, index) => {
-		const productId = data.productId[index];
-		const productName = data.productName[index];
-		const description = data.description[index];
-		const brand = data.brand[index];
+		// Parallel columns share the row index; fallbacks only apply to
+		// ragged input and keep the declared DisplayProduct contract.
+		const productId: string = data.productId[index] ?? '';
+		const productName: string = data.productName[index] ?? '';
+		const description: string = data.description[index] ?? '';
+		const brand: string = data.brand[index] ?? '';
 		return {
 			productId,
 			productName,
 			description,
 			brand,
-			categories: data.categories[index].split(';'),
-			properties: data.properties[index].split(';').map((category) => {
-				const parts = category.split('=');
+			categories: data.categories[index]?.split(';') ?? [],
+			properties: (data.properties[index]?.split(';') ?? []).map((category) => {
+				const parts: string[] = category.split('=');
 				return {
-					name: parts[0],
-					values: [parts[1]]
+					name: parts[0] ?? '',
+					values: [parts[1] ?? '']
 				};
 			}),
 			allText: `${productName} ${description} ${brand}`,
-			images: range(data.images_count[index]).map((imageIndex) => {
+			images: range(data.images_count[index] ?? 0).map((imageIndex) => {
 				return `${imagesBaseUrl}/${productId}/${imageIndex}.webp`;
 			}),
-			items: data.items[index].split(';').map((item) => {
-				const parts = item.split('=');
-				const size = parts[0];
-				const price = parts[1];
+			items: (data.items[index]?.split(';') ?? []).map((item) => {
+				const parts: string[] = item.split('=');
+				const size: string = parts[0] ?? '';
+				const price: string = parts[1] ?? '';
 				return {
 					itemId: `${productId}${size}`,
 					size,
@@ -111,7 +113,8 @@ export function cleanCategories(categories: string[]): string[] {
 		new Set(
 			categories.map((category) => {
 				const pathParts = category.split('/').filter((part) => part !== '');
-				const categoryName = pathParts.length > 0 ? pathParts[pathParts.length - 1] : category;
+				const last: string | undefined = pathParts[pathParts.length - 1];
+				const categoryName: string = last ?? category;
 				return categoryName.toLowerCase();
 			})
 		)

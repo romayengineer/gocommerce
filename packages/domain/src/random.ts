@@ -9,7 +9,11 @@ export function shuffleFisherYates<T>(array: T[], random: RandomFn = Math.random
 	const shuffled = [...array];
 	for (let i = shuffled.length - 1; i > 0; i--) {
 		const j = Math.floor(random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+		const current: T | undefined = shuffled[i];
+		const other: T | undefined = shuffled[j];
+		if (current === undefined || other === undefined) continue; // unreachable: i, j < length
+		shuffled[i] = other;
+		shuffled[j] = current;
 	}
 	return shuffled;
 }
