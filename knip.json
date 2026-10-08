@@ -12,7 +12,6 @@
 	"ignoreDependencies": [
 		"@types/google.maps",
 		"@types/leaflet",
-		"@gocommerce/ui",
 		"leaflet"
 	]
 }

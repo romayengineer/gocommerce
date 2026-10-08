@@ -15,7 +15,8 @@
     "check:boundaries": "node scripts/check-boundaries.mjs",
     "knip": "knip",
     "lint": "eslint packages src scripts vercel.ts eslint.config.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify": "npm run check:boundaries && npm run knip && npm run check && npm run lint && npm test"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.0",
@@ -41,7 +42,6 @@
   },
   "dependencies": {
     "@gocommerce/composition": "*",
-    "@gocommerce/ui": "*",
     "leaflet": "^1.9.4",
     "lucide-svelte": "^1.0.1",
     "svelte": "^5.55.10",
