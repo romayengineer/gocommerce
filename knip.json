@@ -4,6 +4,7 @@
     ".": {
       "entry": ["src/routes/**/*"],
       "project": ["src/**/*", "scripts/**/*"],
+      "ignoreBinaries": ["tsc"],
       "ignoreDependencies": ["leaflet", "@types/google.maps", "@types/leaflet"]
     },
     "packages/*": {

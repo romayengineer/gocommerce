@@ -17,7 +17,7 @@
 
 	let itemSelected = $state(0);
 
-	let itemId = $derived(product?.items[itemSelected].itemId);
+	let itemId = $derived(product?.items[itemSelected]?.itemId);
 
 	function selectSize(e: Event, index: number) {
 		e.preventDefault();

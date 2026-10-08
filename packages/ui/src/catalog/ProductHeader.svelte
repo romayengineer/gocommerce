@@ -10,12 +10,16 @@
 	}
 
 	const { product, itemSelected, selectSize }: Props = $props();
+
+	let selectedItem = $derived(product.items[itemSelected]);
 </script>
 
 <div>
 	<h1 class="x-text-2xl mb-4 font-bold">{product.brand} {product.productName}</h1>
 	<div class="mb-4 flex flex-wrap justify-between gap-4">
 		<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
-		<Price amount={product.items[itemSelected].price} size="lg" />
+		{#if selectedItem}
+			<Price amount={selectedItem.price} size="lg" />
+		{/if}
 	</div>
 </div>

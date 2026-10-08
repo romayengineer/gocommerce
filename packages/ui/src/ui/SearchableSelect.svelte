@@ -48,8 +48,9 @@
 
 	function handleFocusOut() {
 		isOpen = false;
-		if (value && filteredOptions.length == 1) {
-			setValue(filteredOptions[0].label);
+		const onlyOption = filteredOptions[0];
+		if (value && filteredOptions.length == 1 && onlyOption) {
+			setValue(onlyOption.label);
 		}
 	}
 

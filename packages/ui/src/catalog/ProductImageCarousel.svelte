@@ -15,7 +15,8 @@
 	const { images = [], alt = 'Product', showNavigation = true, onImageLoaded }: Props = $props();
 
 	// for speed up if showNavigation is false only load first image
-	const imageList = $derived(images && images.length > 0 ? (showNavigation ? images : [images[0]]) : []);
+	const firstImage = $derived(images[0]);
+	const imageList = $derived(images.length > 0 && firstImage ? (showNavigation ? images : [firstImage]) : []);
 
 	let splideElement: HTMLDivElement | undefined = $state();
 

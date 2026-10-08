@@ -18,6 +18,9 @@
 
 	let itemSelected = $state(0);
 
+	let firstImage = $derived(product.images[0]);
+	let selectedItem = $derived(product.items[itemSelected]);
+
 	function selectSize(e: Event, index: number) {
 		e.preventDefault();
 		itemSelected = index;
@@ -31,11 +34,13 @@
 <Link href={fullUrl} class="group no-underline">
 	<div class="card flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg" style="height: {height}px">
 		<div class="flex-1 min-h-0 transition-opacity group-hover:opacity-80">
-			<ProductImage
-				src={product.images[0]}
-				alt={product.productName}
-				onImageLoaded={handleImageLoaded}
-			/>
+			{#if firstImage}
+				<ProductImage
+					src={firstImage}
+					alt={product.productName}
+					onImageLoaded={handleImageLoaded}
+				/>
+			{/if}
 		</div>
 
 		<div class="flex flex-1 flex-col justify-between p-4">
@@ -50,7 +55,9 @@
 				<div class="mb-2">
 					<SizeSelector items={product.items} selected={itemSelected} onSelect={selectSize} />
 				</div>
-				<AddToCartButton productId={product.productId} itemId={product.items[itemSelected].itemId} price={product.items[itemSelected].price} />
+				{#if selectedItem}
+					<AddToCartButton productId={product.productId} itemId={selectedItem.itemId} price={selectedItem.price} />
+				{/if}
 			</div>
 		</div>
 	</div>
