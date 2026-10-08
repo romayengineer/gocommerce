@@ -1,14 +1,14 @@
 {
   "dependencies": {
     "@gocommerce/composition": "*",
-    "@gocommerce/domain": "*",
-    "@gocommerce/ports": "*",
     "@gocommerce/ui-core": "*",
     "@splidejs/splide": "^4.1.4",
     "lucide-svelte": "^1.0.1",
     "svelte-i18n": "^4.0.1"
   },
   "devDependencies": {
+    "@gocommerce/domain": "*",
+    "@gocommerce/ports": "*",
     "vitest": "^2.1.9"
   },
   "exports": {
@@ -17,6 +17,8 @@
   },
   "name": "@gocommerce/ui",
   "peerDependencies": {
+    "@gocommerce/domain": "*",
+    "@gocommerce/ports": "*",
     "svelte": "^5.55.10"
   },
   "private": true,

@@ -1,8 +1,6 @@
 {
-  "dependencies": {
-    "@gocommerce/ports": "*"
-  },
   "devDependencies": {
+    "@gocommerce/ports": "*",
     "vitest": "^2.1.9"
   },
   "exports": {
@@ -10,6 +8,9 @@
     "./*": "./src/*"
   },
   "name": "@gocommerce/adapters-memory",
+  "peerDependencies": {
+    "@gocommerce/ports": "*"
+  },
   "private": true,
   "type": "module",
   "version": "0.0.1"

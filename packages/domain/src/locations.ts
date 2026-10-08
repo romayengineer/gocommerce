@@ -25,6 +25,11 @@ const ARGENTINE_PROVINCES_NAMES = [
 	'Tucuman'
 ];
 
+/**
+ * @deprecated Prefer `ARGENTINE_PROVINCES` from
+ * `@gocommerce/ui-core/options-data` (presentation owner). Kept here for
+ * backward compat only.
+ */
 export const ARGENTINE_PROVINCES = ARGENTINE_PROVINCES_NAMES.map((name) => ({
 	value: name,
 	label: name

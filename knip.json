@@ -1,17 +1,17 @@
 {
-	"$schema": "https://unpkg.com/knip@6/schema.json",
-	"workspaces": {
-		".": {
-			"entry": ["src/routes/**/*"],
-			"project": ["src/**/*", "scripts/**/*"]
-		},
-		"packages/*": {
-			"project": ["src/**/*"]
-		}
-	},
-	"ignoreDependencies": [
-		"@types/google.maps",
-		"@types/leaflet",
-		"leaflet"
-	]
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["src/routes/**/*"],
+      "project": ["src/**/*", "scripts/**/*"],
+      "ignoreDependencies": ["leaflet", "@types/google.maps", "@types/leaflet"]
+    },
+    "packages/*": {
+      "project": ["src/**/*"]
+    },
+    "packages/adapters-maps": {
+      "project": ["src/**/*"],
+      "ignoreDependencies": ["@types/google.maps"]
+    }
+  }
 }

@@ -21,9 +21,10 @@ export {
 	defaultLocale
 } from '@gocommerce/adapters/svelte/i18n';
 
-// Pure domain helpers/types are imported directly from @gocommerce/domain/*
+// Pure domain types are imported directly from @gocommerce/domain/*
 // (and MapConfig from @gocommerce/ports/MapService) by presentation
-// components — view.ts only exposes wired services and Svelte stores.
+// components — value helpers come via view.ts wired services or
+// @gocommerce/ui-core/*, never directly from domain.
 
 export const config = container.config;
 export const logger = container.logger;

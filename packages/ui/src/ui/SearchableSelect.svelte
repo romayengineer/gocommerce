@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import FormField from '$lib/ui/FormField.svelte';
-	import { filterOptions, matchesOption } from '@gocommerce/domain/search';
+	import { filterOptions, matchesOption } from '@gocommerce/ui-core/search';
 
 	interface Ioption { value: string; label: string }
 

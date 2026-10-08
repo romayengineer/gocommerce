@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { columnsForWidth, DEFAULT_COLUMN_WIDTH, MIN_COLUMNS, MAX_COLUMNS } from './viewport';
 import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from './grid';
 import { updatePageInUrl, getPageInUrl } from './url';
+import { formatPrice } from './format';
+import { filterOptions, matchesOption } from './search';
+import { AMENITIES, ARGENTINE_PROVINCES } from './options-data';
 
 describe('columnsForWidth', () => {
 	it('scales columns with width within bounds', () => {
@@ -32,5 +35,35 @@ describe('url page helpers', () => {
 		const url = updatePageInUrl('https://shop.example/#/', 3);
 		expect(getPageInUrl(url)).toBe(3);
 		expect(getPageInUrl('https://shop.example/#/')).toBe(1);
+	});
+});
+
+describe('formatPrice', () => {
+	it('formats ARS without decimals for es', () => {
+		expect(formatPrice(1234, 'es', 'ARS')).toBe('$1.234');
+	});
+	it('formats with decimals for en', () => {
+		expect(formatPrice(1234, 'en', 'ARS')).toBe('$1,234.00');
+	});
+});
+
+describe('search helpers', () => {
+	const options = [
+		{ value: 'a', label: 'Apple' },
+		{ value: 'b', label: 'Banana' }
+	];
+	it('filters case-insensitively', () => {
+		expect(filterOptions(options, 'app')).toHaveLength(1);
+	});
+	it('matches exact label case-insensitively', () => {
+		expect(matchesOption(options, 'apple')).toBe(true);
+		expect(matchesOption(options, 'cherry')).toBe(false);
+	});
+});
+
+describe('options data', () => {
+	it('exposes amenities and provinces', () => {
+		expect(AMENITIES.length).toBeGreaterThan(0);
+		expect(ARGENTINE_PROVINCES.length).toBeGreaterThan(0);
 	});
 });

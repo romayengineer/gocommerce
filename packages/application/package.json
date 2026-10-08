@@ -1,10 +1,10 @@
 {
   "dependencies": {
     "@gocommerce/adapters-memory": "*",
-    "@gocommerce/domain": "*",
-    "@gocommerce/ports": "*"
+    "@gocommerce/domain": "*"
   },
   "devDependencies": {
+    "@gocommerce/ports": "*",
     "vitest": "^2.1.9"
   },
   "exports": {
@@ -12,6 +12,9 @@
     "./*": "./src/*"
   },
   "name": "@gocommerce/application",
+  "peerDependencies": {
+    "@gocommerce/ports": "*"
+  },
   "private": true,
   "type": "module",
   "version": "0.0.1"

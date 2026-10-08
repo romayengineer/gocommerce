@@ -15,10 +15,12 @@
  * - ports -> domain is TYPE-ONLY (e.g. MapService uses ShippingCoordinates).
  *   Value objects are shared by reference to avoid type drift; `import type`
  *   emits no runtime coupling. Declared as peer+dev, not runtime deps.
- * - ui -> @gocommerce/composition/view (services/stores) + @gocommerce/domain/*
- *   (pure helpers) + @gocommerce/ports/* (types) directly; never
+ * - ui -> @gocommerce/composition/view (services/stores) + @gocommerce/ui-core/*
+ *   (presentation values) + @gocommerce/domain/* + @gocommerce/ports/*
+ *   (types via `import type` only; value imports from domain fail); never
  *   /container, /domain via view proxy, /ports via view proxy, /application,
- *   /config, or /adapters. Wiring lives in composition, pure logic in domain.
+ *   /config, or /adapters. Wiring lives in composition, presentation values
+ *   in ui-core, pure logic in domain.
  * - src/routes (app shell) -> @gocommerce/composition/view + $lib +
  *   presentation libs only (rule 8).
  * - *.test.* files may cross layers to build fixtures/mocks, and may use
@@ -176,7 +178,8 @@ for (const f of collect('ui-core')) {
 }
 
 // 5. ui (non-test): no application/config/adapters; composition only via
-// /view; pure domain helpers + ports types imported directly.
+// /view; domain + ports types imported directly (import type only) — value
+// helpers come via composition/view or @gocommerce/ui-core/*.
 for (const f of collect('ui')) {
 	if (allowTests(f)) continue;
 	const { found } = importsOf(f);
@@ -184,6 +187,8 @@ for (const f of collect('ui')) {
 		if (/^@gocommerce\/(application|config|adapters)/.test(i.spec)) violation(f, `ui must not import ${i.spec}`);
 		if (i.spec.startsWith('@gocommerce/composition/') && !i.spec.endsWith('/view'))
 			violation(f, `ui must only consume @gocommerce/composition/view (found ${i.spec})`);
+		if (i.spec.startsWith('@gocommerce/domain/') && !i.typeOnly)
+			violation(f, `ui->domain must be import type (found value import of ${i.spec})`);
 	}
 }
 
@@ -268,6 +273,7 @@ for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps'
 		...Object.keys(manifest.peerDependencies ?? {})
 	]);
 	const used = new Set();
+	const usedAsValue = new Set();
 	for (const f of collect(pkg)) {
 		if (allowTests(f)) continue;
 		const { found } = importsOf(f);
@@ -276,13 +282,19 @@ for (const pkg of ['domain', 'ports', 'application', 'adapters', 'adapters-maps'
 			const name = specToPackage(i.spec);
 			if (name === `@gocommerce/${pkg}`) continue; // self-import within the package
 			used.add(name);
+			if (!i.typeOnly) usedAsValue.add(name);
 			if (!allowed.has(name))
 				violation(f, `${pkg} imports extraneous dependency ${i.spec} (declare ${name} or route via composition/view)`);
 		}
 	}
 	for (const name of Object.keys(manifest.dependencies ?? {})) {
-		if (!used.has(name) && !name.startsWith('@gocommerce/'))
+		if (!used.has(name))
 			warnings.push(`${pkg}: declared dependency ${name} is never imported in non-test sources`);
+		else if (name.startsWith('@gocommerce/') && !usedAsValue.has(name))
+			violation(
+				collect(pkg)[0] ?? `packages/${pkg}/package.json`,
+				`${pkg} declares runtime dependency ${name} but only ever uses import type (move to peerDependencies)`
+			);
 	}
 }
 

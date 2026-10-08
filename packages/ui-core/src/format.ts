@@ -12,12 +12,10 @@ const LOCALES: Record<string, string> = {
 };
 
 /**
- * Format a price for display. Uses `Intl.NumberFormat` for grouping so the
- * view layer never hand-rolls separators. `es` hides decimals (cents are not
- * commonly used for the default store currency); other locales show two.
- *
- * @deprecated Prefer `formatPrice` from `@gocommerce/ui-core/format`
- * (presentation owner). Kept here for backward compat only.
+ * Format a price for display. Presentation helper owned by ui-core so
+ * Svelte components never import value helpers from domain.
+ * (Canonical copy moved from @gocommerce/domain/money; that export is
+ * deprecated — prefer this module.)
  */
 export function formatPrice(
 	value: number,

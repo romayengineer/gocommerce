@@ -2,7 +2,9 @@
   "dependencies": {
     "@gocommerce/adapters": "*",
     "@gocommerce/adapters-maps": "*",
-    "@gocommerce/application": "*",
+    "@gocommerce/application": "*"
+  },
+  "devDependencies": {
     "@gocommerce/config": "*",
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*"
@@ -12,6 +14,11 @@
     "./*": "./src/*"
   },
   "name": "@gocommerce/composition",
+  "peerDependencies": {
+    "@gocommerce/config": "*",
+    "@gocommerce/domain": "*",
+    "@gocommerce/ports": "*"
+  },
   "private": true,
   "type": "module",
   "version": "0.0.1"
