@@ -1,8 +1,8 @@
 import type { Logger } from '@gocommerce/ports/Logger';
-import { noopLogger } from '@gocommerce/adapters-memory/logger';
+import { noopLogger } from '@gocommerce/foundation/logger';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
 import type { IMapService, MapConfig } from '@gocommerce/ports/MapService';
-import { DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from '@gocommerce/adapters-memory/maps';
+import { DEFAULT_CENTER, DEFAULT_ZOOM, FOUND_LOCATION_ZOOM } from '@gocommerce/domain/geo';
 
 export class GoogleMapsService implements IMapService {
 	private apiKey: string;

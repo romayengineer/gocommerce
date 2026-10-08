@@ -3,7 +3,7 @@
     "@gocommerce/domain": "*"
   },
   "devDependencies": {
-    "@gocommerce/adapters-memory": "*",
+    "@gocommerce/foundation": "*",
     "@gocommerce/ports": "*",
     "vitest": "^2.1.9"
   },

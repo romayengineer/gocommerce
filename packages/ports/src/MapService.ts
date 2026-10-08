@@ -1,41 +1,10 @@
+import type { MapConfig } from '@gocommerce/domain/geo';
 import type { ShippingCoordinates } from '@gocommerce/domain/shipping';
 
-export interface LatLng {
-	lat: number;
-	lng: number;
-}
-
-/*
-┌────────────────┬────────────┬──────────────────────────────────┐
-│     Level      │    Size    │             Example              │
-├────────────────┼────────────┼──────────────────────────────────┤
-│ Country        │ Largest    │ Argentina                        │
-├────────────────┼────────────┼──────────────────────────────────┤
-│ State/Province │ Very large │ Buenos Aires Province            │
-├────────────────┼────────────┼──────────────────────────────────┤
-│ County         │ Large      │ Partido (Avellaneda, La Matanza) │
-├────────────────┼────────────┼──────────────────────────────────┤
-│ City           │ Medium     │ Ciudad de Buenos Aires, La Plata │
-├────────────────┼────────────┼──────────────────────────────────┤
-│ Neighborhood   │ Small      │ Barrio (Caballito, San Telmo)    │
-└────────────────┴────────────┴──────────────────────────────────┘
-*/
-
-export interface MapConfig {
-	address?: string;
-	amenity?: string;
-	city?: string;
-	county?: string;
-	stateName?: string; // state is a reserved word use stateName instead
-	zipCode?: string;
-	country?: string;
-}
-
-export interface CenterZoom {
-	center: LatLng;
-	zoom: number;
-	locationFound: boolean;
-}
+// Geography value objects are owned by `@gocommerce/domain/geo` (single
+// owner); ports re-exports the types so consumers keep importing from the
+// port. All imports stay `import type` — no runtime coupling.
+export type { CenterZoom, LatLng, MapConfig } from '@gocommerce/domain/geo';
 
 export interface IMapService {
 	initialize(container: unknown, config?: MapConfig): Promise<void>;

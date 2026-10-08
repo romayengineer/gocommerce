@@ -19,8 +19,8 @@ import { browserClock } from '@gocommerce/adapters/browser/clock';
 import { NavigatorClipboard } from '@gocommerce/adapters/browser/clipboard';
 import { SvelteKitRouter } from '@gocommerce/adapters/svelte/router.svelte';
 import { ViewportWidthTracker } from '@gocommerce/adapters/svelte/platform';
-import { memoryStoreFactory } from '@gocommerce/adapters-memory/store';
-import { jsonStorageCodec } from '@gocommerce/adapters-memory/storage';
+import { memoryStoreFactory } from '@gocommerce/foundation/store';
+import { jsonStorageCodec } from '@gocommerce/foundation/storage';
 import {
 	columnsForWidth,
 	DEFAULT_COLUMN_WIDTH,

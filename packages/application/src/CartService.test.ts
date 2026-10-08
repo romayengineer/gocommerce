@@ -6,8 +6,8 @@ import type { DisplayProduct } from '@gocommerce/domain/product';
 import { CartService } from '@gocommerce/application/CartService';
 import { ProductCatalog } from '@gocommerce/application/ProductCatalog';
 import type { ProductsColumnar } from '@gocommerce/domain/product';
-import { memoryStoreFactory } from '@gocommerce/adapters-memory/store';
-import { jsonStorageCodec } from '@gocommerce/adapters-memory/storage';
+import { memoryStoreFactory } from '@gocommerce/foundation/store';
+import { jsonStorageCodec } from '@gocommerce/foundation/storage';
 
 function memoryStorage(): KeyValueStorage {
 	const map = new Map<string, string>();

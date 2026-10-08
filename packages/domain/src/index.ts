@@ -1,4 +1,5 @@
 export * from './cart';
+export * from './geo';
 export * from './product';
 export * from './random';
 export * from './shipping';

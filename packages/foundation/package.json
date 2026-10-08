@@ -7,7 +7,7 @@
     ".": "./src/index.ts",
     "./*": "./src/*"
   },
-  "name": "@gocommerce/adapters-memory",
+  "name": "@gocommerce/foundation",
   "peerDependencies": {
     "@gocommerce/ports": "*"
   },

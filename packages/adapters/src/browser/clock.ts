@@ -1,3 +1,3 @@
-import { systemClock } from '@gocommerce/adapters-memory/clock';
+import { systemClock } from '@gocommerce/foundation/clock';
 
 export const browserClock = systemClock;

@@ -1,7 +1,7 @@
 import { page } from '$app/state';
 import { goto } from '$app/navigation';
 import type { WritableStore } from '@gocommerce/ports/Store';
-import { createStore } from '@gocommerce/adapters-memory/store';
+import { createStore } from '@gocommerce/foundation/store';
 import type { NavigationOptions, Route, RouterPort } from '@gocommerce/ports/Router';
 
 function toRoute(url: URL): Route {

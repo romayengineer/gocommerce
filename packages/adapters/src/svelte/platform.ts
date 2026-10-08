@@ -1,13 +1,11 @@
 import type { WritableStore } from '@gocommerce/ports/Store';
-import { createStore } from '@gocommerce/adapters-memory/store';
-import type { Platform, Viewport, ViewportTracker } from '@gocommerce/ports/Platform';
-
-export type ColumnsForWidthFn = (
-	width: number,
-	columnWidth: number,
-	min: number,
-	max: number
-) => number;
+import { createStore } from '@gocommerce/foundation/store';
+import type {
+	ColumnsForWidthFn,
+	Platform,
+	Viewport,
+	ViewportTracker
+} from '@gocommerce/ports/Platform';
 
 export interface ViewportTrackerInit {
 	columnWidth: number;

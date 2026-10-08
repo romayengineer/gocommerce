@@ -3,7 +3,7 @@ import type { ReadableStore, WritableStore } from './Store';
 /**
  * Abstract store construction so application services never depend on a
  * concrete implementation. The in-memory default lives in
- * `@gocommerce/adapters-memory/store` (`memoryStoreFactory`); composition
+ * `@gocommerce/foundation/store` (`memoryStoreFactory`); composition
  * injects it at the root.
  */
 export interface StoreFactory {

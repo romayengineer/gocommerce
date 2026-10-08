@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { CheckoutService } from '@gocommerce/application/CheckoutService';
 import { createEmptyShippingFormData, type ShippingFormData } from '@gocommerce/domain/shipping';
-import { memoryStoreFactory } from '@gocommerce/adapters-memory/store';
-import { jsonStorageCodec } from '@gocommerce/adapters-memory/storage';
+import { memoryStoreFactory } from '@gocommerce/foundation/store';
+import { jsonStorageCodec } from '@gocommerce/foundation/storage';
 import type { KeyValueStorage } from '@gocommerce/ports/Storage';
 import type { RouterPort } from '@gocommerce/ports/Router';
 import type { Logger } from '@gocommerce/ports/Logger';

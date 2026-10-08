@@ -1,6 +1,6 @@
 import type { AppConfig } from '@gocommerce/config/config';
 import type { Logger } from '@gocommerce/ports/Logger';
-import { noopLogger } from '@gocommerce/adapters-memory/logger';
+import { noopLogger } from '@gocommerce/foundation/logger';
 import type { IMapService } from '@gocommerce/ports/MapService';
 import { GoogleMapsService } from './googleMapsService';
 import { LeafletService } from './leafletService';
