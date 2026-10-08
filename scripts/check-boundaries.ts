@@ -99,8 +99,9 @@ function importsOf(file: string): FileImports {
 	const content: string = readFileSync(file, 'utf8');
 	const found: ImportRef[] = [];
 	let m: RegExpExecArray | null;
-	while ((m = IMPORT_RE.exec(content))) found.push({ spec: m[1], typeOnly: m[0].includes('import type') });
-	while ((m = DYNAMIC_IMPORT_RE.exec(content))) found.push({ spec: m[1], typeOnly: false });
+	// Group 1 is required by both patterns, so it always participates on match.
+	while ((m = IMPORT_RE.exec(content))) found.push({ spec: m[1] ?? '', typeOnly: m[0].includes('import type') });
+	while ((m = DYNAMIC_IMPORT_RE.exec(content))) found.push({ spec: m[1] ?? '', typeOnly: false });
 	return { content, found };
 }
 
@@ -128,7 +129,7 @@ for (const f of collect('domain')) {
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) {
-			const root: string = b.split('/')[0] === '@types' ? b.split('/').slice(0, 2).join('/') : b.split('/')[0];
+			const root: string = firstSegment(b) === '@types' ? b.split('/').slice(0, 2).join('/') : firstSegment(b);
 			if (root !== 'zod') violation(f, `domain must only depend on zod (found ${b})`);
 		}
 	}
@@ -254,7 +255,7 @@ for (const f of collect('config')) {
 	}
 	if (!allowTests(f)) {
 		for (const b of bareImports(f, found)) {
-			const root: string = b.split('/')[0];
+			const root: string = firstSegment(b);
 			if (root !== 'zod') violation(f, `config must only depend on zod (found ${b})`);
 		}
 	}
@@ -298,6 +299,11 @@ function pkgManifest(pkg: CheckedPackage): PackageManifest {
 	}
 }
 
+/** First `/`-separated segment (`String.split` always yields ≥1 element). */
+function firstSegment(spec: string): string {
+	return spec.split('/')[0] ?? spec;
+}
+
 /** Map an import specifier to the package name that must declare it. */
 function specToPackage(spec: string): string {
 	if (spec.startsWith('@gocommerce/')) return spec.split('/').slice(0, 2).join('/');
@@ -305,7 +311,7 @@ function specToPackage(spec: string): string {
 	if (spec === 'svelte' || spec.startsWith('svelte/')) return 'svelte';
 	if (spec.startsWith('@types/')) return spec.split('/').slice(0, 2).join('/');
 	if (spec.startsWith('@')) return spec.split('/').slice(0, 2).join('/');
-	return spec.split('/')[0];
+	return firstSegment(spec);
 }
 
 const warnings: string[] = [];

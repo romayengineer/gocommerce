@@ -12,7 +12,7 @@
     "analyze": "ANALYZE=true vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "check:boundaries": "node scripts/check-boundaries.ts",
+    "check:boundaries": "tsc --noEmit -p scripts/tsconfig.json && node scripts/check-boundaries.ts",
     "knip": "knip",
     "lint": "eslint packages src scripts vercel.ts eslint.config.js",
     "test": "vitest run",
