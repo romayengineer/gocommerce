@@ -4,6 +4,9 @@
     "@gocommerce/domain": "*",
     "@gocommerce/ports": "*"
   },
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*"

@@ -1,0 +1,18 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema.json",
+	"workspaces": {
+		".": {
+			"entry": ["src/routes/**/*"],
+			"project": ["src/**/*", "scripts/**/*"]
+		},
+		"packages/*": {
+			"project": ["src/**/*"]
+		}
+	},
+	"ignoreDependencies": [
+		"@types/google.maps",
+		"@types/leaflet",
+		"@gocommerce/ui",
+		"leaflet"
+	]
+}

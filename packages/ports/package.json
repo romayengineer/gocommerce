@@ -1,6 +1,7 @@
 {
   "devDependencies": {
-    "@gocommerce/domain": "*"
+    "@gocommerce/domain": "*",
+    "vitest": "^2.1.9"
   },
   "exports": {
     ".": "./src/index.ts",
