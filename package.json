@@ -16,6 +16,7 @@
     "knip": "knip",
     "lint": "eslint packages src scripts vercel.ts eslint.config.js",
     "test": "vitest run",
+    "postinstall": "svelte-kit sync",
     "verify": "npm run check:boundaries && npm run knip && npm run check && npm run lint && npm test"
   },
   "devDependencies": {
