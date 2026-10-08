@@ -9,7 +9,7 @@
  *   leaflet/google SDKs, SDK payloads load lazily inside each service)
  *   adapters-memory (ports' in-memory defaults, ports types only)
  *   composition (root: wires everything incl. AppConfig -> options mapping)
- *   config (standalone, no imports) | ui (presentation)
+ *   config (schemas + zod, no workspace imports) | ui (presentation)
  *
  * Documented exceptions:
  * - ports -> domain is TYPE-ONLY (e.g. MapService uses ShippingCoordinates).
@@ -182,10 +182,20 @@ for (const f of collect('composition')) {
 	}
 }
 
-// 7. config: standalone.
+// 7. config: standalone except zod (schemas validated here, like domain).
 for (const f of collect('config')) {
 	const { found } = importsOf(f);
-	if (found.length > 0) violation(f, `config must have no imports (found ${found.map((i) => i.spec).join(', ')})`);
+	for (const i of found) {
+		if (i.spec.startsWith('@gocommerce/config/')) continue; // self in tests ok
+		if (i.spec.startsWith('@gocommerce/'))
+			violation(f, `config must not import ${i.spec}`);
+	}
+	if (!allowTests(f)) {
+		for (const b of bareImports(f, found)) {
+			const root = b.split('/')[0];
+			if (root !== 'zod') violation(f, `config must only depend on zod (found ${b})`);
+		}
+	}
 }
 
 // 8. src/routes (app shell): consume composition/view + $lib + presentation

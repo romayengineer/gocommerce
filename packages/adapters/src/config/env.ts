@@ -1,11 +1,10 @@
-import type { AppConfig } from '@gocommerce/config';
+import { configSchema, type AppConfig } from '@gocommerce/config';
 
 /** Read the application configuration from the build-time environment. */
 export function readEnvConfig(): AppConfig {
-	return {
+	return configSchema.parse({
 		imagesBaseUrl: import.meta.env.VITE_S3_IMAGES_URL ?? '',
-		mapProvider:
-			(import.meta.env.VITE_MAP_PROVIDER ?? 'leaflet') === 'google' ? 'google' : 'leaflet',
+		mapProvider: import.meta.env.VITE_MAP_PROVIDER ?? 'leaflet',
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? '',
 		currency: import.meta.env.VITE_CURRENCY ?? 'ARS',
 		bank: {
@@ -18,5 +17,5 @@ export function readEnvConfig(): AppConfig {
 			pageWidth: import.meta.env.VITE_PAGE_WIDTH ?? '80rem',
 			theme: import.meta.env.VITE_THEME ?? 'default'
 		}
-	};
+	});
 }
