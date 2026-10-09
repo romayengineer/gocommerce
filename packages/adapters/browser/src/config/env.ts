@@ -78,7 +78,9 @@ export function readEnvConfig(
 		shop: {
 			name: shopName,
 			logoUrl: env.VITE_SHOP_LOGO_URL ?? '',
-			supportEmail: env.VITE_SHOP_SUPPORT_EMAIL ?? ''
+			supportEmail: env.VITE_SHOP_SUPPORT_EMAIL ?? '',
+			whatsappNumber: (env.VITE_WHATSAPP_NUMBER ?? '').replace(/\D/g, ''),
+			whatsappMessage: env.VITE_WHATSAPP_MESSAGE ?? ''
 		},
 		seo: {
 			title: env.VITE_SEO_TITLE ?? shopName,

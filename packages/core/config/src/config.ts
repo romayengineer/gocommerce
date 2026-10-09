@@ -90,10 +90,12 @@ export type ViewConfig = z.infer<typeof viewConfigSchema>;
 export const shopConfigSchema = z.object({
 	name: z.string().min(1).catch('GoCommerce'),
 	logoUrl: z.string().catch(''),
-	supportEmail: z.string().catch('')
+	supportEmail: z.string().catch(''),
+	whatsappNumber: z.string().catch(''),
+	whatsappMessage: z.string().catch('')
 });
 export type ShopConfig = z.infer<typeof shopConfigSchema>;
-const defaultShop = { name: 'GoCommerce', logoUrl: '', supportEmail: '' };
+const defaultShop = { name: 'GoCommerce', logoUrl: '', supportEmail: '', whatsappNumber: '', whatsappMessage: '' };
 
 export const seoConfigSchema = z.object({
 	title: z.string().min(1).catch('GoCommerce'),

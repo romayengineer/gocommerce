@@ -8,7 +8,7 @@ const valid = {
 	currency: 'ARS',
 	bank: { alias: '', number: '', name: '', bankName: '' },
 	view: { pageWidth: '80rem', theme: 'default', tokens: { ...defaultThemeTokens } },
-	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '' },
+	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '', whatsappNumber: '', whatsappMessage: '' },
 	seo: { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' },
 	hero: { enabled: true, ctaHref: '#/products', gradientFrom: 'primary-600', gradientTo: 'primary-800' },
 	home: { featuredCount: 10 },
@@ -70,7 +70,7 @@ describe('configSchema', () => {
 			view: { pageWidth: '80rem', theme: 'default' }
 		};
 		const parsed = configSchema.parse(minimal);
-		expect(parsed.shop).toEqual({ name: 'GoCommerce', logoUrl: '', supportEmail: '' });
+		expect(parsed.shop).toEqual({ name: 'GoCommerce', logoUrl: '', supportEmail: '', whatsappNumber: '', whatsappMessage: '' });
 		expect(parsed.seo).toEqual({
 			title: 'GoCommerce',
 			description: 'An ecommerce store',

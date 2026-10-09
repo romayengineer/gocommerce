@@ -7,6 +7,7 @@
 	import { router } from '@gocommerce/composition/view/router';
 	import Navigation from '@gocommerce/ui-shell/Navigation.svelte';
 	import Footer from '@gocommerce/ui-shell/Footer.svelte';
+	import WhatsAppFloat from '@gocommerce/ui-shell/WhatsAppFloat.svelte';
 	import '../app.css';
 
 	$effect(() => {
@@ -117,4 +118,5 @@
 	{#if config.layout.showFooter}
 		<Footer />
 	{/if}
+	<WhatsAppFloat />
 </div>

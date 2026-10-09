@@ -27,7 +27,7 @@ const testConfig: AppConfig = {
 	currency: 'ARS',
 	bank: { alias: 'a', number: 'n', name: 'n', bankName: 'b' },
 	view: { pageWidth: '80rem', theme: 'default', tokens: { ...defaultThemeTokens } },
-	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '' },
+	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '', whatsappNumber: '', whatsappMessage: '' },
 	seo: { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' },
 	hero: { enabled: true, ctaHref: '#/products', gradientFrom: 'primary-600', gradientTo: 'primary-800' },
 	home: { featuredCount: 10 },

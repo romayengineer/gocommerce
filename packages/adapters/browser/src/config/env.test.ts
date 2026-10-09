@@ -66,7 +66,7 @@ describe('readEnvConfig', () => {
 			},
 			false
 		);
-		expect(config.shop).toEqual({ name: 'Acme', logoUrl: 'https://cdn.test/logo.svg', supportEmail: '' });
+		expect(config.shop).toEqual({ name: 'Acme', logoUrl: 'https://cdn.test/logo.svg', supportEmail: '', whatsappNumber: '', whatsappMessage: '' });
 		expect(config.seo.title).toBe('Acme');
 		expect(config.pwa).toEqual({ name: 'Acme', shortName: 'Acme' });
 		expect(config.hero.enabled).toBe(false);
@@ -103,5 +103,16 @@ describe('readEnvConfig', () => {
 		expect(config.view.tokens.danger600).toBe('200 0 0');
 		expect(config.view.tokens.fontSans).toBe('Inter, sans-serif');
 		expect(config.view.tokens.cardBg).toBe(defaultThemeTokens.cardBg);
+	});
+
+	it('reads and sanitizes the WhatsApp number, defaulting to hidden when empty', () => {
+		expect(readEnvConfig({}, false).shop.whatsappNumber).toBe('');
+		expect(readEnvConfig({}, false).shop.whatsappMessage).toBe('');
+		const config = readEnvConfig(
+			{ VITE_WHATSAPP_NUMBER: '+54 9 11 0000-0000', VITE_WHATSAPP_MESSAGE: 'Hola!' },
+			false
+		);
+		expect(config.shop.whatsappNumber).toBe('5491100000000');
+		expect(config.shop.whatsappMessage).toBe('Hola!');
 	});
 });
