@@ -80,7 +80,7 @@
 
 	{#if isOpen}
 		<div
-			class="absolute top-full left-0 right-0 z-10 mt-1 rounded-lg border border-gray-300 bg-white shadow-lg"
+			class="absolute top-full left-0 right-0 z-10 mt-1 rounded-lg border border-line bg-card shadow-lg"
 			role="listbox"
 			tabindex="-1"
 			onmousedown={(e) => e.preventDefault()}
@@ -99,7 +99,7 @@
 						</button>
 					</li>
 				{:else}
-					<li class="px-4 py-2 text-sm text-gray-500">{$t('common.noOptions')}</li>
+					<li class="px-4 py-2 text-sm text-ink-faint">{$t('common.noOptions')}</li>
 				{/each}
 			</ul>
 		</div>

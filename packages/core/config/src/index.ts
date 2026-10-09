@@ -10,12 +10,14 @@ export type {
 	PwaConfig,
 	SeoConfig,
 	ShopConfig,
+	ThemeTokens,
 	ViewConfig
 } from './config';
 export {
 	bankDetailsSchema,
 	cartConfigSchema,
 	configSchema,
+	defaultThemeTokens,
 	footerConfigSchema,
 	heroConfigSchema,
 	homeConfigSchema,
@@ -24,5 +26,6 @@ export {
 	pwaConfigSchema,
 	seoConfigSchema,
 	shopConfigSchema,
+	themeTokensSchema,
 	viewConfigSchema
 } from './config';

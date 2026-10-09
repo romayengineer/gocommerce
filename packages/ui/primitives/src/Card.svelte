@@ -25,7 +25,7 @@
 <div class={sticky ? 'h-fit' : 'contents'}>
 	<div class={`card ${sticky ? 'sticky top-4' : ''} ${resolvedPadding} ${className || ''}`}>
 		{#if title}
-			<h2 class="mb-4 text-xl font-semibold">{title}</h2>
+			<h2 class="mb-4 text-xl font-semibold text-ink">{title}</h2>
 		{/if}
 		{#if children}
 			{@render children()}

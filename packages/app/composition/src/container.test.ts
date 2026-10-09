@@ -5,6 +5,7 @@ import { hashSeedString, mulberry32 } from '@gocommerce/domain/random';
 import { getSeedInUrl } from '@gocommerce/ui-core/url';
 import { memoryStoreFactory } from '@gocommerce/foundation/store';
 import type { AppConfig } from '@gocommerce/config/config';
+import { defaultThemeTokens } from '@gocommerce/config/config';
 import type { ProductsColumnar } from '@gocommerce/domain/product';
 import type { Route, RouterPort } from '@gocommerce/ports/Router';
 
@@ -25,7 +26,7 @@ const testConfig: AppConfig = {
 	googleMapsApiKey: '',
 	currency: 'ARS',
 	bank: { alias: 'a', number: 'n', name: 'n', bankName: 'b' },
-	view: { pageWidth: '80rem', theme: 'default' },
+	view: { pageWidth: '80rem', theme: 'default', tokens: { ...defaultThemeTokens } },
 	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '' },
 	seo: { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' },
 	hero: { enabled: true, ctaHref: '#/products', gradientFrom: 'primary-600', gradientTo: 'primary-800' },

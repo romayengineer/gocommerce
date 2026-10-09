@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { configSchema } from '@gocommerce/config/config';
+import { configSchema, defaultThemeTokens } from '@gocommerce/config/config';
 
 const valid = {
 	imagesBaseUrl: 'https://example.com/images',
@@ -7,7 +7,7 @@ const valid = {
 	googleMapsApiKey: '',
 	currency: 'ARS',
 	bank: { alias: '', number: '', name: '', bankName: '' },
-	view: { pageWidth: '80rem', theme: 'default' },
+	view: { pageWidth: '80rem', theme: 'default', tokens: { ...defaultThemeTokens } },
 	shop: { name: 'GoCommerce', logoUrl: '', supportEmail: '' },
 	seo: { title: 'GoCommerce', description: 'An ecommerce store', themeColor: '#2563eb' },
 	hero: { enabled: true, ctaHref: '#/products', gradientFrom: 'primary-600', gradientTo: 'primary-800' },
@@ -32,8 +32,32 @@ describe('configSchema', () => {
 	});
 
 	it('falls back to default view tokens on empty strings', () => {
-		const parsed = configSchema.parse({ ...valid, view: { pageWidth: '', theme: '' } });
-		expect(parsed.view).toEqual({ pageWidth: '80rem', theme: 'default' });
+		const parsed = configSchema.parse({ ...valid, view: { pageWidth: '', theme: '', tokens: { ...defaultThemeTokens, headerBg: '' } } });
+		expect(parsed.view.pageWidth).toBe('80rem');
+		expect(parsed.view.theme).toBe('default');
+		expect(parsed.view.tokens).toEqual(defaultThemeTokens);
+	});
+
+	it('fills missing style tokens with defaults (backwards compat)', () => {
+		const parsed = configSchema.parse({
+			...valid,
+			view: { pageWidth: '80rem', theme: 'default' }
+		});
+		expect(parsed.view.tokens).toEqual(defaultThemeTokens);
+	});
+
+	it('accepts style token overrides', () => {
+		const parsed = configSchema.parse({
+			...valid,
+			view: {
+				pageWidth: '80rem',
+				theme: 'brand',
+				tokens: { ...defaultThemeTokens, headerBg: '10 20 30', danger600: '200 0 0' }
+			}
+		});
+		expect(parsed.view.tokens.headerBg).toBe('10 20 30');
+		expect(parsed.view.tokens.danger600).toBe('200 0 0');
+		expect(parsed.view.tokens.cardBg).toBe(defaultThemeTokens.cardBg);
 	});
 
 	it('fills new view sections with defaults when omitted (backwards compat)', () => {

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { readEnvConfig } from '@gocommerce/adapters/config/env';
+import { defaultThemeTokens } from '@gocommerce/config/config';
 
 describe('readEnvConfig', () => {
 	it('defaults an empty env to leaflet + safe fallbacks', () => {
@@ -7,7 +8,7 @@ describe('readEnvConfig', () => {
 		expect(config.mapProvider).toBe('leaflet');
 		expect(config.googleMapsApiKey).toBe('');
 		expect(config.currency).toBe('ARS');
-		expect(config.view).toEqual({ pageWidth: '80rem', theme: 'default' });
+		expect(config.view).toEqual({ pageWidth: '80rem', theme: 'default', tokens: defaultThemeTokens });
 		expect(config.shop.name).toBe('GoCommerce');
 		expect(config.seo.title).toBe('GoCommerce');
 		expect(config.hero.enabled).toBe(true);
@@ -85,5 +86,22 @@ describe('readEnvConfig', () => {
 		expect(config.home.featuredCount).toBe(10);
 		expect(config.cart.taxRate).toBe(10);
 		expect(config.hero.enabled).toBe(true);
+	});
+
+	it('reads style tokens from env, falling back to defaults when empty', () => {
+		const config = readEnvConfig(
+			{
+				VITE_HEADER_BG: '10 20 30',
+				VITE_FOOTER_BG: '40 50 60',
+				VITE_DANGER_600: '200 0 0',
+				VITE_FONT_SANS: 'Inter, sans-serif'
+			},
+			false
+		);
+		expect(config.view.tokens.headerBg).toBe('10 20 30');
+		expect(config.view.tokens.footerBg).toBe('40 50 60');
+		expect(config.view.tokens.danger600).toBe('200 0 0');
+		expect(config.view.tokens.fontSans).toBe('Inter, sans-serif');
+		expect(config.view.tokens.cardBg).toBe(defaultThemeTokens.cardBg);
 	});
 });

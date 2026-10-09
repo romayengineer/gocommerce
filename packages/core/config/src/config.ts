@@ -18,9 +18,72 @@ export const bankDetailsSchema = z.object({
 });
 export type BankDetails = z.infer<typeof bankDetailsSchema>;
 
+/**
+ * Style tokens — single source of truth for every configurable CSS value.
+ * Colors are RGB triplets (`"17 24 39"`) so Tailwind opacity modifiers
+ * (`bg-header/90`) keep working via `rgb(var(--x) / <alpha-value>)`.
+ * Every field has a `.catch()` fallback matching the pre-theming hardcoded
+ * value, so a missing/empty token renders pixel-identical to the default.
+ */
+export const themeTokensSchema = z.object({
+	fontSans: z
+		.string()
+		.min(1)
+		.catch(
+			`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`
+		),
+	headerBg: z.string().min(1).catch('255 255 255'),
+	footerBg: z.string().min(1).catch('17 24 39'),
+	footerFg: z.string().min(1).catch('156 163 175'),
+	footerBorder: z.string().min(1).catch('55 65 81'),
+	cardBg: z.string().min(1).catch('255 255 255'),
+	mutedBg: z.string().min(1).catch('243 244 246'),
+	mutedHoverBg: z.string().min(1).catch('229 231 235'),
+	borderColor: z.string().min(1).catch('209 213 219'),
+	text: z.string().min(1).catch('17 24 39'),
+	textSecondary: z.string().min(1).catch('55 65 81'),
+	textMuted: z.string().min(1).catch('75 85 99'),
+	textFaint: z.string().min(1).catch('107 114 128'),
+	placeholder: z.string().min(1).catch('156 163 175'),
+	chipText: z.string().min(1).catch('31 41 55'),
+	dangerSoft: z.string().min(1).catch('254 242 242'),
+	dangerBorder: z.string().min(1).catch('248 113 113'),
+	danger500: z.string().min(1).catch('239 68 68'),
+	danger600: z.string().min(1).catch('220 38 38'),
+	danger700: z.string().min(1).catch('185 28 28'),
+	success600: z.string().min(1).catch('22 163 74'),
+	onColor: z.string().min(1).catch('255 255 255')
+});
+export type ThemeTokens = z.infer<typeof themeTokensSchema>;
+export const defaultThemeTokens: ThemeTokens = {
+	fontSans: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`,
+	headerBg: '255 255 255',
+	footerBg: '17 24 39',
+	footerFg: '156 163 175',
+	footerBorder: '55 65 81',
+	cardBg: '255 255 255',
+	mutedBg: '243 244 246',
+	mutedHoverBg: '229 231 235',
+	borderColor: '209 213 219',
+	text: '17 24 39',
+	textSecondary: '55 65 81',
+	textMuted: '75 85 99',
+	textFaint: '107 114 128',
+	placeholder: '156 163 175',
+	chipText: '31 41 55',
+	dangerSoft: '254 242 242',
+	dangerBorder: '248 113 113',
+	danger500: '239 68 68',
+	danger600: '220 38 38',
+	danger700: '185 28 28',
+	success600: '22 163 74',
+	onColor: '255 255 255'
+};
+
 export const viewConfigSchema = z.object({
 	pageWidth: z.string().min(1).catch('80rem'),
-	theme: z.string().min(1).catch('default')
+	theme: z.string().min(1).catch('default'),
+	tokens: themeTokensSchema.catch(defaultThemeTokens)
 });
 export type ViewConfig = z.infer<typeof viewConfigSchema>;
 

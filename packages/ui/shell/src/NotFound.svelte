@@ -10,9 +10,9 @@
 
 <div class="flex min-h-screen flex-col items-center justify-center px-4">
 	<div class="text-center">
-		<h1 class="mb-4 text-6xl font-bold text-gray-900">404</h1>
-		<p class="mb-2 text-2xl font-semibold text-gray-700">{$t('errors.notFoundTitle')}</p>
-		<p class="mb-8 max-w-md text-gray-600">
+		<h1 class="mb-4 text-6xl font-bold text-ink">404</h1>
+		<p class="mb-2 text-2xl font-semibold text-ink-secondary">{$t('errors.notFoundTitle')}</p>
+		<p class="mb-8 max-w-md text-ink-muted">
 			{$t('errors.notFoundMessage')}
 		</p>
 		<Link href="#/" variant="button">{$t('errors.goHome')}</Link>

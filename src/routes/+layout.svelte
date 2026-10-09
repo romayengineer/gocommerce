@@ -13,6 +13,43 @@
 		if (typeof document !== 'undefined') {
 			if ($locale) document.documentElement.lang = $locale;
 			if (config.view?.theme) document.documentElement.dataset.theme = config.view.theme;
+			// Style tokens stay configurable: mirror container.config.view
+			// into CSS vars so env-driven brands and runtime container
+			// overrides apply without rebuilds. Page width is set globally
+			// so Navigation/Footer (max-w-page) follow PageContainer.
+			const style = document.documentElement.style;
+			if (config.view?.pageWidth) style.setProperty('--width-page', config.view.pageWidth);
+			const tokens = config.view?.tokens as Record<string, string> | undefined;
+			if (tokens) {
+				const tokenToVar: Record<string, string> = {
+					fontSans: '--font-sans',
+					headerBg: '--color-header',
+					footerBg: '--color-footer',
+					footerFg: '--color-footer-fg',
+					footerBorder: '--color-footer-border',
+					cardBg: '--color-card',
+					mutedBg: '--color-muted',
+					mutedHoverBg: '--color-muted-hover',
+					borderColor: '--color-border',
+					text: '--color-text',
+					textSecondary: '--color-text-secondary',
+					textMuted: '--color-text-muted',
+					textFaint: '--color-text-faint',
+					placeholder: '--color-placeholder',
+					chipText: '--color-chip-text',
+					dangerSoft: '--color-danger-soft',
+					dangerBorder: '--color-danger-border',
+					danger500: '--color-danger-500',
+					danger600: '--color-danger-600',
+					danger700: '--color-danger-700',
+					success600: '--color-success-600',
+					onColor: '--color-on'
+				};
+				for (const [key, cssVar] of Object.entries(tokenToVar)) {
+					const value = tokens[key];
+					if (typeof value === 'string' && value !== '') style.setProperty(cssVar, value);
+				}
+			}
 			// Shop brand stays configurable: mirror seo config into the
 			// document head so per-build brands get correct title/meta.
 			if (config.seo?.title) document.title = config.seo.title;

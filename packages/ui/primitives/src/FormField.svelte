@@ -22,9 +22,9 @@
 
 
 <div>
-	<label for={id} class="mb-2 block text-sm font-medium text-gray-700">
+	<label for={id} class="mb-2 block text-sm font-medium text-ink-secondary">
 		{label}
-		{#if required}<span class="text-red-500">*</span>{/if}
+		{#if required}<span class="text-danger-500">*</span>{/if}
 	</label>
 	<input
 		{id}

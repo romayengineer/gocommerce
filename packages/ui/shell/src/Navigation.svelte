@@ -6,7 +6,7 @@
 	import { config } from '@gocommerce/composition/view/app';
 </script>
 
-<nav class="{config.layout.stickyNav ? 'sticky top-0 z-50' : 'relative'} bg-white shadow-md">
+<nav class="{config.layout.stickyNav ? 'sticky top-0 z-50' : 'relative'} bg-header shadow-md">
 	<div class="mx-auto w-full max-w-page px-page-x">
 		<div class="flex h-16 items-center justify-between">
 			<Link href="#/" class="truncate text-xl font-bold text-primary-600 hover:text-primary-700 md:text-2xl">

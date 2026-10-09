@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)']
+      },
       colors: {
         primary: {
           50: withAlpha('--color-primary-50', '239 246 255'),
@@ -21,7 +24,38 @@ export default {
           800: withAlpha('--color-primary-800', '30 64 175'),
           900: withAlpha('--color-primary-900', '30 58 138')
         },
-        surface: withAlpha('--color-surface', '249 250 251')
+        surface: withAlpha('--color-surface', '249 250 251'),
+        header: withAlpha('--color-header', '255 255 255'),
+        footer: {
+          DEFAULT: withAlpha('--color-footer', '17 24 39'),
+          fg: withAlpha('--color-footer-fg', '156 163 175'),
+          border: withAlpha('--color-footer-border', '55 65 81')
+        },
+        card: withAlpha('--color-card', '255 255 255'),
+        muted: {
+          DEFAULT: withAlpha('--color-muted', '243 244 246'),
+          hover: withAlpha('--color-muted-hover', '229 231 235')
+        },
+        line: withAlpha('--color-border', '209 213 219'),
+        ink: {
+          DEFAULT: withAlpha('--color-text', '17 24 39'),
+          secondary: withAlpha('--color-text-secondary', '55 65 81'),
+          muted: withAlpha('--color-text-muted', '75 85 99'),
+          faint: withAlpha('--color-text-faint', '107 114 128')
+        },
+        chiptext: withAlpha('--color-chip-text', '31 41 55'),
+        placeholder: withAlpha('--color-placeholder', '156 163 175'),
+        danger: {
+          soft: withAlpha('--color-danger-soft', '254 242 242'),
+          border: withAlpha('--color-danger-border', '248 113 113'),
+          500: withAlpha('--color-danger-500', '239 68 68'),
+          600: withAlpha('--color-danger-600', '220 38 38'),
+          700: withAlpha('--color-danger-700', '185 28 28')
+        },
+        success: {
+          600: withAlpha('--color-success-600', '22 163 74')
+        },
+        oncolor: withAlpha('--color-on', '255 255 255')
       },
       maxWidth: {
         page: 'var(--width-page, 80rem)'

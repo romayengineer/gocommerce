@@ -37,9 +37,9 @@
 </style>
 
 <Link href="#/cart" class="relative flex-shrink-0" variant="muted">
-	<span class="text-gray-700 hover:text-primary-600"><ShoppingCart size={30}/></span>
+	<span class="text-ink-secondary hover:text-primary-600"><ShoppingCart size={30}/></span>
 	{#if cartCountValue > 0}
-		<span class="absolute -top-1 -right-1 bg-red-500 text-white text-base font-bold rounded-full w-5 h-5 p-3 flex items-center justify-center {isShaking ? 'shake' : ''}">
+		<span class="absolute -top-1 -right-1 bg-danger-500 text-oncolor text-base font-bold rounded-full w-5 h-5 p-3 flex items-center justify-center {isShaking ? 'shake' : ''}">
 			{cartCountValue}
 		</span>
 	{/if}

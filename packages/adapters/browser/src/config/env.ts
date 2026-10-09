@@ -49,7 +49,31 @@ export function readEnvConfig(
 		},
 		view: {
 			pageWidth: env.VITE_PAGE_WIDTH ?? '80rem',
-			theme: env.VITE_THEME ?? 'default'
+			theme: env.VITE_THEME ?? 'default',
+			tokens: {
+				fontSans: env.VITE_FONT_SANS ?? '',
+				headerBg: env.VITE_HEADER_BG ?? '',
+				footerBg: env.VITE_FOOTER_BG ?? '',
+				footerFg: env.VITE_FOOTER_FG ?? '',
+				footerBorder: env.VITE_FOOTER_BORDER ?? '',
+				cardBg: env.VITE_CARD_BG ?? '',
+				mutedBg: env.VITE_MUTED_BG ?? '',
+				mutedHoverBg: env.VITE_MUTED_HOVER_BG ?? '',
+				borderColor: env.VITE_BORDER_COLOR ?? '',
+				text: env.VITE_TEXT_COLOR ?? '',
+				textSecondary: env.VITE_TEXT_SECONDARY ?? '',
+				textMuted: env.VITE_TEXT_MUTED ?? '',
+				textFaint: env.VITE_TEXT_FAINT ?? '',
+				placeholder: env.VITE_PLACEHOLDER_COLOR ?? '',
+				chipText: env.VITE_CHIP_TEXT ?? '',
+				dangerSoft: env.VITE_DANGER_SOFT ?? '',
+				dangerBorder: env.VITE_DANGER_BORDER ?? '',
+				danger500: env.VITE_DANGER_500 ?? '',
+				danger600: env.VITE_DANGER_600 ?? '',
+				danger700: env.VITE_DANGER_700 ?? '',
+				success600: env.VITE_SUCCESS_600 ?? '',
+				onColor: env.VITE_ON_COLOR ?? ''
+			}
 		},
 		shop: {
 			name: shopName,

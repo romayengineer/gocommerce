@@ -13,7 +13,7 @@
 </script>
 
 <Card padding="lg" class="text-center {className || ''}">
-	<p class="mb-6 text-lg text-gray-600">{message}</p>
+	<p class="mb-6 text-lg text-ink-muted">{message}</p>
 	{#if actionHref && actionLabel}
 		<Link href={actionHref} variant="button" size="md">{actionLabel}</Link>
 	{/if}
