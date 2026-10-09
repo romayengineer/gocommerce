@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { Trash2 } from 'lucide-svelte';
+	import { Trash2 } from '@lucide/svelte';
 	import Price from '@gocommerce/ui-primitives/Price.svelte';
 	import QuantitySelector from '@gocommerce/ui-primitives/QuantitySelector.svelte';
 	import type { CartItemFull } from '@gocommerce/domain/cart';

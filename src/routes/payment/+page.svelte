@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { CreditCard } from 'lucide-svelte';
+	import { CreditCard } from '@lucide/svelte';
 	import PaymentForm from '@gocommerce/ui-purchase/payment/PaymentForm.svelte';
 	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
 	import PageTitle from '@gocommerce/ui-primitives/PageTitle.svelte';

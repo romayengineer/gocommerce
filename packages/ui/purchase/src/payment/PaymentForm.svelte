@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import { Copy, Check } from 'lucide-svelte';
+	import { Copy, Check } from '@lucide/svelte';
 	import Button from '@gocommerce/ui-primitives/Button.svelte';
 	import OrderSummaryLine from '../cart/OrderSummaryLine.svelte';
 	import Card from '@gocommerce/ui-primitives/Card.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '@gocommerce/ui-primitives/Button.svelte';
 	import Price from '@gocommerce/ui-primitives/Price.svelte';
-	import { ShoppingCart } from 'lucide-svelte';
+	import { ShoppingCart } from '@lucide/svelte';
 	import { addToCart } from '@gocommerce/composition/view/cart';
 
 	interface Props {

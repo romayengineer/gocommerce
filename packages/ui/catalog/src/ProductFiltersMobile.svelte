@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import CollapsibleSectionButton from './CollapsibleSectionButton.svelte';
-	import { Settings2 } from 'lucide-svelte';
+	import { Settings2 } from '@lucide/svelte';
 	import {
 		productPage,
 		filterCategories,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { SplideCarousel } from './carousel';
-	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
+	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import ProductImage from './ProductImage.svelte';
 	import type { Options } from '@splidejs/splide';
 	import '@splidejs/splide/dist/css/splide.min.css';

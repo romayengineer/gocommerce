@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Link from '@gocommerce/ui-primitives/Link.svelte';
-	import { ShoppingCart } from 'lucide-svelte';
+	import { ShoppingCart } from '@lucide/svelte';
 	import { cartCount } from '@gocommerce/composition/view/cart';
 
 	let cartCountValue = $derived($cartCount);

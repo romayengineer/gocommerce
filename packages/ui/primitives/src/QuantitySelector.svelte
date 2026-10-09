@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Minus, Plus } from 'lucide-svelte';
+	import { Minus, Plus } from '@lucide/svelte';
 	import { iconButtonClasses, quantityInputClasses } from './variants';
 
 	interface Props {
