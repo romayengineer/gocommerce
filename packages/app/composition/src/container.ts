@@ -29,7 +29,7 @@ import {
 	MAX_COLUMNS,
 	MIN_COLUMNS
 } from '@gocommerce/ui-core/viewport';
-import { getSeedInUrl, setSeedInUrl } from '@gocommerce/ui-core/url';
+import { getSeedInUrl, setSeedInUrl, withSeedFromCurrent } from '@gocommerce/ui-core/url';
 import { hashSeedString, mulberry32 } from '@gocommerce/domain/random';
 import { createMapService } from '@gocommerce/adapters-maps/mapFactory';
 import productsData from './data/products.json';
@@ -85,6 +85,29 @@ function bootHref(router: RouterPort): string {
 	return router.route.get().href;
 }
 
+/**
+ * Seed-preserving router decorator. Hash navigations replace the whole
+ * `#/...?...` string, so a bare `navigate('#/products')` would drop
+ * `?seed=` (and reshuffle the catalog on next boot). The decorator copies
+ * the live seed into every hash target; non-hash targets pass through.
+ * Central choke point for all programmatic navigations (cart/checkout/
+ * payment buttons, 404 redirects, `CheckoutService`), with zero call-site
+ * churn. The glue lives here in composition because adapters must not
+ * import ui-core (boundary rule 4).
+ */
+function withSeedPreserved(inner: RouterPort): RouterPort {
+	return {
+		get route(): RouterPort['route'] {
+			return inner.route;
+		},
+		start: (): void => inner.start(),
+		stop: (): void => inner.stop(),
+		navigate: (href: string, options?: Parameters<RouterPort['navigate']>[1]): void => {
+			inner.navigate(withSeedFromCurrent(href, bootHref(inner)), options);
+		}
+	};
+}
+
 export interface AppContainer {
 	config: AppConfig;
 	logger: Logger;
@@ -121,7 +144,7 @@ export function createContainer(init: ContainerInit = {}): AppContainer {
 			},
 			memoryStoreFactory
 		);
-	const router = init.router ?? new SvelteKitRouter(memoryStoreFactory);
+	const router = withSeedPreserved(init.router ?? new SvelteKitRouter(memoryStoreFactory));
 	const clipboard = init.clipboard ?? new NavigatorClipboard();
 	const gateway = init.gateway ?? new SimulatedCheckoutGateway();
 	const createMap = init.createMap ?? createMapService;

@@ -65,3 +65,18 @@ export function setSeedInUrl(url: string, seed: string): string {
 	params.set('seed', seed);
 	return `${beforeHash}${hashPath}?${params.toString()}`;
 }
+
+/**
+ * Copy the product-order seed from the current URL into a navigation target.
+ * Non-hash targets (external links) pass through untouched. When the current
+ * URL carries no seed the target is returned unchanged. A stale seed already
+ * present on the target is overwritten so the seed never changes on click,
+ * while the target's other params are preserved as-is.
+ */
+export function withSeedFromCurrent(targetHref: string, currentHref: string): string {
+	if (!targetHref.includes('#')) return targetHref;
+	const seed = getSeedInUrl(currentHref);
+	if (!seed) return targetHref;
+	if (getSeedInUrl(targetHref) === seed) return targetHref;
+	return setSeedInUrl(targetHref, seed);
+}

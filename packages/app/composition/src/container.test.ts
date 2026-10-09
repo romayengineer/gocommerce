@@ -163,3 +163,29 @@ describe('product seed convergence (refresh with ?seed= keeps the order)', () =>
 		expect(router.navigate).toHaveBeenCalledOnce();
 	});
 });
+
+describe('seed-preserving navigation (clicking a link keeps ?seed=)', () => {
+	it('copies the live seed into programmatic hash navigations', () => {
+		const router = fakeRouter(NO_SEED);
+		setShellUrl(SEEDED, router);
+		const container = createContainer({ router, config: testConfig, productsData: columnar });
+
+		container.router.navigate('#/cart');
+
+		expect(router.navigate).toHaveBeenCalledOnce();
+		const [[href]] = router.navigate.mock.calls as [[string]];
+		expect(getSeedInUrl(href)).toBe('482917');
+	});
+
+	it('leaves non-hash targets untouched', () => {
+		const router = fakeRouter(NO_SEED);
+		setShellUrl(SEEDED, router);
+		const container = createContainer({ router, config: testConfig, productsData: columnar });
+
+		container.router.navigate('https://docs.example/api-key');
+
+		expect(router.navigate).toHaveBeenCalledOnce();
+		const [[href]] = router.navigate.mock.calls as [[string]];
+		expect(href).toBe('https://docs.example/api-key');
+	});
+});

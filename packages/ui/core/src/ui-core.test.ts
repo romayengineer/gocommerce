@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { columnsForWidth, DEFAULT_COLUMN_WIDTH, MIN_COLUMNS, MAX_COLUMNS } from './viewport';
 import { computeGridLayout, pageFromScrollHeight, DEFAULT_GRID_CONFIG } from './grid';
-import { updatePageInUrl, getPageInUrl, getSeedInUrl, setSeedInUrl } from './url';
+import { updatePageInUrl, getPageInUrl, getSeedInUrl, setSeedInUrl, withSeedFromCurrent } from './url';
 import { formatPrice } from './format';
 import { filterOptions, matchesOption } from './search';
 import { AMENITIES, ARGENTINE_PROVINCES } from './options-data';
@@ -54,6 +54,45 @@ describe('url seed helpers', () => {
 	it('overwrites an existing seed', () => {
 		const url = setSeedInUrl('https://shop.example/#/products?seed=1', '482917');
 		expect(getSeedInUrl(url)).toBe('482917');
+	});
+});
+
+describe('withSeedFromCurrent', () => {
+	const SEEDED = 'https://shop.example/#/products?seed=482917&page=3';
+
+	it('copies the seed into a bare hash target', () => {
+		expect(withSeedFromCurrent('#/products', SEEDED)).toBe('#/products?seed=482917');
+		expect(withSeedFromCurrent('#/', SEEDED)).toBe('#/?seed=482917');
+		expect(withSeedFromCurrent('#/cart', SEEDED)).toBe('#/cart?seed=482917');
+	});
+
+	it('preserves the target’s other params while copying the seed', () => {
+		const url = withSeedFromCurrent('#/products?page=2', SEEDED);
+		expect(getSeedInUrl(url)).toBe('482917');
+		expect(getPageInUrl(url)).toBe(2);
+	});
+
+	it('overwrites a stale seed on the target', () => {
+		expect(withSeedFromCurrent('#/products?seed=1', SEEDED)).toBe('#/products?seed=482917');
+	});
+
+	it('leaves the target untouched when it already carries the seed', () => {
+		expect(withSeedFromCurrent('#/products?seed=482917', SEEDED)).toBe(
+			'#/products?seed=482917'
+		);
+	});
+
+	it('leaves the target untouched when the current URL has no seed', () => {
+		expect(withSeedFromCurrent('#/products', 'https://shop.example/#/')).toBe('#/products');
+		expect(withSeedFromCurrent('#/products', 'https://shop.example/#/products?seed=')).toBe(
+			'#/products'
+		);
+	});
+
+	it('passes non-hash targets through unchanged', () => {
+		expect(withSeedFromCurrent('https://docs.example/api-key', SEEDED)).toBe(
+			'https://docs.example/api-key'
+		);
 	});
 });
 
