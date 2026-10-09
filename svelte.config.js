@@ -50,6 +50,12 @@ const config = {
   },
   vitePlugin: {
     inspector: false,
+    experimental: {
+      // @splidejs/splide is vanilla JS (svelte field points to same ESM
+      // bundle, no Svelte-specific exports needed). Suppress the
+      // vite-plugin-svelte "svelte field but no exports condition" warning.
+      disableSvelteResolveWarnings: true
+    }
   }
 };
 
