@@ -13,7 +13,6 @@
 		filterBrand,
 		searchQuery
 	} from '@gocommerce/composition/view/products';
-	import { viewport } from '@gocommerce/composition/view/viewport';
 	import type { SortOption } from '@gocommerce/composition/view/products';
 
 	const SORT_OPTIONS: SortOption[] = ['random', 'name-asc', 'name-desc', 'price-asc', 'price-desc'];
@@ -24,7 +23,31 @@
 		}
 	}
 
-	let isDesktop = $derived($viewport.width >= 1024);
+	// Desktop detection must agree with the `lg:` Tailwind classes by
+	// construction. The shared `$viewport` store cannot be used here: grid
+	// pages override the global tracker with their container div (narrower
+	// than the window once the filters sidebar is beside it), so after a
+	// client-side navigation `$viewport.width` can sit below 1024px on a
+	// desktop screen — collapsing these sections with no toggle to reopen
+	// them (`lg:hidden` hides the mobile button). `matchMedia` tracks the
+	// same media query Tailwind's `lg:` uses, so JS and CSS never disagree.
+	const DESKTOP_QUERY = '(min-width: 1024px)';
+
+	let isDesktop = $state(
+		typeof window !== 'undefined' ? window.matchMedia(DESKTOP_QUERY).matches : false
+	);
+
+	$effect(() => {
+		const media = window.matchMedia(DESKTOP_QUERY);
+		const onChange = (event: MediaQueryListEvent): void => {
+			isDesktop = event.matches;
+		};
+		// Sync in case the viewport crossed the breakpoint before mount.
+		isDesktop = media.matches;
+		media.addEventListener('change', onChange);
+		return () => media.removeEventListener('change', onChange);
+	});
+
 	let isMobileFiltersOpen = $state(false);
 
 	let isExpanded = $derived(isDesktop || isMobileFiltersOpen);
