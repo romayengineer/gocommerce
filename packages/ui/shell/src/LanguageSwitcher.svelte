@@ -17,7 +17,7 @@
 	<select
 		value={current}
 		onchange={handleLanguageChange}
-		class="cursor-pointer rounded border border-gray-300 bg-white px-2 py-1.5 text-base hover:border-primary-400 focus:border-primary-600 focus:outline-none"
+		class="cursor-pointer border-0 bg-transparent px-2 py-1.5 text-base focus:outline-none focus:ring-0"
 		title={localeNames[current]}
 	>
 		{#each locales as lang}
