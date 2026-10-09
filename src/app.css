@@ -59,6 +59,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	img {
+		/* Hide alt text shown while images load (it inherits link blue in cards).
+		   Keeps alt for screen readers, just invisible visually. */
+		color: transparent;
+	}
+}
+
 @layer components {
 	.x-text-lg {
 		@apply text-lg md:text-xl;
