@@ -20,8 +20,8 @@
 
 <PageContainer>
 	{#if config.hero.enabled}
-		<section class="mb-16">
-			<div class="mb-8 rounded-lg p-12 text-white" style={heroStyle}>
+		<section class="mb-2 md:mb-4">
+			<div class="rounded-lg p-12 text-white" style={heroStyle}>
 				<h1 class="mb-4 text-5xl font-bold">{config.shop.name}</h1>
 				<p class="mb-6 text-xl">{$t('home.browse')}</p>
 				<Link href={config.hero.ctaHref} variant="contrast">
