@@ -52,9 +52,9 @@ $GIT push origin "$CURRENT_BRANCH"
 echo -e "${GREEN}✓ Pushed $CURRENT_BRANCH${NC}"
 echo ""
 
-# Checkout build
+# Checkout build (use switch: checkout is ambiguous vs build/ directory)
 echo -e "${YELLOW}Checking out build branch...${NC}"
-$GIT checkout build
+$GIT switch build
 echo -e "${GREEN}✓ Checked out build branch${NC}"
 echo ""
 
@@ -76,9 +76,9 @@ $GIT push origin build
 echo -e "${GREEN}✓ Pushed build branch${NC}"
 echo ""
 
-# Switch back to master/main
+# Switch back to master/main (use switch: checkout is ambiguous vs build/ directory)
 echo -e "${YELLOW}Switching back to $CURRENT_BRANCH...${NC}"
-$GIT checkout "$CURRENT_BRANCH"
+$GIT switch "$CURRENT_BRANCH"
 echo -e "${GREEN}✓ Switched back to $CURRENT_BRANCH${NC}"
 echo ""
 
