@@ -48,6 +48,7 @@
   "dependencies": {
     "@gocommerce/composition": "*",
     "@gocommerce/ui-catalog": "*",
+    "@gocommerce/ui-core": "*",
     "@gocommerce/ui-primitives": "*",
     "@gocommerce/ui-purchase": "*",
     "@gocommerce/ui-shell": "*",

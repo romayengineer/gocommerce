@@ -61,6 +61,8 @@
     "shipping": "Envío",
     "total": "Total",
     "checkout": "Proceder al Pago",
+    "checkoutViaWhatsapp": "Pedir por WhatsApp",
+    "whatsappHeader": "Nuevo pedido — {shopName}",
     "clearCart": "Vaciar Carrito",
     "orderSummary": "Resumen del Pedido"
   },

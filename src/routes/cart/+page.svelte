@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
+	import { t, locale } from 'svelte-i18n';
 	import { ShoppingCart } from '@lucide/svelte';
 	import Button from '@gocommerce/ui-primitives/Button.svelte';
 	import CartItem from '@gocommerce/ui-purchase/cart/CartItem.svelte';
@@ -8,10 +8,29 @@
 	import Card from '@gocommerce/ui-primitives/Card.svelte';
 	import PageContainer from '@gocommerce/ui-primitives/PageContainer.svelte';
 	import PageTitle from '@gocommerce/ui-primitives/PageTitle.svelte';
+	import { buildWhatsAppCartMessage, buildWhatsAppUrl } from '@gocommerce/ui-core';
 	import { cartProducts, cartTotal, removeFromCart, updateQuantity } from '@gocommerce/composition/view/cart';
+	import { config } from '@gocommerce/composition/view/app';
 	import { router } from '@gocommerce/composition/view/router';
 
 	let total = $derived($cartTotal);
+
+	const whatsappNumber = config.shop.whatsappNumber?.replace(/\D/g, '') ?? '';
+	const viaWhatsApp = $derived(config.cart.checkoutMode === 'whatsapp' && whatsappNumber !== '');
+
+	function handleCheckout() {
+		if (viaWhatsApp) {
+			const header = $t('cart.whatsappHeader', { values: { shopName: config.shop.name } });
+			const message = buildWhatsAppCartMessage($cartProducts, total, {
+				currency: config.currency,
+				locale: $locale,
+				header
+			});
+			window.open(buildWhatsAppUrl(whatsappNumber, message), '_blank', 'noopener');
+			return;
+		}
+		router.navigate('#/checkout');
+	}
 </script>
 
 <PageContainer>
@@ -39,8 +58,8 @@
 						<OrderSummaryLine label={$t('cart.total') + ':'} amount={total} isBold={true} />
 					</div>
 
-					<Button class="mb-3 w-full whitespace-nowrap py-3" onclick={() => router.navigate('#/checkout')}>
-						{$t('cart.checkout')}
+					<Button class="mb-3 w-full whitespace-nowrap py-3" onclick={handleCheckout}>
+						{viaWhatsApp ? $t('cart.checkoutViaWhatsapp') : $t('cart.checkout')}
 					</Button>
 
 					<Button class="w-full whitespace-nowrap py-3" variant="secondary" onclick={() => router.navigate('#/products')}>

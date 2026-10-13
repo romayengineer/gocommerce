@@ -5,6 +5,7 @@ import { updatePageInUrl, getPageInUrl, getSeedInUrl, setSeedInUrl, withSeedFrom
 import { formatPrice } from './format';
 import { filterOptions, matchesOption } from './search';
 import { AMENITIES, ARGENTINE_PROVINCES } from './options-data';
+import { buildWhatsAppCartMessage, buildWhatsAppUrl } from './cart-whatsapp';
 
 describe('columnsForWidth', () => {
 	it('scales columns with width within bounds', () => {
@@ -123,5 +124,35 @@ describe('options data', () => {
 	it('exposes amenities and provinces', () => {
 		expect(AMENITIES.length).toBeGreaterThan(0);
 		expect(ARGENTINE_PROVINCES.length).toBeGreaterThan(0);
+	});
+});
+
+describe('buildWhatsAppCartMessage', () => {
+	const items = [
+		{ product: { brand: 'Acme', productName: 'Shampoo', size: '500', price: 1000 }, quantity: 2 },
+		{ product: { brand: 'Beta', productName: 'Soap', size: '90', price: 250 }, quantity: 1 }
+	];
+
+	it('lists every item field and the cart total', () => {
+		const message = buildWhatsAppCartMessage(items, 2250, { currency: 'ARS', locale: 'es' });
+		expect(message).toContain('Acme Shampoo (500) x2');
+		expect(message).toContain('Beta Soap (90) x1');
+		expect(message).toContain('Total: $2.250');
+	});
+
+	it('includes the header when provided', () => {
+		const message = buildWhatsAppCartMessage(items, 2250, { header: 'New order — Acme' });
+		expect(message.startsWith('New order — Acme\n\n')).toBe(true);
+	});
+});
+
+describe('buildWhatsAppUrl', () => {
+	it('strips non-digits from the number and encodes the message', () => {
+		const url = buildWhatsAppUrl('+54 9 11 0000-0000', 'a b\nc');
+		expect(url).toBe('https://wa.me/5491100000000?text=a%20b%0Ac');
+	});
+
+	it('omits the query when the message is empty', () => {
+		expect(buildWhatsAppUrl('5491100000000', '')).toBe('https://wa.me/5491100000000');
 	});
 });

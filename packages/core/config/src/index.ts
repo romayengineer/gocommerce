@@ -1,6 +1,7 @@
 export type {
 	AppConfig,
 	BankDetails,
+	CartCheckoutMode,
 	CartConfig,
 	FooterConfig,
 	HeroConfig,
@@ -15,6 +16,7 @@ export type {
 } from './config';
 export {
 	bankDetailsSchema,
+	cartCheckoutModeSchema,
 	cartConfigSchema,
 	configSchema,
 	defaultThemeTokens,

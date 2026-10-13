@@ -1,6 +1,7 @@
 import { configSchema, type AppConfig } from '@gocommerce/config/config';
 
 const KNOWN_MAP_PROVIDERS = ['google', 'leaflet'];
+const KNOWN_CART_CHECKOUT_MODES = ['checkout', 'whatsapp'];
 
 function parseFlag(raw: string | undefined, fallback: boolean): boolean {
 	if (raw === undefined || raw === '') return fallback;
@@ -35,6 +36,19 @@ export function readEnvConfig(
 	}
 
 	const shopName = env.VITE_SHOP_NAME ?? 'GoCommerce';
+
+	const rawCheckoutMode = env.VITE_CART_CHECKOUT_MODE;
+	if (
+		typeof rawCheckoutMode === 'string' &&
+		rawCheckoutMode !== '' &&
+		!KNOWN_CART_CHECKOUT_MODES.includes(rawCheckoutMode)
+	) {
+		// Warn and fall back (zod coerces below); never throw — a typo in
+		// an env var must not crash the shop, in dev or prod.
+		console.warn(
+			`Unknown VITE_CART_CHECKOUT_MODE "${rawCheckoutMode}" (expected "checkout" or "whatsapp"); falling back to "checkout"`
+		);
+	}
 
 	const config = configSchema.parse({
 		imagesBaseUrl: env.VITE_S3_IMAGES_URL ?? '',
@@ -109,7 +123,10 @@ export function readEnvConfig(
 			showBuiltBy: parseFlag(env.VITE_SHOW_BUILT_BY, true)
 		},
 		cart: {
-			taxRate: parseCount(env.VITE_TAX_RATE, 10)
+			taxRate: parseCount(env.VITE_TAX_RATE, 10),
+			checkoutMode: (env.VITE_CART_CHECKOUT_MODE ?? 'checkout') as
+				| 'checkout'
+				| 'whatsapp'
 		},
 		pwa: {
 			name: env.VITE_PWA_NAME ?? shopName,

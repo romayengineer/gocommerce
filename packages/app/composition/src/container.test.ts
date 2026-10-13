@@ -33,7 +33,7 @@ const testConfig: AppConfig = {
 	home: { featuredCount: 10 },
 	layout: { showHeader: true, showFooter: true, stickyNav: true },
 	footer: { showShop: true, showCompany: true, showLegal: true, copyrightYear: '2024', showBuiltBy: true },
-	cart: { taxRate: 10 },
+	cart: { taxRate: 10, checkoutMode: 'checkout' },
 	pwa: { name: 'GoCommerce', shortName: 'GoCommerce' }
 };
 

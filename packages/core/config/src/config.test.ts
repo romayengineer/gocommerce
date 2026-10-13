@@ -14,7 +14,7 @@ const valid = {
 	home: { featuredCount: 10 },
 	layout: { showHeader: true, showFooter: true, stickyNav: true },
 	footer: { showShop: true, showCompany: true, showLegal: true, copyrightYear: '2024', showBuiltBy: true },
-	cart: { taxRate: 10 },
+	cart: { taxRate: 10, checkoutMode: 'checkout' },
 	pwa: { name: 'GoCommerce', shortName: 'GoCommerce' }
 };
 
@@ -91,7 +91,7 @@ describe('configSchema', () => {
 			copyrightYear: '2024',
 			showBuiltBy: true
 		});
-		expect(parsed.cart).toEqual({ taxRate: 10 });
+		expect(parsed.cart).toEqual({ taxRate: 10, checkoutMode: 'checkout' });
 		expect(parsed.pwa).toEqual({ name: 'GoCommerce', shortName: 'GoCommerce' });
 	});
 
@@ -117,5 +117,10 @@ describe('configSchema', () => {
 		expect(parsed.home.featuredCount).toBe(10);
 		expect(parsed.cart.taxRate).toBe(10);
 		expect(parsed.footer.copyrightYear).toBe('2024');
+	});
+
+	it('accepts whatsapp checkout mode and coerces unknown values to checkout', () => {
+		expect(configSchema.parse({ ...valid, cart: { taxRate: 10, checkoutMode: 'whatsapp' } }).cart.checkoutMode).toBe('whatsapp');
+		expect(configSchema.parse({ ...valid, cart: { taxRate: 10, checkoutMode: 'bogus' } }).cart.checkoutMode).toBe('checkout');
 	});
 });

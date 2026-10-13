@@ -15,6 +15,7 @@ describe('readEnvConfig', () => {
 		expect(config.home.featuredCount).toBe(10);
 		expect(config.layout).toEqual({ showHeader: true, showFooter: true, stickyNav: true });
 		expect(config.cart.taxRate).toBe(10);
+		expect(config.cart.checkoutMode).toBe('checkout');
 	});
 
 	it('warns and falls back on an unknown provider instead of throwing', () => {
@@ -114,5 +115,20 @@ describe('readEnvConfig', () => {
 		);
 		expect(config.shop.whatsappNumber).toBe('5491100000000');
 		expect(config.shop.whatsappMessage).toBe('Hola!');
+	});
+
+	it('reads the cart checkout mode, warning and falling back on unknown values', () => {
+		expect(readEnvConfig({ VITE_CART_CHECKOUT_MODE: 'whatsapp' }, false).cart.checkoutMode).toBe('whatsapp');
+		expect(readEnvConfig({ VITE_CART_CHECKOUT_MODE: '' }, false).cart.checkoutMode).toBe('checkout');
+
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		try {
+			expect(readEnvConfig({ VITE_CART_CHECKOUT_MODE: 'bogus' }, true).cart.checkoutMode).toBe('checkout');
+			expect(warn).toHaveBeenCalledWith(
+				expect.stringContaining('Unknown VITE_CART_CHECKOUT_MODE "bogus"')
+			);
+		} finally {
+			warn.mockRestore();
+		}
 	});
 });

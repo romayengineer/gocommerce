@@ -149,11 +149,15 @@ const defaultFooter = {
 	showBuiltBy: true
 };
 
+export const cartCheckoutModeSchema = z.enum(['checkout', 'whatsapp']);
+export type CartCheckoutMode = z.infer<typeof cartCheckoutModeSchema>;
+
 export const cartConfigSchema = z.object({
-	taxRate: z.number().min(0).catch(10)
+	taxRate: z.number().min(0).catch(10),
+	checkoutMode: cartCheckoutModeSchema.catch('checkout')
 });
 export type CartConfig = z.infer<typeof cartConfigSchema>;
-const defaultCart = { taxRate: 10 };
+const defaultCart = { taxRate: 10, checkoutMode: 'checkout' as const };
 
 export const pwaConfigSchema = z.object({
 	name: z.string().min(1).catch('GoCommerce'),

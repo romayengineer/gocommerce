@@ -61,6 +61,8 @@
     "shipping": "Shipping",
     "total": "Total",
     "checkout": "Proceed to Checkout",
+    "checkoutViaWhatsapp": "Order via WhatsApp",
+    "whatsappHeader": "New order — {shopName}",
     "clearCart": "Clear Cart",
     "orderSummary": "Order Summary"
   },
